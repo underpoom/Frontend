@@ -1,0 +1,53 @@
+.UserNameRole {
+    display: flex;
+    width: 543px;
+    height: 30px;
+   
+    color: white;
+    font-Size: 24px;
+    font-Family: Poppins;
+    font-Weight: 700;
+    padding-left: 85px;
+    flex-direction: row;
+    gap: 100px;
+    
+}
+
+.DetailsText {
+
+   
+    color: #0E1821;
+    font-Size: 16px;
+    font-Family: Poppins;
+    font-Weight: 600;
+
+    word-Wrap: break-word;
+    margin-left: 0px;
+}
+
+.UserDetails {
+    display: flex;
+    flex-direction: row;
+    width: 677px;
+    height: 67px;
+    background: #F6F6F6;
+    border-Radius: 8px;
+    margin: auto;
+    align-items: center;
+    justify-content: space-between;
+   
+
+}
+
+.ImgIconUser {
+    margin-left: 6px;
+}
+
+.ImgEditUser {
+    margin-right: -5px;
+}
+
+.ImgDeleteUser{
+    margin-right:-15px ;
+    margin-top: -70px;
+}

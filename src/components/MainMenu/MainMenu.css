@@ -1,0 +1,249 @@
+ .UserView {
+    display: flex;
+    width: 1280px;
+    height: 720px;
+    position: "relative";
+    background-color: #E0E0E0;
+    margin: auto;
+    margin-top: 5%;
+  
+
+}
+
+.MainMenu {
+    width: 1093px;
+    height: 569px;
+    margin: auto;
+    position: "absolute";
+    outline : 5px solid red;
+}
+
+
+
+.FileSpace {
+    width: 738px;
+    height: 485px;
+    margin-left: 355px;
+    margin-top: 47px;
+
+    position: "absolute";
+    background-color: #525761;
+    border-Radius: 8px;
+    outline: 2px black solid;
+ 
+}
+
+.Menu {
+    display: flex;
+    width: 284px;
+    height: 480px;
+    margin-left: 0px;
+    margin-top: 52px;
+    border-Radius: 8px;
+    position: absolute;
+}
+
+.Rectangle1706{
+    width: 311px;
+    height: 480px;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    background-color: #525761;
+    border-Radius: 8px;
+
+}
+
+.Rectangle1704 {
+    width: 268px;
+    height: 395px;
+    left: 20px;
+    top: 64px;
+    position: absolute;
+    background-color: #F6F6F6;
+    border-Radius: 8;
+}
+
+.Factory-Text {
+    text-Align: center;
+    color: black;
+    font-size: 24px;
+    font-Family: 'Poppins';
+    font-Weight: 700;
+}
+
+.Rectangle-Factory{
+    width: 215px;
+    height: 40px;
+    left: 38px;
+    /* top: 404px; */
+    position: absolute;
+    /* background-color: #F16183; */
+    background-color: rgba(241.19, 97.48, 131.97, 0.60);
+   
+    border-Radius: 8px;
+
+}
+
+.Image-Arrow{
+    width: 40px;
+    height: 40px;
+    left: 175px;
+    top: 0px;
+    position: absolute;
+    
+}
+
+.Rectangle-Button{
+    width: 115px;
+    height: 33px;
+    left: 173px;
+    top: 21px;
+    position: absolute;
+    background-color: rgba(217, 217, 217, 0.60);
+    border-Radius: 8px;
+    outline: 3px #0AE2FF solid;
+}
+
+.NewFactory-Button{
+    width: 115px;
+    height: 33px;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    text-Align: center;
+    color: #FAFAFA;
+    font-size: 16px;
+    font-Family: "Poppins";
+    font-Weight: "700";
+    word-Wrap: "break-word";
+}
+
+.Ellipse{
+    width: 87px;
+    height: 87px;
+    /* left: 880px;
+    top: -54px; */
+    position: absolute;
+    background-color: #F16184;
+    border-Radius: 9999px;
+}
+
+.Image-Ellipse{
+    width: 67px;
+    height: 67px;
+    left: 10px;
+    top: 10px;
+    position: absolute;
+}
+
+.Rectangle-BrowsFile{
+    width: 253px;
+    height: 233px;
+    margin: 7% 14%;
+    
+    position: absolute;
+    background-color: #F6F6F6;
+    border-Radius: 8px;
+}
+
+.Image-BrowsFile{
+    width: 96px;
+    height: 96px;
+    left: 79px;
+    top: 50px;
+    position: absolute;
+}
+
+.BrowsFile-Button{
+    width: 115px;
+    height: 33px;
+    left: 69px;
+    top: 175px;
+    position: absolute;
+    background-color: #0E1821;
+    border-Radius: 8px;
+    border: 3px #0AE2FF solid;
+}
+
+.BrowsFile-Text{
+    position: absolute;
+    text-Align: center;
+    color: #FAFAFA;
+    font-Size: 16px;
+    font-Family: Poppins;
+    font-Weight: 700;
+    word-Wrap: break-word;
+}
+
+.Rectangle-Factory-Selected{          
+    width: 215px;
+    height: 200px;
+    left: 54px;
+    top: 134px;
+    position: absolute;
+    border-Radius: 20px;  
+    background-color: #F16184;
+           
+}
+
+.Rectangle-Building-Selected{
+    width: 103px;
+    height: 29px;
+    left: 26px;
+    top: 157px;
+    position: absolute;
+    background: #D9D9D9;
+    border-Radius: 8px;
+    border: 1px black solid;
+}
+
+.Building-Text-Selected{
+    position: absolute;
+    text-Align: center;
+    color: #0E1821;
+    font-Size: 16px;
+    font-Family: Poppins;
+    font-Weight: 600;
+    word-Wrap: break-word;
+}
+
+.Rectangle-Building{
+    width: 103px;
+    height: 29px;
+    left: 13px;
+    /* top: 79px; */
+    position: absolute;
+    background-color: rgba(217, 217, 217, 0.20);
+    border-Radius: 8px;
+    border: 1px black solid;
+}
+
+.Building-Text{
+    position: absolute;
+    text-Align: center;
+    color: #0E1821;
+    font-Size: 16px;
+    font-Family: Poppins;
+    font-Weight: 600;
+    word-Wrap: break-word;
+}
+
+.Bin-Icon{
+    width: 14px;
+    height: 18px;
+    left: 188px;
+    top: 162px;
+    position: absolute;
+    background-color: black;
+    border: 1px #F24E1E solid;
+}
+
+.Edit-Icon{
+    width: 19px;
+    height: 19px;
+    left: 149px;
+    top: 162px;
+    position: absolute;
+    background-color: #0E1821;
+}

@@ -1,0 +1,81 @@
+.NewBuilding-Button {
+    margin: 10px 0px 10px 145px;
+    display: flex;
+    width: 115px;
+    height: 33px;
+    align-items: center;
+    justify-content: center;
+    color: #FAFAFA;
+    font-size: 16px;
+    font-Family: Poppins;
+    font-Weight: 700;
+    word-Wrap: break-word;
+    background-color: rgba(217, 217, 217, 0.60);
+    border-Radius: 8px;
+    outline: 3px #0AE2FF solid;
+    cursor: pointer;
+}
+
+.DisplayUsersPass {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 344px;
+    height: 71px;
+    color: black;
+    font-Size: 20px;
+    font-Family: Poppins;
+    font-Weight: 700;
+    word-Wrap: break-word;
+    margin-top: 20px;
+    /* border: red 1px solid; */
+    text-align: left;
+}
+
+
+
+.input {
+  
+    align-items: center;
+    margin: auto;
+    width: 342px;
+    height: 44px;
+    background: #eaeaea;
+    border-radius: 6px;
+    border: 1px rgba(83.94, 76.01, 76.01, 0.14) solid;
+    margin-top: 2px;
+}
+
+.input input {
+    padding-left: 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #797979;
+    font-size: 19px;
+
+}
+
+.ProfilePicture {
+    display: flex;
+    width: 136px;
+    height: 136px;
+    background-color: #F16184;
+    border-Radius: 9999px;
+    align-items: center;
+    justify-content: center;
+}
+
+.Role {
+    width: 87px;
+    height: 29px;
+    background-color: #525761;
+    border-radius: 8px;
+    color: #f6f6f6;
+    font-size: 20px;
+    font-family: Poppins;
+    font-weight: 700;
+    word-wrap: break-word;
+    
+    margin: 1% 0% 0% 35%;
+}

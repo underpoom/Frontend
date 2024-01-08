@@ -1,24 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import Mainmenu  from './components/MainMenu/MainMenu';
+import MainMenuTest from './components/MainMenuTest/MainMenuTest';
+import Loginsignup from './components/LoginSignup/LoginSignup';
+import Toggle from './components/MainMenuTest/Toggle';
+import ImgDraw from './bounding/ImgDraw';
+import ReadTxtFile from './bounding/ReadTxtFile';
+import MultipleFileUploader from './components/MultipleFileUploader';
+import { EditProfile } from './components/EditProfile/EditProfile';
+import { AdminMainMenu } from './components/AdminMainMenu/AdminMainMenu';
+
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      {/* <MainMenuTest/> */}
+      {/* <Loginsignup /> */}
+      {/* <Toggle /> */}
+     
+      <ImgDraw />
+      {/* <ReadTxtFile/> */}
+      {/* <MultipleFileUploader /> */}
+      {/* <EditProfile />  */}
+      {/* <AdminMainMenu/> */}
+
     </div>
+    
   );
 }
 
