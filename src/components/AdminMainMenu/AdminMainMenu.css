@@ -9,7 +9,7 @@
     font-Weight: 700;
     padding-left: 85px;
     flex-direction: row;
-    gap: 100px;
+    gap: 80px;
     
 }
 
@@ -22,7 +22,7 @@
     font-Weight: 600;
 
     word-Wrap: break-word;
-    margin-left: 0px;
+
 }
 
 .UserDetails {

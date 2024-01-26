@@ -21,11 +21,11 @@ function App() {
       {/* <Loginsignup /> */}
       {/* <Toggle /> */}
      
-      <ImgDraw />
+      {/* <ImgDraw /> */}
       {/* <ReadTxtFile/> */}
       {/* <MultipleFileUploader /> */}
       {/* <EditProfile />  */}
-      {/* <AdminMainMenu/> */}
+      <AdminMainMenu/>
 
     </div>
     
