@@ -40,9 +40,9 @@ export const AdminMainMenu = () => {
 
         <div className="FileSpace">
           <div className="UserNameRole">
-            <div>Username</div>
-            <div>Role</div>
-            <div>Attatched file</div>
+            <div >Username</div>
+            <div id="us1">Role</div>
+            <div id="us2">Attached file</div>
           </div>
           {userData.map((user, index) => (
             <User key={index} username={user.username} role={user.role} />

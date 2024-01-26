@@ -37,7 +37,7 @@ export const MultipleFileUploader = () => {
   return (
     <div className="App">
       <form onSubmit={handleMultipleSubmit}>
-        <h1>React Multiple File Upload</h1>
+        {/* <h1>React Multiple File Upload</h1> */}
         <input type="file" multiple onChange={handleMultipleChange} />
         <button type="submit">Upload</button>
       </form>

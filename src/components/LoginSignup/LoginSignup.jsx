@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./LoginSignup.css";
-
+import { Icon } from "@iconify/react";
 import user_icon from "../Assets/person.png";
 import email_icon from "../Assets/email.png";
 import password_icon from "../Assets/password.png";
+import MultipleFileUploader from "../MultipleFileUploader";
 
 const LoginSignup = () => {
   const [action, setAction] = useState("Sign up");
@@ -42,19 +43,13 @@ const LoginSignup = () => {
       <div className="inputs">
         <div className="input">
           <img src={password_icon} alt="" />
+          {/* <Icon icon="ic:baseline-factory" width="21" height="16" /> */}
           <input type="text" placeholder="Factory Detail" />
         </div>
       </div>
-
       <div className="inputs">
-        <div className="input">
-          <img src={password_icon} alt="" />
-          <input type="text" placeholder="Factory Detail" />
-        </div>
+        <MultipleFileUploader />
       </div>
-
-      
-
       {action === "Sign up" ? (
         <div></div>
       ) : (
