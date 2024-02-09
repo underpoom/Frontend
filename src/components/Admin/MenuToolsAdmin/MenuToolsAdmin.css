@@ -1,0 +1,165 @@
+.User {
+  display: flex;
+  width: 100%;
+  gap: 3vh;
+  white-space: nowrap;
+  margin: 35px 10px 0 0;
+  font-size: 32px;
+}
+
+.img-user {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+
+}
+
+.img-user-edit {
+  aspect-ratio: 1;
+  object-fit: auto;
+  object-position: center;
+  width: 40px;
+
+}
+
+.img-bold-left-edit {
+  object-fit: auto;
+  object-position: center;
+  width: 13px;
+  margin: auto 0;
+  margin-left: auto;
+}
+
+.AddFactory {
+  display: flex;
+  gap: 3vh;
+  margin: 35px 10px 0 0;
+}
+
+.img-addfactory-edit {
+  aspect-ratio: 1;
+  object-fit: auto;
+  object-position: center;
+  width: 40px;
+}
+
+.Permission {
+  display: flex;
+  gap: 3vh;
+  white-space: nowrap;
+  margin: 35px 10px 0 0;
+
+}
+
+.img-permission-edit {
+  aspect-ratio: 1;
+  object-fit: auto;
+  object-position: center;
+  width: 45px;
+}
+
+.Logout {
+  align-self: end;
+  display: flex;
+  gap: 14px;
+  white-space: nowrap;
+  margin-top: auto;
+}
+
+
+
+.img-logout {
+  aspect-ratio: 1;
+  object-fit: auto;
+  object-position: center;
+  width: 40px;
+}
+
+.manage-user {
+  display: flex;
+  border-radius: 10px;
+  margin: 2vh 0 0 8vh;
+  justify-content: start;
+  width: 21vh;
+  font: 24px Inter, sans-serif;
+  padding: 1vh;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.manage-user:hover {
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  transform: scale(1.05);
+}
+
+
+.verify-user {
+  display: flex;
+  border-radius: 10px;
+  margin: 2vh 0 0 8vh;
+  justify-content: start;
+  width: 21vh;
+  font: 24px Inter, sans-serif;
+  padding: 1vh;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+
+}
+
+.verify-user:hover {
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  transform: scale(1.05);
+}
+
+.User.selected {
+  border-radius: 10px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  display: flex;
+  width: calc(100% + 2vh);
+  margin-left: -1vh;
+  padding-left: 1vh;
+}
+
+.AddFactory.selected {
+  border-radius: 10px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  display: flex;
+  width: calc(100% + 2vh);
+  margin-left: -1vh;
+  padding-left: 1vh;
+}
+
+.Permission.selected {
+  border-radius: 10px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  display: flex;
+  width: calc(100% + 2vh);
+  margin-left: -1vh;
+  padding-left: 1vh;
+}
+
+.User,
+.AddFactory,
+.Permission {
+  cursor: pointer;
+}
+
+.manage-user.selected-child
+{
+  /* Add your styles for when the section is selected here */
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  transform: scale(1.05);
+}
+
+.verify-user.selected-child {
+  /* Add your styles for when the section is selected here */
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  transform: scale(1.05);
+}

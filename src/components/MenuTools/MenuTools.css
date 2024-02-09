@@ -1,0 +1,144 @@
+.Container-menutools {
+    display: flex;
+    flex-direction: column;
+    width: 40vh;
+    
+    height: 90vh;
+    margin: 5vh;
+    font-size: 32px;
+    color: #fff;
+    font-weight: 700;
+    padding: 20px 35px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 9.3px 6px rgba(0, 0, 0, 0.25);
+    background-color: var(--Navbar, #2e2e32);
+    justify-items: start;
+}
+
+.Factory-Space {
+    display: flex;
+ 
+    margin-top: 2vh;
+    border: 1px solid red;
+    gap: 2vh;
+    flex-wrap: wrap;
+    transition: transform 0.3s ease;
+    
+    
+    
+}
+
+.BoldArrow{
+    margin-left: auto;
+}
+
+.Factory-Space:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.Building-Space {
+    display: flex;
+    flex-wrap: wrap;
+   
+    border: 1px solid red;
+    justify-content: space-around;
+    font-size: 25px;
+    width: 25vh;
+    margin-left: 3vh;
+    margin-bottom: 2vh;
+    transition: transform 0.3s ease;
+        /* Add transition for smooth effect */
+}
+
+.Building-Space:hover {
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.dropdown-search {
+    margin-top: 1.5vh;
+}
+
+.dropdown-toggle {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: 2px solid white !important;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 8px !important;
+    position: relative;
+    width: 28vh;
+    margin: 1vh;
+    height: 4rem;
+    font-size: 2rem !important;
+
+}
+
+.dropdown-toggle::after {
+    content: "";
+    display: inline-block;
+    border-left: 0.3em solid transparent;
+    border-right: 0.3em solid transparent;
+    border-top: 0.3em solid white;
+    position: absolute;
+    right: 0.75rem;
+    top: calc(50% - 0.15em);
+    font-size: 20px;
+
+}
+
+.dropdown-toggle:hover {
+    background-color: #5a6268;
+}
+
+.dropdown-menu {
+
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    width: 25vh;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    color: #574949;
+    text-decoration: none;
+    display: block;
+    font-size: 2vh;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.selected-factory {
+    margin-top: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    font-size: 20px;
+}
+
+.buildings {
+    margin-top: 10px;
+    margin-left: 2vh;
+}
+
+.buildings p {
+    margin: 5px 0;
+}
+
+.Home-page {
+    display: flex;
+    flex-direction: column;
+    font-family: Inter, sans-serif;
+    /* border: 1px solid red; */
+    align-items: start;
+}
+
+.White-line {
+    background-color: #fff;
+    margin-top: 17px;
+    height: 2px;
+}

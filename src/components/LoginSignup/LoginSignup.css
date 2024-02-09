@@ -1,102 +1,154 @@
-.container{
+.container {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    margin-top: 200px;
-    width: 600px;
-    background-color: aliceblue;
-    background-color: rgba(241.19, 97.48, 131.97, 0.40);
-    padding-bottom: 30px;
+    border-radius: 20px;
+    border: 1px solid #9a9a9a;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    background-color: #fff;
+    z-index: 10;
+
+    margin-top: -62px;
+    width: 443px !important;
+    max-width: 100%;
+
+    font-size: 16px;
+    padding: 47px 43px;
+
+    margin: 15vh auto;
 }
 
-.header{
+.header {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 9px;
     width: 100%;
-    margin-top: 30px;
+
 
 }
 
-.text{
+.text {
     color: black;
     font-size: 48px;
     font-weight: 700;
 }
 
-.underline{
+.underline {
     width: 61px;
     height: 6px;
     background: black;
     border-radius: 9px;
 }
 
-.inputs{
-    margin-top: 55px;
+.inputs {
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
     gap: 25px;
+    
 
 }
 
-.input{
+.input {
     display: flex;
-    align-items: center;
     margin: auto;
-    width: 480px;
-    height: 80px;
-    background: #eaeaea; ;
-    border-radius: 6px;
+    font-family: Inter, sans-serif;
+    border-radius: 20px;
+    border: 1px solid var(--stork, #9f9f9f);
+    background-color: #fff;
+    justify-content: center;
+    align-items: start;
+    color: var(--stork, #9f9f9f);
+    font-weight: 700;
+    white-space: nowrap;
+    text-align: center;
+    padding: 19px 60px 19px 19px;
+    height: 7vh;
+    width: 35vh;
 }
 
-.input img{
+.input img {
     margin: 0px 30px 5px 30px;
 }
 
-.input input{
-    height: 50px;
+.input input {
+    height: 30px;
     width: 400px;
-    background: transparent ;
-    border: none ;
+    background: transparent;
+    border: none;
     outline: none;
     color: #797979;
     font-size: 19px;
+    
 }
 
-.forgot-password{
-    padding-left: 62px;
-    margin-top: 27px;
+.forgot-password {
+
     color: #797979;
     font-size: 18px;
 }
 
-.forgot-password span{
+.forgot-password span {
     color: #4c00b4;
     cursor: pointer;
+    font-weight: 700;
+
 }
 
-.submit-container{
+.submit-container {
     display: flex;
     gap: 30px;
-    margin: 60px auto;
+    margin: 30px auto;
 }
 
-.submit{
+.submit {
     display: flex;
-    width: 220px;
-    height: 59px;
-    background: #4c00b4;
+
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: var(--Important-Button, #0a89ff);
+
     justify-content: center;
     align-items: center;
-    color: white;
-    border-radius: 50px;
-    font-size: 19px;
-    font-weight: 700;
-    cursor: pointer;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+    padding: 15px 60px;
+    font: 700 24px Inter, sans-serif;
+
 }
 
-.gray{
+
+.background-signup {
+    position: fixed;
+    top: 2vh;
+    left: 2vh;
+    width: 98%;
+    height: 35vh;
+    background-image: url('https://images.pexels.com/photos/207586/pexels-photo-207586.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    border-radius: 20px;
+}
+
+.background-login {
+    position: fixed;
+    top: 2vh;
+    left: 2vh;
+    width: 98%;
+    height: 96vh;
+    background-image: url('https://incorpore.md/wp-content/uploads/2023/11/236705-2048x1395.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    border-radius: 20px;
+  
+}
+
+
+
+.gray {
     background: #EAEAEA;
     color: #676767;
 }

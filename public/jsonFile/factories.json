@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Factory 1",
+    "buildings": ["Building 1", "Building 2", "Building 3"]
+  },
+  {
+    "id": 2,
+    "name": "Factory 2",
+    "buildings": ["Building A", "Building B", "Building C"]
+  },
+  {
+    "id": 3,
+    "name": "Factory 3",
+    "buildings": ["Building X", "Building Y", "Building Z"]
+  }
+]

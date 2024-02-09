@@ -1,0 +1,44 @@
+.navbar-top {
+    display: flex;
+    height: 14vh;
+    width: 133vh;
+    border: 1px solid #F24E1E;
+    margin: 5vh 5vh 0 0;
+    align-items: center;
+    padding-right: 2vh;
+}
+
+.img-Info {
+    border: 1px solid #F24E1E;
+    margin-right: 2vh;
+}
+
+.img-User {
+    border: 1px solid #F24E1E;
+    margin-right: 2vh;
+}
+
+.navbar-top.Information {
+    font-size: 30px;
+}
+
+.navbar-top.Profile {
+    font-size: 30px
+}
+
+.page-title {
+
+
+    margin-left: 5vh;
+    border: 1px solid #F24E1E;
+    font-size: xx-large;
+    font-weight: 700;
+    margin-right: auto;
+    font-size: 40px;
+
+}
+
+.Black-line {
+    background-color: black;
+    height: 2px;
+}

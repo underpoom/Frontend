@@ -1,38 +1,58 @@
 import './App.css';
 import React from 'react';
-import Mainmenu from './components/MainMenu/MainMenu';
-import MainMenuTest from './components/MainMenuTest/MainMenuTest';
+import { Routes, Route } from 'react-router-dom';
 import Loginsignup from './components/LoginSignup/LoginSignup';
-import Toggle from './components/MainMenuTest/Toggle';
-import MultipleFileUploader from './components/MultipleFileUploader';
+import MultipleFileUploader from './components/LoginSignup/MultipleFileUploader';
 import { EditProfile } from './components/EditProfile/EditProfile';
-import { AdminMainMenu } from './components/AdminMainMenu/AdminMainMenu';
-import { Instruction } from './components/Instruction/Instruction';
 import ImgDraw from './bounding/ImgDraw';
-
+import LoadAddress from './components/LoginSignup/LoadAddress';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
+import "./assets/vendor/nucleo/css/nucleo.css";
+import "./assets/vendor/font-awesome/css/font-awesome.min.css";
+import { Button } from "reactstrap";
+import Information from './components/Information/Information';
+import { ManageUser } from './components/Admin/ManageUser/ManageUser';
+import MyComponentTW from './components/Admin/VerifyUser/MyComponentTW';
 function App() {
   return (
+
     <div className='App'>
-      <MainMenuTest />
-      {/* <Loginsignup /> */}
+      
+      <MyComponentTW/>
+      <Routes>
+        {/* <Route path="/" element={<MainMenuTest />} /> */}
+        <Route path="loginsignup" element={<Loginsignup />} />
+        <Route path="editprofile" element={<EditProfile />} />
+        <Route path="information" element={<Information />} />
+        <Route path="manageuser" element={<ManageUser />} />
+        
+        
 
-      {/* <Toggle /> */}
 
-      {/* <ImgDraw /> */}
+
+        
+        {/* <Route path="about" element={<About />} /> */}
+      </Routes>
+
+
+
+      {/* <LoadAddress/> */}
+
+
       {/* <ReadTxtFile/> */}
       {/* <MultipleFileUploader /> */}
-      {/* <EditProfile />  */}
       {/* <AdminMainMenu/> */}
-      <Instruction />
+      {/* <Instruction /> */}
       {/* <ImgDraw /> */}
 
 
     </div>
 
+
+
+
   );
 }
+
 
 export default App;
