@@ -6,7 +6,7 @@ const ImageWithRectangles = () => {
   const [selectedRectangle, setSelectedRectangle] = useState(null);
   const [hoveredRectangle, setHoveredRectangle] = useState(null);
   const [image, setImage] = useState(new Image());
-  const [LastSelectedRectangle, setLastSelectedRectangle] = useState(null);
+  const [lastClickTime, setLastClickTime] = useState(0);
 
   const classNames = {
     0: "birddrop",
@@ -64,81 +64,23 @@ const ImageWithRectangles = () => {
   }, []);
 
   const insertRectangle = () => {
-    let startX = null;
-    let startY = null;
-    let tempRectangle = null;
-
-    const handleMouseDown = (event) => {
-      const rect = canvasRef.current.getBoundingClientRect();
-      startX = event.clientX - rect.left;
-      startY = event.clientY - rect.top;
-    };
-
-    const handleMouseMove = (event) => {
-      if (startX !== null && startY !== null) {
-        const rect = canvasRef.current.getBoundingClientRect();
-        const currentX = event.clientX - rect.left;
-        const currentY = event.clientY - rect.top;
-
-        const width = Math.abs(currentX - startX);
-        const height = Math.abs(currentY - startY);
-
-        const x = Math.min(startX, currentX);
-        const y = Math.min(startY, currentY);
-
-        tempRectangle = { x, y, width, height };
-
-        drawRectangles([...rectangles, tempRectangle]);
-      }
-    };
-
-    const handleMouseUp = (event) => {
-      if (startX !== null && startY !== null) {
-        const rect = canvasRef.current.getBoundingClientRect();
-        const endX = event.clientX - rect.left;
-        const endY = event.clientY - rect.top;
-
-        const width = Math.abs(endX - startX);
-        const height = Math.abs(endY - startY);
-
-        const x = Math.min(startX, endX);
-        const y = Math.min(startY, endY);
-
-        const newRectangle = { x, y, width, height };
-
-        setRectangles([...rectangles, newRectangle]);
-
-        startX = null;
-        startY = null;
-        tempRectangle = null;
-      }
-    };
-
-    canvasRef.current.addEventListener("mousedown", handleMouseDown);
-    canvasRef.current.addEventListener("mousemove", handleMouseMove);
-    canvasRef.current.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      canvasRef.current.removeEventListener("mousedown", handleMouseDown);
-      canvasRef.current.removeEventListener("mousemove", handleMouseMove);
-      canvasRef.current.removeEventListener("mouseup", handleMouseUp);
-    };
+    const newRectangles = [
+      ...rectangles,
+      { x: 100, y: 100, width: 50, height: 50 },
+    ];
+    setRectangles(newRectangles);
+    drawRectangles(newRectangles);
   };
 
+  // still bug
   const deleteRectangle = () => {
-    if (LastSelectedRectangle !== null) {
+    if (selectedRectangle !== null) {
       const newRectangles = rectangles.filter(
-        (_, index) => index !== LastSelectedRectangle
+        (_, index) => index !== selectedRectangle
       );
-
-      setLastSelectedRectangle(null);
-      setSelectedRectangle(null);
-      console.log(newRectangles);
-
       setRectangles(newRectangles);
-      setTimeout(() => {
-        drawRectangles(newRectangles);
-      }, 10);
+      setSelectedRectangle(null);
+      drawRectangles(newRectangles);
     }
   };
 
@@ -177,6 +119,45 @@ const ImageWithRectangles = () => {
     reader.readAsDataURL(file);
   };
 
+  const handleMouseDown = (event) => {
+    const rect = canvasRef.current.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    let isHovering = false;
+
+    rectangles.forEach(({ Class, x, y, width, height }, index) => {
+      if (
+        mouseX >= x - width / 2 &&
+        mouseX <= x + width / 2 &&
+        mouseY >= y - height / 2 &&
+        mouseY <= y + height / 2
+      ) {
+        isHovering = true;
+        setSelectedRectangle(index);
+
+        const currentTime = new Date().getTime();
+        const timeDiff = currentTime - lastClickTime;
+        if (timeDiff < 300) {
+          handleDoubleClick();
+        } else {
+          setLastClickTime(currentTime);
+        }
+      }
+    });
+  };
+
+  const handleDoubleClick = () => {
+    if (selectedRectangle !== null) {
+      const newRectangles = rectangles.filter(
+        (_, index) => index !== selectedRectangle
+      );
+      setRectangles(newRectangles);
+      setSelectedRectangle(null);
+      drawRectangles(newRectangles);
+    }
+  };
+
   const drawRectangles = (rectanglesToDraw) => {
     const ctx = canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -190,18 +171,12 @@ const ImageWithRectangles = () => {
     );
 
     rectanglesToDraw.forEach(({ defectClass, x, y, width, height }, index) => {
-      // ctx.strokeStyle = selectedRectangle === index ? "blue" : "red";
-      if (LastSelectedRectangle === index) {
-        ctx.strokeStyle = "blue";
-        console.log("index :", index);
-      } else {
-        ctx.strokeStyle = "red";
-      }
+      ctx.strokeStyle = selectedRectangle === index ? "blue" : "red";
 
       ctx.lineWidth = 2;
       ctx.strokeRect(x - width / 2, y - height / 2, width, height);
 
-      if (LastSelectedRectangle === index) {
+      if (hoveredRectangle === index) {
         ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
         ctx.fillRect(x - width / 2, y - height / 2, width, height);
         canvasRef.current.style.cursor = "pointer";
@@ -214,36 +189,6 @@ const ImageWithRectangles = () => {
     });
   };
 
-  const handleMouseDown = (event) => {
-    const rect = canvasRef.current.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    let isHovering = false;
-
-    rectangles.forEach(({ x, y, width, height }, index) => {
-      if (
-        mouseX >= x - width / 2 &&
-        mouseX <= x + width / 2 &&
-        mouseY >= y - height / 2 &&
-        mouseY <= y + height / 2
-      ) {
-        console.log(
-          "Selected Rectangle:",
-          selectedRectangle,
-          "Current Index:",
-          index,
-          "Lastest Selected Rectangle:",
-          LastSelectedRectangle
-        );
-        isHovering = true;
-        setSelectedRectangle(index);
-        setLastSelectedRectangle(index);
-        drawRectangles(rectangles);
-      }
-    });
-  };
-
   const handleMouseMove = (event) => {
     const rect = canvasRef.current.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
@@ -252,7 +197,7 @@ const ImageWithRectangles = () => {
     let isHovering = false;
 
     // set cursor
-    rectangles.forEach(({ x, y, width, height }, index) => {
+    rectangles.forEach(({ defectClass, x, y, width, height }, index) => {
       if (
         mouseX >= x - width / 2 &&
         mouseX <= x + width / 2 &&
@@ -277,14 +222,9 @@ const ImageWithRectangles = () => {
       drawRectangles(newRectangles);
     }
   };
+
   const handleMouseUp = () => {
     setSelectedRectangle(null);
-
-    drawRectangles(rectangles);
-    console.log("up ! :", LastSelectedRectangle);
-    console.log("SelectedRectangle :", selectedRectangle);
-    console.log("LastSelectedRectangle :", LastSelectedRectangle);
-    console.log("hove :", hoveredRectangle);
   };
 
   return (
@@ -296,9 +236,10 @@ const ImageWithRectangles = () => {
         onMouseUp={handleMouseUp}
       />
       <button onClick={insertRectangle}>Insert Rectangle</button>
-      {LastSelectedRectangle !== null && (
-        <button onClick={deleteRectangle}>Delete Rectangle</button>
-      )}
+      <button onClick={deleteRectangle} disabled={selectedRectangle === null}>
+        Delete Rectangle
+      </button>
+
       <button onClick={saveRectanglesAsJSON}>Save Rectangles as JSON</button>
     </div>
   );
