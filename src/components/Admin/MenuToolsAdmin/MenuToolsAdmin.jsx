@@ -13,17 +13,19 @@ const imgPermission =
 const imgLogout =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/18a69ef420c65facab96b2f931e2dad1d16d1c4e0280a6f46d15388f30a80e7e?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
-export const MenuToolsAdmin = () => {
+export const MenuToolsAdmin = ({ onSelectSection }) => {
   const [selectedSection, setSelectedSection] = useState(null);
   const [userSelectedSection, setUserSelectedSection] = useState(null);
 
   const handleSectionSelect = (section) => {
     setSelectedSection(section);
     setUserSelectedSection(null);
+    onSelectSection(section);
   };
 
   const handleUserSectionSelect = (section) => {
     setUserSelectedSection(section);
+    onSelectSection(section);
   };
 
   const Section = ({ name, imgSrc, className, children }) => (
@@ -77,10 +79,10 @@ export const MenuToolsAdmin = () => {
       </div>
       <div className="White-line" />
 
-      <Section name="User" imgSrc={imgUser} className="User">
+      <Section name="Users" imgSrc={imgUser} className="User">
         Users
       </Section>
-      {selectedSection === "User" && (
+      {selectedSection === "Users" && (
         <>
           <ManageUsers />
           <VerifyUser />

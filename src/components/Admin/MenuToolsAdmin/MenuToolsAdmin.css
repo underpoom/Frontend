@@ -113,7 +113,19 @@
   transform: scale(1.05);
 }
 
-.User.selected {
+.User:hover {
+  border-radius: 10px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  display: flex;
+  width: calc(100% + 2vh);
+  margin-left: -1vh;
+  padding-left: 1vh;
+  cursor: pointer;
+}
+
+.AddFactory.selected,
+.AddFactory:hover {
   border-radius: 10px;
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--Important-Button, #0a89ff);
@@ -123,7 +135,8 @@
   padding-left: 1vh;
 }
 
-.AddFactory.selected {
+.Permission.selected,
+.Permission:hover{
   border-radius: 10px;
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--Important-Button, #0a89ff);
@@ -133,17 +146,7 @@
   padding-left: 1vh;
 }
 
-.Permission.selected {
-  border-radius: 10px;
-  border: 1px solid var(--stork, #9f9f9f);
-  background-color: var(--Important-Button, #0a89ff);
-  display: flex;
-  width: calc(100% + 2vh);
-  margin-left: -1vh;
-  padding-left: 1vh;
-}
-
-.User,
+.Users,
 .AddFactory,
 .Permission {
   cursor: pointer;
@@ -151,14 +154,12 @@
 
 .manage-user.selected-child
 {
-  /* Add your styles for when the section is selected here */
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--Important-Button, #0a89ff);
   transform: scale(1.05);
 }
 
 .verify-user.selected-child {
-  /* Add your styles for when the section is selected here */
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--Important-Button, #0a89ff);
   transform: scale(1.05);
