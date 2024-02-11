@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import "./MenuToolsAdmin.css";
 
 const imgUser =
@@ -64,6 +64,12 @@ export const MenuToolsAdmin = ({ onSelectSection }) => {
     );
   };
 
+  const navigate = useNavigate();
+
+  function handleClickLogout(event) {
+    navigate("/loginsignup");
+  }
+
   return (
     <div className="Container-menutools">
       <div className="Home-page">
@@ -96,9 +102,10 @@ export const MenuToolsAdmin = ({ onSelectSection }) => {
       <Section name="Permission" imgSrc={imgPermission} className="Permission">
         Permission
       </Section>
-      <div className="Logout">
+      <div className="Logout" onClick={handleClickLogout}>
         Logout
         <img loading="lazy" src={imgLogout} className="img-logout" />
+        
       </div>
     </div>
   );

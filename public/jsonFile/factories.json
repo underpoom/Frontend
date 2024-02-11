@@ -2,16 +2,41 @@
   {
     "id": 1,
     "name": "Factory 1",
+    "province": "พระนครศรีอยุธยา",
+    "district": "เสนา",
+    "subdistrict": "บ้านแพน",
     "buildings": ["Building 1", "Building 2", "Building 3"]
   },
   {
     "id": 2,
     "name": "Factory 2",
-    "buildings": ["Building A", "Building B", "Building C"]
+    "province": "กรุงเทพมหานคร",
+    "district": "บางกะปิ",
+    "subdistrict": "หัวหมาก",
+    "buildings": ["Building D", "Building E", "Building F"]
   },
   {
     "id": 3,
     "name": "Factory 3",
-    "buildings": ["Building X", "Building Y", "Building Z"]
+    "province": "นครสวรรค์",
+    "district": "เมือง",
+    "subdistrict": "ปากน้ำโพ",
+    "buildings": ["Building G", "Building H", "Building I"]
+  },
+  {
+    "id": 4,
+    "name": "Factory 4",
+    "province": "กรุงเทพมหานคร",
+    "district": "คลองสาน",
+    "subdistrict": "บางลำภูล่าง",
+    "buildings": ["Building Alpha", "Building Beta", "Building Gamma"]
+  },
+  {
+    "id": 5,
+    "name": "Factory 5",
+    "province": "นครปฐม",
+    "district": "สามพราน",
+    "subdistrict": "บ้านแพ้ว",
+    "buildings": ["Building I", "Building II", "Building III"]
   }
 ]

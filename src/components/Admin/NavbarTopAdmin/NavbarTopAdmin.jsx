@@ -5,14 +5,14 @@ const NavbarTopAdminContainer = styled.div`
   display: flex;
   height: 14vh;
   width: 132vh;
-  border: 1px solid #f24e1e;
+  /* border: 1px solid #f24e1e; */
   margin: 5vh 5vh 0 0;
   align-items: center;
   padding-right: 2vh;
 `;
 
 const PageTitleAdmin = styled.div`
-  border: 1px solid #f24e1e;
+  /* border: 1px solid #f24e1e; */
   font-size: xx-large;
   font-weight: 700;
   margin-right: auto;

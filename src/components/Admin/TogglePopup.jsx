@@ -12,7 +12,6 @@ const PopupContainer = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2;
-  
 `;
 
 const PopupContent = styled.div`
@@ -27,9 +26,6 @@ const PopupContent = styled.div`
   text-align: center;
   padding: 27px 30px;
   align-items: center;
-
-  
-  
 `;
 
 const ButtonYesNoContainer = styled.button`
@@ -44,7 +40,6 @@ const LabelHead = styled.button`
   width: 80%;
 `;
 
-
 const ButtonYesNo = styled.button`
   font-family: Inter, sans-serif;
   border-radius: 10px;
@@ -57,7 +52,7 @@ const ButtonYesNo = styled.button`
   cursor: pointer;
 
   &:hover {
-    color: #e0e0e0; 
+    color: #e0e0e0;
     background-color: var(--Important-Button, #0a89ff);
   }
 `;
@@ -67,14 +62,10 @@ const TogglePopup = ({ content, onClose }) => {
     <>
       <PopupContainer>
         <PopupContent>
+          <>Do you want to {content} this user?</>
 
-            <>
-            Do you want to {content} this user?
-            </>
-            
-          
           <ButtonYesNoContainer>
-            <ButtonYesNo >Yes</ButtonYesNo>
+            <ButtonYesNo>Yes</ButtonYesNo>
             <ButtonYesNo onClick={onClose}>No</ButtonYesNo>
           </ButtonYesNoContainer>
         </PopupContent>

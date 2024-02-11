@@ -64,7 +64,18 @@
   gap: 14px;
   white-space: nowrap;
   margin-top: auto;
+  
 }
+
+.Logout:hover {
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  transform: scale(1.05);
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
 
 
 
@@ -136,7 +147,7 @@
 }
 
 .Permission.selected,
-.Permission:hover{
+.Permission:hover {
   border-radius: 10px;
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--Important-Button, #0a89ff);
@@ -152,8 +163,7 @@
   cursor: pointer;
 }
 
-.manage-user.selected-child
-{
+.manage-user.selected-child {
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--Important-Button, #0a89ff);
   transform: scale(1.05);
