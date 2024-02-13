@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 40vh;
-    
+
     height: 90vh;
     margin: 5vh;
     font-size: 32px;
@@ -17,19 +17,16 @@
 
 .Factory-Space {
     display: flex;
- 
+
     margin-top: 2vh;
     border: 1px solid red;
     gap: 2vh;
     flex-wrap: wrap;
     transition: transform 0.3s ease;
-    
-    
-    
 }
 
-.BoldArrow{
-    margin-left: auto;
+.BoldArrow {
+    margin-left: 10vh;
 }
 
 .Factory-Space:hover {
@@ -40,7 +37,7 @@
 .Building-Space {
     display: flex;
     flex-wrap: wrap;
-   
+
     border: 1px solid red;
     justify-content: space-around;
     font-size: 25px;
@@ -48,7 +45,7 @@
     margin-left: 3vh;
     margin-bottom: 2vh;
     transition: transform 0.3s ease;
-        /* Add transition for smooth effect */
+    /* Add transition for smooth effect */
 }
 
 .Building-Space:hover {

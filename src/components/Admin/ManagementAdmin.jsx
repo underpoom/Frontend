@@ -6,6 +6,9 @@ import VerifyUsers from "./VerifyUsers";
 import styled from "styled-components";
 import AddFactory from "./AddFactory";
 import Permission from "./Permission";
+import ChangeRoleAndPassword from "./ChangeRoleAndPassword";
+import RemoveFactory from "./RemoverFactory";
+
 const RightContainer = styled.div`
   display: flex;
   width: 132vh;
@@ -29,6 +32,9 @@ export const ManagementAdmin = () => {
         {selectedSection === "verify-user" && <VerifyUsers />}
         {selectedSection === "AddFactory" && <AddFactory />}
         {selectedSection === "Permission" && <Permission />}
+        {selectedSection === "RemoveFactory" && <RemoveFactory />}
+
+        {/* <ChangeRoleAndPassword/> */}
       </RightContainer>
     </>
   );

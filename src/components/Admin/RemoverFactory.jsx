@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
-import PermissionSelected from "./PermissionSelected";
+import TogglePopup from "./TogglePopup";
 
-const ContainerPermission = styled.div`
+const ContainerRemoveFactory = styled.div`
   display: flex;
   height: 76vh;
   /* border: 1px solid red; */
@@ -74,7 +74,8 @@ const imgAdd =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/d1573c1f4387e34454945052c6340580dd716ebf34149be2676f645bc373c6de?apiKey=34584a6259e046a0be0d44044e057cb8&";
 const imgBack =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
-export const Permission = () => {
+
+export const RemoveFactory = () => {
   const [FactorySelected, setFactorySelected] = useState(false);
 
   const [factoryList, setFactoryList] = useState([]);
@@ -95,53 +96,60 @@ export const Permission = () => {
     fetchData();
   }, []);
 
-   const handleBackClick = () => {
-     setFactorySelected(false);
-   };
+  const handleBackClick = () => {
+    setFactorySelected(false);
+  };
 
   const [FactorySelectedData, setFactorySelectedData] = useState([]);
 
-  const handleFactorySelected = (factory) => {
-    setFactorySelected(!FactorySelected);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+
+  const handleTogglePopupRemove = (factory) => {
+    setShowPopup(true);
+    setPopupContent("Are you sure for removing this factory ?");
     setFactorySelectedData(factory);
+  };
+
+  // ----------------------------------------------------------------
+  const handleRemoveClickYes = () => {
+    console.log("you remove :", FactorySelectedData.name);
+    setShowPopup(false);
   };
 
   return (
     <>
-      {FactorySelected === false ? (
-        <>
-          <NavbarTopAdmin pageTitle="Permission" />
-          <ContainerPermission>
-            {factoryList.map((factory, index) => (
-              <FactoryDetail key={index}>
-                <FactoryName>{factory.name}</FactoryName>
-                <LocLabel>
-                  Province : <LocData>{factory.province}</LocData>
-                </LocLabel>
-                <LocLabel>
-                  District : <LocData>{factory.district}</LocData>
-                </LocLabel>
-                <LocLabel>
-                  Sub-District : <LocData>{factory.subdistrict}</LocData>
-                </LocLabel>
-
-                <Select onClick={() => handleFactorySelected(factory)}>
-                  Select
-                </Select>
-              </FactoryDetail>
-            ))}
-          </ContainerPermission>
-        </>
-      ) : (
-        <>
-          <PermissionSelected
-            factoryData={FactorySelectedData}
-            onBackClick={handleBackClick}
-          ></PermissionSelected>
-        </>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleRemoveClickYes}
+        />
       )}
+
+      <NavbarTopAdmin pageTitle="Remove Factory" />
+      <ContainerRemoveFactory>
+        {factoryList.map((factory, index) => (
+          <FactoryDetail key={index}>
+            <FactoryName>{factory.name}</FactoryName>
+            <LocLabel>
+              Province : <LocData>{factory.province}</LocData>
+            </LocLabel>
+            <LocLabel>
+              District : <LocData>{factory.district}</LocData>
+            </LocLabel>
+            <LocLabel>
+              Sub-District : <LocData>{factory.subdistrict}</LocData>
+            </LocLabel>
+
+            <Select onClick={() => handleTogglePopupRemove(factory)}>
+              Remove
+            </Select>
+          </FactoryDetail>
+        ))}
+      </ContainerRemoveFactory>
     </>
   );
 };
 
-export default Permission;
+export default RemoveFactory;

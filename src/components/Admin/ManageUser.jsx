@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
+import ChangeRoleAndPassword from "./ChangeRoleAndPassword";
 
 const ContainerManageUser = styled.div`
   display: flex;
@@ -17,9 +18,6 @@ const ContainerManageUser = styled.div`
 const LabelHeadContainer = styled.div`
   padding: 10px 0px 10px 0px;
   display: flex;
-  /* border: 1px solid red; */
-  justify-content: flex-start;
-  gap: 10px;
   background-color: #f6f6f6;
   position: sticky;
   top: 0;
@@ -31,23 +29,32 @@ const LabelHeadUsername = styled.div`
   font-size: 24px;
   color: #000;
   font-weight: 700;
-  margin-left: 115px;
+  margin-left: 80px;
 `;
 
 const LabelHeadRole = styled.div`
   font-family: Inter, sans-serif;
-
   font-size: 24px;
   color: #000;
   font-weight: 700;
-  margin-left: 292px;
+  margin-left: 220px;
 `;
+
+const LabelChangeRole = styled.div`
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  color: #000;
+  font-weight: 700;
+  margin-left: 155px;
+  width: 16%;
+`;
+
 const LabelHeadVF = styled.div`
   font-family: Inter, sans-serif;
   font-size: 24px;
   color: #000;
   font-weight: 700;
-  margin-left: 250px;
+  margin-left: 95px;
 `;
 
 const ContentUser = styled.div`
@@ -55,7 +62,7 @@ const ContentUser = styled.div`
   border-radius: 10px;
   background-color: #d9d9d9;
   margin-bottom: 25px;
-  padding: 23.5px 39px 23.5px 80px;
+  padding: 24px 40px 24px 40px;
   flex-direction: row;
   justify-content: space-between;
 `;
@@ -83,17 +90,33 @@ const RolRole = styled.div`
   justify-content: center;
 `;
 
-const DownloadAttatchedFileButton = styled.div`
-  font-family: Inter, sans-serif;
-  border-radius: 10px;
-  border: 1px solid var(--stork, #9f9f9f);
-  background-color: var(--light, #fafafa);
-  justify-content: center;
-  padding: 18px 10px;
-  /* border: 1px solid red; */
-  font-size: 20px;
-  cursor: pointer;
-`;
+const [DownloadAttatchedFileButton, ChangeRoleButton] = [
+  styled.div`
+    font-family: Inter, sans-serif;
+    border-radius: 10px;
+    border: 1px solid var(--Important-Button, #0a89ff);
+    color: #0a89ff;
+    background-color: var(--light, #fafafa);
+    justify-content: center;
+    padding: 18px 10px;
+    /* border: 1px solid red; */
+    font-size: 20px;
+    cursor: pointer;
+    width: 12%;
+  `,
+  styled.div`
+    font-family: Inter, sans-serif;
+    border-radius: 10px;
+    border: 1px solid var(--Important-Button, #0a89ff);
+    color: #0a89ff;
+    background-color: var(--light, #fafafa);
+    justify-content: center;
+    padding: 18px 10px;
+    /* border: 1px solid red; */
+    font-size: 20px;
+    cursor: pointer;
+  `,
+];
 const ImgDeleteButton = styled.img`
   aspect-ratio: 1;
   object-fit: auto;
@@ -191,40 +214,70 @@ export const ManageUser = (props) => {
     setEditedIndex(null);
   };
 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showChangeRoleAndPassword, setShowChangeRoleAndPassword] =
+    useState(false);
+
+  const handleChangeRoleButtonClick = (user) => {
+    setSelectedUser(user);
+    setShowChangeRoleAndPassword(true);
+  };
+
+  const handleBackClick = () => {
+    setSelectedUser(null);
+    setShowChangeRoleAndPassword(false);
+  };
+
   return (
     <>
-      <NavbarTopAdmin pageTitle="Manage User" />
+      {showChangeRoleAndPassword ? (
+        <ChangeRoleAndPassword
+          userData={selectedUser}
+          onBackClick={handleBackClick}
+        />
+      ) : (
+        <>
+          <NavbarTopAdmin pageTitle="Manage User" />
+          <ContainerManageUser>
+            {editedIndex !== null && (
+              <PopupContainer>
+                <PopupContent>
+                  <div>
+                    Do you want to delete <br /> this user?
+                  </div>
+                  <ButtonYesNoContainer>
+                    <ButtonYesNo onClick={props.onYes}>Yes</ButtonYesNo>
+                    <ButtonYesNo onClick={closePopup}>No</ButtonYesNo>
+                  </ButtonYesNoContainer>
+                </PopupContent>
+              </PopupContainer>
+            )}
 
-      <ContainerManageUser>
-        {editedIndex !== null && (
-          <PopupContainer>
-            <PopupContent>
-              <div>
-                Do you want to delete <br /> this user?
-              </div>
-              <ButtonYesNoContainer>
-                <ButtonYesNo onClick={props.onYes}>Yes</ButtonYesNo>
-                <ButtonYesNo onClick={closePopup}>No</ButtonYesNo>
-              </ButtonYesNoContainer>
-            </PopupContent>
-          </PopupContainer>
-        )}
+            <LabelHeadContainer>
+              <LabelHeadUsername>Username</LabelHeadUsername>
+              <LabelHeadRole>Role</LabelHeadRole>
+              <LabelChangeRole>Change role and password</LabelChangeRole>
+              <LabelHeadVF>Verified File</LabelHeadVF>
+            </LabelHeadContainer>
 
-        <LabelHeadContainer>
-          <LabelHeadUsername>Username</LabelHeadUsername>
-          <LabelHeadRole>Role</LabelHeadRole>
-          <LabelHeadVF>Verified File</LabelHeadVF>
-        </LabelHeadContainer>
-
-        {userData.map((user, index) => (
-          <ContentUser key={index}>
-            <RowUsername>{user.username}</RowUsername>
-            <RolRole>{user.role}</RolRole>
-            <DownloadAttatchedFileButton>Download</DownloadAttatchedFileButton>
-            <ImgDeleteButton src={imgDelete} onClick={togglePopup} />
-          </ContentUser>
-        ))}
-      </ContainerManageUser>
+            {userData.map((user, index) => (
+              <ContentUser key={index}>
+                <RowUsername>{user.username}</RowUsername>
+                <RolRole>{user.role}</RolRole>
+                <ChangeRoleButton
+                  onClick={() => handleChangeRoleButtonClick(user)}
+                >
+                  Change
+                </ChangeRoleButton>
+                <DownloadAttatchedFileButton>
+                  Download
+                </DownloadAttatchedFileButton>
+                <ImgDeleteButton src={imgDelete} onClick={togglePopup} />
+              </ContentUser>
+            ))}
+          </ContainerManageUser>
+        </>
+      )}
     </>
   );
 };

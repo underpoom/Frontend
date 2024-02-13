@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import NavbarTopAdmin from './NavbarTopAdmin/NavbarTopAdmin';
+import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import styled from "styled-components";
 
 const ContainerAddFactory = styled.div`
@@ -82,7 +82,6 @@ const Submit = styled.div`
   box-shadow: 0px 4px 4px 0px #525761;
   cursor: pointer;
 `;
-
 
 export const AddFactory = () => {
   const [provinceList, setProvinceList] = useState([]);
@@ -168,6 +167,7 @@ export const AddFactory = () => {
       setFilteredAmphures(newFilteredAmphures);
       setSelectedAmphure("");
       setSelectedTambon("");
+      setFactoryLocation(null);
     }
   }, [selectedProvince]);
   useEffect(() => {
@@ -186,8 +186,11 @@ export const AddFactory = () => {
 
       setFilteredTambons(newFilteredTambon);
       setSelectedTambon("");
+      setFactoryLocation(null);
     }
   }, [selectedAmphure]);
+
+  const [factoryLocation, setFactoryLocation] = useState([]);
   useEffect(() => {
     if (selectedTambon) {
       console.log("selected tambon ", selectedTambon);
@@ -205,91 +208,100 @@ export const AddFactory = () => {
       ).name_en;
 
       const Location = foundProvince + "_" + foundAmphure + "_" + foundTambon;
-
-      console.log(Location);
+      setFactoryLocation(Location);
     }
   }, [selectedTambon]);
+
+  // ----------------------------------------------------------------
+  const handleSubmit = () => {
+    if (factoryLocation !== null) {
+      console.log("You craet", newFactoryName, "at ", factoryLocation);
+    }
+  };
+
+  const [newFactoryName, setNewFactoryName] = useState("");
+
+  const handleChange = (event) => {
+    setNewFactoryName(event.target.value);
+  };
+
   return (
     <>
       <NavbarTopAdmin pageTitle="Add Factory" />
 
       <ContainerAddFactory>
-        
-          <ContentFactoryName>
-            Factory Name :
-            <PasswordInput
-              // type="password"
-              id="newPassword"
-              name="newPassword"
-              maxLength={20}
-              required
-            />
-            <Maximum20character>Maximum 20 character</Maximum20character>
-          </ContentFactoryName>
+        <ContentFactoryName>
+          Factory Name :
+          <PasswordInput
+            // type="password"
+            id="newPassword"
+            name="newPassword"
+            maxLength={20}
+            required
+            onChange={handleChange}
+          />
+          <Maximum20character>Maximum 20 character</Maximum20character>
+        </ContentFactoryName>
 
-          <SelectSection>
-            Factory Province :
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <StyledSelect
-                value={selectedProvince}
-                onChange={handleProvinceChange}
-                loading={loading} // Pass loading state as a prop
-              >
-                <option value="">Select the province</option>
-                {provinceList.map((province) => (
-                  <option key={province.id} value={province.id}>
-                    {province.name_th}
-                  </option>
-                ))}
-              </StyledSelect>
-            )}
-          </SelectSection>
+        <SelectSection>
+          Factory Province :
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <StyledSelect
+              value={selectedProvince}
+              onChange={handleProvinceChange}
+              loading={loading} // Pass loading state as a prop
+            >
+              <option value="">Select the province</option>
+              {provinceList.map((province) => (
+                <option key={province.id} value={province.id}>
+                  {province.name_th}
+                </option>
+              ))}
+            </StyledSelect>
+          )}
+        </SelectSection>
 
-          <SelectSection>
-            Factory District :
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <StyledSelect
-                value={selectedAmphure}
-                onChange={handleAmphureChange}
-              >
-                <option value="">Select the district</option>
-                {filteredAmphures.map((amphure) => (
-                  <option key={amphure.id} value={amphure.id}>
-                    {amphure.name_th}
-                  </option>
-                ))}
-              </StyledSelect>
-            )}
-          </SelectSection>
+        <SelectSection>
+          Factory District :
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <StyledSelect
+              value={selectedAmphure}
+              onChange={handleAmphureChange}
+            >
+              <option value="">Select the district</option>
+              {filteredAmphures.map((amphure) => (
+                <option key={amphure.id} value={amphure.id}>
+                  {amphure.name_th}
+                </option>
+              ))}
+            </StyledSelect>
+          )}
+        </SelectSection>
 
-          <SelectSection>
-            Factory Sub-district :
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <StyledSelect
-                value={selectedTambon}
-                onChange={handleTambonChange}
-              >
-                <option value="">Select the sub-district</option>
-                {filteredTambons.map((tambon) => (
-                  <option key={tambon.id} value={tambon.id}>
-                    {tambon.name_th}
-                  </option>
-                ))}
-              </StyledSelect>
-            )}
-          </SelectSection>
+        <SelectSection>
+          Factory Sub-district :
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <StyledSelect value={selectedTambon} onChange={handleTambonChange}>
+              <option value="">Select the sub-district</option>
+              {filteredTambons.map((tambon) => (
+                <option key={tambon.id} value={tambon.id}>
+                  {tambon.name_th}
+                </option>
+              ))}
+            </StyledSelect>
+          )}
+        </SelectSection>
 
-          <Submit>Submit</Submit>
-       
+        <Submit onClick={handleSubmit}>Submit</Submit>
       </ContainerAddFactory>
     </>
   );
-}
+};
 
 export default AddFactory;

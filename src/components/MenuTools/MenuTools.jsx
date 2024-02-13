@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { InputGroupAddon } from "reactstrap";
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-  Input,
-} from "reactstrap";
-
 import "./MenuTools.css";
-
+import styled from "styled-components";
+const Img = styled.img`
+  aspect-ratio: 0.57;
+  object-fit: auto;
+  object-position: center;
+  width: 20px;
+  fill: #000;
+  margin-right: 2vh;
+  cursor: pointer;
+`;
 export const MenuTools = () => {
   const [factories, setFactories] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedFactory, setSelectedFactory] = useState(null);
 
   const imgFactory =
@@ -38,36 +35,12 @@ export const MenuTools = () => {
       .catch((error) => console.error("Error fetching factories:", error));
   }, []);
 
-  const toggleDropdown = () => {
-    setDropdownOpen((prevState) => !prevState);
-  };
-
-  const handleSearchChange = (event) => {
-    const { value } = event.target;
-    setSearchQuery(value);
-  };
-
-  const handleFactorySelect = (selectedFactory) => {
-    setSelectedFactory(selectedFactory);
-    // Add your logic for handling the selected factory here
-  };
-
-  const handleBuildingClick = (buildingName) => {
-    console.log("Clicked on building:", buildingName);
-    // Add your logic for handling the clicked building here
-  };
-
   const handleFactoryClick = (factory) => {
     setSelectedFactory(factory);
   };
 
-  const filteredFactories = factories.filter((factory) =>
-    factory.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <div className="Container-menutools">
-      {/* <div className="NewBuilding-Button">New Building</div> */}
       <div className="Home-page">
         <span style={{ fontSize: "40px" }}>Factories</span>
         <span style={{ fontSize: "24px" }}>& Buildings</span>

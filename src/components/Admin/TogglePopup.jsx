@@ -57,15 +57,15 @@ const ButtonYesNo = styled.button`
   }
 `;
 
-const TogglePopup = ({ content, onClose }) => {
+const TogglePopup = ({ content, onYes, onClose, }) => {
   return (
     <>
       <PopupContainer>
         <PopupContent>
-          <>Do you want to {content} this user?</>
+          {content}
 
           <ButtonYesNoContainer>
-            <ButtonYesNo>Yes</ButtonYesNo>
+            <ButtonYesNo onClick={onYes}>Yes</ButtonYesNo>
             <ButtonYesNo onClick={onClose}>No</ButtonYesNo>
           </ButtonYesNoContainer>
         </PopupContent>
