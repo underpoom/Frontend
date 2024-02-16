@@ -15,87 +15,92 @@ const ContainerVerifyUsers = styled.div`
 `;
 
 const LabelHeadContainer = styled.div`
-  padding: 10px 0px 10px 0px;
+  align-items: center;
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--stork, #9f9f9f);
   display: flex;
-  /* border: 1px solid red; */
-  justify-content: flex-start;
-  gap: 10px;
-
+  margin-top: 25px;
+  font-size: 24px;
+  color: #fff;
+  font-weight: 700;
+  padding: 11px 26px;
   position: sticky;
-  background: #f6f6f6;
   top: 0;
   z-index: 1;
 `;
 
 const LabelHeadUsername = styled.div`
-  font-family: Inter, sans-serif;
-  font-size: 24px;
-  color: #000;
-  font-weight: 700;
-  margin-left: 115px;
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
 `;
 
-const LabelHeadRole = styled.div`
-  font-family: Inter, sans-serif;
+const LabelHeadFirstname = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 58px;
+`;
 
-  font-size: 24px;
-  color: #000;
-  font-weight: 700;
-  margin-left: 288px;
+const LabelHeadSurname = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 62px;
+`;
+
+const LabelHeadEmailAddress = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 160px;
 `;
 
 const LabelHeadVF = styled.div`
-  font-family: Inter, sans-serif;
-  font-size: 24px;
-  color: #000;
-  font-weight: 700;
-  margin-left: 248px;
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 175px;
+  width: 85px;
 `;
 
 const ContentUser = styled.div`
+  align-items: center;
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: #fff;
   display: flex;
-  border-radius: 10px;
-  background-color: #d9d9d9;
-  margin-bottom: 25px;
-  padding: 23.5px 39px 23.5px 80px;
   flex-direction: row;
   justify-content: space-between;
-`;
-
-const RowUsername = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16%;
-  /* border: 1px solid red; */
-  color: #000;
-  font: 400 24px Inter, sans-serif;
-`;
-
-const RolRole = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 24px;
+  font-size: 20px;
   color: #000;
   font-weight: 400;
-  font-family: Inter, sans-serif;
-  /* border: 1px solid red; */
-  width: 16%;
-  align-items: center;
-  justify-content: center;
+  padding: 5px 30px;
 `;
 
-const DownloadAttatchedFileButton = styled.div`
-  font-family: Inter, sans-serif;
-  border-radius: 10px;
-  border: 1px solid var(--stork, #9f9f9f);
-  background-color: var(--light, #fafafa);
-  justify-content: center;
-  padding: 18px 10px;
-  /* border: 1px solid red; */
-  font-size: 20px;
-  cursor: pointer;
-`;
+const [RowUserData, RowUserDataEmail] = [
+  styled.div`
+    text-align: center;
+    font-family: Inter, sans-serif;
+    /* border: 1px solid red; */
+    width: 9%;
+    word-wrap: break-word;
+  `,
+  styled.div`
+    text-align: center;
+    font-family: Inter, sans-serif;
+    /* border: 1px solid red; */
+    width: 30%;
+  `,
+];
+
+const [DownloadAttatchedFileButton] = [
+  styled.div`
+    border-radius: 10px;
+    border: 1px solid var(--Important-Button, #0a89ff);
+    background-color: var(--light, #fafafa);
+    justify-content: center;
+    color: #0a89ff;
+    padding: 10px 15px;
+    font: 16px Inter, sans-serif;
+    cursor: pointer;
+    width: fit-content;
+  `
+];
 
 const PopupContainer = styled.div`
   position: fixed;
@@ -151,22 +156,15 @@ const ButtonYesNo = styled.button`
 `;
 
 const ImgAcceptButton = styled.img`
-  aspect-ratio: 1;
   object-fit: auto;
   object-position: center;
-  width: 40px;
-  align-self: stretch;
-  margin-right: -16vh;
-  margin-left: -8vh;
   cursor: pointer;
+  margin-right: -4vh;
 `;
 
 const ImgDeclineButton = styled.img`
-  aspect-ratio: 1;
   object-fit: auto;
   object-position: center;
-  width: 50px;
-  align-self: stretch;
   cursor: pointer;
 `;
 
@@ -195,6 +193,7 @@ export const VerifyUsers = (props) => {
       }
       const data = await response.json();
       setUserData(data);
+      setFilteredData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -215,9 +214,19 @@ export const VerifyUsers = (props) => {
     setEditedIndexDecline(null);
   };
 
+   const [filteredData, setFilteredData] = useState([]);
+   const showFilteredData = (filteredData) => {
+     console.log("Filtered Data: ", filteredData);
+     setFilteredData(filteredData);
+   };
+
   return (
     <>
-      <NavbarTopAdmin pageTitle="Verify Users" />
+      <NavbarTopAdmin
+        pageTitle="Verify Users"
+        currentData={userData}
+        filteredData={showFilteredData}
+      />
 
       <ContainerVerifyUsers>
         {editedIndexAccept !== null && (
@@ -250,14 +259,19 @@ export const VerifyUsers = (props) => {
 
         <LabelHeadContainer>
           <LabelHeadUsername>Username</LabelHeadUsername>
-          <LabelHeadRole>Role</LabelHeadRole>
+          <LabelHeadFirstname>Firstname</LabelHeadFirstname>
+          <LabelHeadSurname>Surname</LabelHeadSurname>
+          <LabelHeadEmailAddress>Email Address</LabelHeadEmailAddress>
           <LabelHeadVF>Verified File</LabelHeadVF>
         </LabelHeadContainer>
 
-        {userData.map((user, index) => (
+        {filteredData.map((user, index) => (
           <ContentUser key={index}>
-            <RowUsername>{user.username}</RowUsername>
-            <RolRole>{user.role}</RolRole>
+            <RowUserData>{user.username}</RowUserData>
+
+            <RowUserData>{user.firstName}</RowUserData>
+            <RowUserData>{user.surname}</RowUserData>
+            <RowUserDataEmail>{user.email}</RowUserDataEmail>
             <DownloadAttatchedFileButton>Download</DownloadAttatchedFileButton>
 
             <ImgAcceptButton src={imgAccept} onClick={togglePopupAccept} />

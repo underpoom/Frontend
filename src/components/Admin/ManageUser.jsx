@@ -9,126 +9,126 @@ import ChangeRoleAndPassword from "./ChangeRoleAndPassword";
 const ContainerManageUser = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
   flex-direction: column;
   padding: 0px 0px 39px 0px;
   overflow-y: auto;
 `;
 
 const LabelHeadContainer = styled.div`
-  padding: 10px 0px 10px 0px;
+  align-items: center;
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--stork, #9f9f9f);
   display: flex;
-  background-color: #f6f6f6;
+  margin-top: 25px;
+  font-size: 24px;
+  color: #fff;
+  font-weight: 700;
+  padding: 11px 26px;
   position: sticky;
   top: 0;
   z-index: 1;
 `;
 
 const LabelHeadUsername = styled.div`
-  font-family: Inter, sans-serif;
-  font-size: 24px;
-  color: #000;
-  font-weight: 700;
-  margin-left: 80px;
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
 `;
 
-const LabelHeadRole = styled.div`
-  font-family: Inter, sans-serif;
-  font-size: 24px;
-  color: #000;
-  font-weight: 700;
-  margin-left: 220px;
+const LabelHeadFirstname = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 44px;
 `;
 
-const LabelChangeRole = styled.div`
-  font-family: Inter, sans-serif;
-  font-size: 24px;
-  color: #000;
-  font-weight: 700;
-  margin-left: 155px;
-  width: 16%;
+const LabelHeadSurname = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 48px;
+`;
+
+const LabelHeadEmailAddress = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 150px;
+`;
+
+const LabelHeadChangePassword = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 130px;
+  width: 120px;
 `;
 
 const LabelHeadVF = styled.div`
-  font-family: Inter, sans-serif;
-  font-size: 24px;
-  color: #000;
-  font-weight: 700;
-  margin-left: 95px;
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 40px;
+  width: 85px;
 `;
 
 const ContentUser = styled.div`
+  align-items: center;
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: #fff;
   display: flex;
-  border-radius: 10px;
-  background-color: #d9d9d9;
-  margin-bottom: 25px;
-  padding: 24px 40px 24px 40px;
   flex-direction: row;
   justify-content: space-between;
-`;
-
-const RowUsername = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16%;
-  /* border: 1px solid red; */
-  color: #000;
-  font: 400 24px Inter, sans-serif;
-`;
-
-const RolRole = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 24px;
+  font-size: 20px;
   color: #000;
   font-weight: 400;
-  font-family: Inter, sans-serif;
-  /* border: 1px solid red; */
-  width: 16%;
-  align-items: center;
-  justify-content: center;
+  padding: 5px 30px;
 `;
 
-const [DownloadAttatchedFileButton, ChangeRoleButton] = [
+const [RowUserData, RowUserDataEmail] = [
   styled.div`
+    text-align: center;
     font-family: Inter, sans-serif;
-    border-radius: 10px;
-    border: 1px solid var(--Important-Button, #0a89ff);
-    color: #0a89ff;
-    background-color: var(--light, #fafafa);
-    justify-content: center;
-    padding: 18px 10px;
     /* border: 1px solid red; */
-    font-size: 20px;
-    cursor: pointer;
-    width: 12%;
+    width: 9%;
+    word-wrap: break-word;
   `,
   styled.div`
+    text-align: center;
     font-family: Inter, sans-serif;
-    border-radius: 10px;
-    border: 1px solid var(--Important-Button, #0a89ff);
-    color: #0a89ff;
-    background-color: var(--light, #fafafa);
-    justify-content: center;
-    padding: 18px 10px;
     /* border: 1px solid red; */
-    font-size: 20px;
-    cursor: pointer;
+    width: 30%;
   `,
 ];
+
+const [DownloadAttatchedFileButton, ChangePasswordButton] = [
+  styled.div`
+    border-radius: 10px;
+    border: 1px solid var(--Important-Button, #0a89ff);
+    background-color: var(--light, #fafafa);
+    justify-content: center;
+    color: #0a89ff;
+    padding: 10px 15px;
+    font: 16px Inter, sans-serif;
+    cursor: pointer;
+    width: fit-content;
+  `,
+  styled.div`
+    border-radius: 10px;
+    border: 1px solid var(--Important-Button, #0a89ff);
+    background-color: var(--light, #fafafa);
+    justify-content: center;
+    color: #0a89ff;
+    padding: 10px 15px;
+    font: 16px Inter, sans-serif;
+    cursor: pointer;
+    width: fit-content;
+  `,
+];
+
 const ImgDeleteButton = styled.img`
   aspect-ratio: 1;
   object-fit: auto;
   object-position: center;
-  width: 50px;
-  margin: auto 0;
-  /* border: 1px solid red; */
   cursor: pointer;
 `;
+
 const PopupContainer = styled.div`
   position: fixed;
-
   top: 0;
   left: 0;
   width: 100%;
@@ -198,6 +198,7 @@ export const ManageUser = (props) => {
       }
       const data = await response.json();
       setUserData(data);
+      setFilteredData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -228,6 +229,14 @@ export const ManageUser = (props) => {
     setShowChangeRoleAndPassword(false);
   };
 
+  const [filteredData, setFilteredData] = useState([]);
+  const showFilteredData = (filteredData) => {
+    console.log("Filtered Data: ", filteredData);
+    setFilteredData(filteredData);
+  };
+
+  
+
   return (
     <>
       {showChangeRoleAndPassword ? (
@@ -237,7 +246,11 @@ export const ManageUser = (props) => {
         />
       ) : (
         <>
-          <NavbarTopAdmin pageTitle="Manage User" />
+          <NavbarTopAdmin
+            pageTitle="Manage User"
+            currentData={userData}
+            filteredData={showFilteredData}
+          />
           <ContainerManageUser>
             {editedIndex !== null && (
               <PopupContainer>
@@ -255,20 +268,28 @@ export const ManageUser = (props) => {
 
             <LabelHeadContainer>
               <LabelHeadUsername>Username</LabelHeadUsername>
-              <LabelHeadRole>Role</LabelHeadRole>
-              <LabelChangeRole>Change role and password</LabelChangeRole>
+              <LabelHeadFirstname>Firstname</LabelHeadFirstname>
+              <LabelHeadSurname>Surname</LabelHeadSurname>
+              <LabelHeadEmailAddress>Email Address</LabelHeadEmailAddress>
+              <LabelHeadChangePassword>Change Password</LabelHeadChangePassword>
               <LabelHeadVF>Verified File</LabelHeadVF>
             </LabelHeadContainer>
 
-            {userData.map((user, index) => (
+            {filteredData.map((user, index) => (
               <ContentUser key={index}>
-                <RowUsername>{user.username}</RowUsername>
-                <RolRole>{user.role}</RolRole>
-                <ChangeRoleButton
+                {/* <RowUsername>{user.username}</RowUsername>
+                <RolRole>{user.role}</RolRole> */}
+                <RowUserData>{user.username}</RowUserData>
+
+                <RowUserData>{user.firstName}</RowUserData>
+                <RowUserData>{user.surname}</RowUserData>
+                <RowUserDataEmail>{user.email}</RowUserDataEmail>
+
+                <ChangePasswordButton
                   onClick={() => handleChangeRoleButtonClick(user)}
                 >
                   Change
-                </ChangeRoleButton>
+                </ChangePasswordButton>
                 <DownloadAttatchedFileButton>
                   Download
                 </DownloadAttatchedFileButton>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MenuToolsAdmin.css";
 import styled from "styled-components";
+import TogglePopup from "../TogglePopup";
 
 const ContainerMenutools = styled.div`
   display: flex;
@@ -107,62 +108,165 @@ export const MenuToolsAdmin = ({ onSelectSection }) => {
     );
   };
 
+  const AddPermission = () => {
+    return (
+      <div
+        className={`add-permission ${
+          userSelectedSection === "add-permission" ? "selected-child" : ""
+        }`}
+        onClick={() => handleUserSectionSelect("add-permission")}
+      >
+        Add Permission
+      </div>
+    );
+  };
+
+  const PermissionSummary = () => {
+    return (
+      <div
+        className={`permission-summary ${
+          userSelectedSection === "permission-summary" ? "selected-child" : ""
+        }`}
+        onClick={() => handleUserSectionSelect("permission-summary")}
+      >
+        Permission Summary
+      </div>
+    );
+  };
+
+  const CreateAdmin = () => {
+    return (
+      <div
+        className={`create-admin ${
+          userSelectedSection === "create-admin" ? "selected-child" : ""
+        }`}
+        onClick={() => handleUserSectionSelect("create-admin")}
+      >
+        Create Admin
+      </div>
+    );
+  };
+
+  const ManageAdmin = () => {
+    return (
+      <div
+        className={`manage-admin ${
+          userSelectedSection === "manage-admin" ? "selected-child" : ""
+        }`}
+        onClick={() => handleUserSectionSelect("manage-admin")}
+      >
+        Manage Admin
+      </div>
+    );
+  };
+
   const navigate = useNavigate();
-  function handleClickLogout(event) {
+
+  const handleRemoveClickYes = () => {
     navigate("/loginsignup");
-  }
+  };
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+
+  const handleClickLogout = () => {
+    setShowPopup(true);
+    setPopupContent("Do you want to logout ?");
+  };
 
   return (
-    <ContainerMenutools>
-      <HomePage>
-        <span style={{ fontSize: "12px" }}>
-          {" "}
-          <br />
-        </span>
-        <span style={{ fontSize: "40px" }}>Management</span>
-        <span style={{ fontSize: "12px" }}>
-          {" "}
-          <br />
-        </span>
-      </HomePage>
-      <WhiteLine />
-
-      <Section name="Users" imgSrc={imgUser} className="User">
-        Users
-        <img
-          loading="lazy"
-          src={selectedSection === "Users" ? imgBoldDown : imgBoldLeft}
-          className="BoldArrow"
+    <>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleRemoveClickYes}
         />
-      </Section>
-
-      {selectedSection === "Users" && (
-        <>
-          <ManageUsers />
-          <VerifyUser />
-        </>
       )}
 
-      <Section name="AddFactory" imgSrc={imgFactory} className="AddFactory">
-        Add Factory
-      </Section>
+      <ContainerMenutools>
+        <HomePage>
+          <span style={{ fontSize: "12px" }}>
+            {" "}
+            <br />
+          </span>
+          <span style={{ fontSize: "40px" }}>Management</span>
+          <span style={{ fontSize: "12px" }}>
+            {" "}
+            <br />
+          </span>
+        </HomePage>
+        <WhiteLine />
 
-      <Section
-        name="RemoveFactory"
-        imgSrc={imgRemoveFactory}
-        className="RemoveFactory"
-      >
-        Remove Factory
-      </Section>
+        <Section name="Users" imgSrc={imgUser} className="User">
+          Users
+          <img
+            loading="lazy"
+            src={selectedSection === "Users" ? imgBoldDown : imgBoldLeft}
+            className="BoldArrow"
+          />
+        </Section>
 
-      <Section name="Permission" imgSrc={imgPermission} className="Permission">
-        Permission
-      </Section>
+        {selectedSection === "Users" && (
+          <>
+            <ManageUsers />
+            <VerifyUser />
+          </>
+        )}
 
-      <div className="Logout" onClick={handleClickLogout}>
-        Logout
-        <img loading="lazy" src={imgLogout} className="img-logout" />
-      </div>
-    </ContainerMenutools>
+        <Section name="Admin" imgSrc={imgUser} className="Admin">
+          Admin
+          <img
+            loading="lazy"
+            src={selectedSection === "Admin" ? imgBoldDown : imgBoldLeft}
+            className="BoldArrow"
+          />
+        </Section>
+
+        {selectedSection === "Admin" && (
+          <>
+            <CreateAdmin />
+            <ManageAdmin />
+          </>
+        )}
+
+        <Section name="AddFactory" imgSrc={imgFactory} className="AddFactory">
+          Add Factory
+        </Section>
+
+        <Section
+          name="RemoveFactory"
+          imgSrc={imgRemoveFactory}
+          className="RemoveFactory"
+        >
+          Remove Factory
+        </Section>
+
+        <Section
+          name="Permission"
+          imgSrc={imgPermission}
+          className="Permission"
+        >
+          Permission
+          <img
+            loading="lazy"
+            src={selectedSection === "Permission" ? imgBoldDown : imgBoldLeft}
+            className="BoldArrow"
+          />
+        </Section>
+
+        {selectedSection === "Permission" && (
+          <>
+            <AddPermission />
+            <PermissionSummary />
+          </>
+        )}
+
+        <div className="Logout" onClick={handleClickLogout}>
+          Logout
+          <img loading="lazy" src={imgLogout} className="img-logout" />
+        </div>
+      </ContainerMenutools>
+    </>
   );
 };

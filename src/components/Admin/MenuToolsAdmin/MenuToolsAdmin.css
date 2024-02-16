@@ -1,13 +1,15 @@
 .User,
 .AddFactory,
-.Permission {
+.Permission,
+.Admin {
   display: flex;
   gap: 3vh;
   margin: 35px 10px 0 0;
   cursor: pointer;
   width: calc(32vh);
 
-  &:hover {
+  &:hover,
+  &.selected {
     border-radius: 10px;
     border: 1px solid var(--stork, #9f9f9f);
     background-color: var(--Important-Button, #0a89ff);
@@ -25,7 +27,8 @@
   cursor: pointer;
   width: calc(36vh);
 
-  &:hover {
+  &:hover,
+  &.selected {
     border-radius: 10px;
     border: 1px solid var(--stork, #9f9f9f);
     background-color: var(--Important-Button, #0a89ff);
@@ -37,12 +40,16 @@
 }
 
 .manage-user,
-.verify-user {
+.verify-user,
+.add-permission,
+.permission-summary,
+.create-admin,
+.manage-admin {
   display: flex;
   border-radius: 10px;
-  margin: 2vh 0 0 8vh;
+  margin: 2vh 0 0 6vh;
   justify-content: start;
-  width: 21vh;
+  width: fit-content;
   font: 24px Inter, sans-serif;
   padding: 1vh;
   transition: transform 0.3s ease;
@@ -56,19 +63,26 @@
   }
 }
 
-.img-users-edit {
+.img-users-edit,
+.img-admin-edit {
   aspect-ratio: 1;
   object-fit: auto;
   object-position: center;
   width: 42px;
-
 }
+
+
 
 .img-addfactory-edit {
   aspect-ratio: 1;
   object-fit: auto;
   object-position: center;
   width: 42px;
+}
+
+.BoldArrow {
+
+  margin-left: auto;
 }
 
 .img-bold-left-edit {
@@ -78,7 +92,6 @@
   margin: auto 0;
   margin-left: auto;
 }
-
 
 
 

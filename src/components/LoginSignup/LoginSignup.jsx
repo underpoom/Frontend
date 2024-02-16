@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./LoginSignup.css";
 import { Icon } from "@iconify/react";
-import user_icon from "../Assets/person.png";
-import email_icon from "../Assets/email.png";
-import password_icon from "../Assets/password.png";
+import user_icon from "../../bounding/Assets/person.png";
+import email_icon from "../../bounding/Assets/email.png";
+import password_icon from "../../bounding/Assets/password.png";
 import MultipleFileUploader from "./MultipleFileUploader";
 import { useNavigate } from "react-router-dom";
 const LoginSignup = () => {
-  const [action, setAction] = useState("Sign up");
+  const [action, setAction] = useState("Login");
   const [provinceNames, setProvinceNames] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [loading, setLoading] = useState(true);
@@ -57,16 +57,39 @@ const LoginSignup = () => {
           <div className="underline"></div>
         </div>
 
+        {action === "Sign up" ? (
+          <>
+            <div className="inputs-name-lastname">
+              <div className="input-name-lastname">
+                {/* <img src={user_icon} alt="" /> */}
+                <input type="text" placeholder="Name" />
+              </div>
+
+              <div className="input-name-lastname">
+                {/* <img src={user_icon} alt="" /> */}
+                <input type="text" placeholder="Last name" />
+              </div>
+            </div>
+
+            <div className="inputs">
+              <div className="input">
+                {/* <img src={user_icon} alt="" /> */}
+                <input type="email" placeholder="Email address" />
+              </div>
+            </div>
+          </>
+        ) : null}
+
         <div className="inputs">
           <div className="input">
-            <img src={user_icon} alt="" />
-            <input type="text" placeholder="Name" />
+            {/* <img src={user_icon} alt="" /> */}
+            <input type="text" placeholder="Username" />
           </div>
         </div>
 
         <div className="inputs">
           <div className="input">
-            <img src={password_icon} alt="" />
+            {/* <img src={password_icon} alt="" /> */}
             <input type="password" placeholder="Password" />
           </div>
         </div>
@@ -86,9 +109,7 @@ const LoginSignup = () => {
             </div>
           ) : (
             // <div className="submit" onClick={handleClickSignIn}>
-            <div className="submit">
-              Sign up
-            </div>
+            <div className="submit">Sign up</div>
           )}
         </div>
         {action === "Login" ? (

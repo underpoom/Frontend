@@ -5,16 +5,18 @@
     border: 1px solid #9a9a9a;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     background-color: #fff;
-    z-index: 10;
 
-    margin-top: -62px;
-    width: 443px !important;
-    max-width: 100%;
+    width:600px !important;
+
 
     font-size: 16px;
-    padding: 47px 43px;
+    padding: 30px 40px !important;
+    height:100%;
+    margin-top:15vh;
+    
 
-    margin: 15vh auto;
+
+    
 }
 
 .header {
@@ -41,13 +43,18 @@
 }
 
 .inputs {
+    margin-top: 20px;
+    display: flex;
+    gap: 25px;
+}
+
+.inputs-name-lastname {
     margin-top: 40px;
     display: flex;
-    flex-direction: column;
-    gap: 25px;
-    
-
+    flex-direction: row;
+    gap: 20px;
 }
+
 
 .input {
     display: flex;
@@ -64,12 +71,9 @@
     text-align: center;
     padding: 19px 60px 19px 19px;
     height: 7vh;
-    width: 35vh;
+    width: 100%;
 }
 
-.input img {
-    margin: 0px 30px 5px 30px;
-}
 
 .input input {
     height: 30px;
@@ -79,8 +83,47 @@
     outline: none;
     color: #797979;
     font-size: 19px;
-    
+
 }
+
+.input-name-lastname {
+    display: flex;
+    margin: auto;
+    font-family: Inter, sans-serif;
+    border-radius: 20px;
+    border: 1px solid var(--stork, #9f9f9f);
+    background-color: #fff;
+    justify-content: start;
+    align-items: start;
+    color: var(--stork, #9f9f9f);
+    font-weight: 700;
+    white-space: nowrap;
+    text-align: center;
+    padding: 19px 19px 19px 19px;
+    height: 7vh;
+    width: auto;
+    /* border: 1px solid red; */
+}
+
+
+.input-name-lastname input {
+    height: 30px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #797979;
+    font-size: 19px;
+    /* border: 1px solid red; */
+
+}
+
+
+
+.input img {
+    margin: 0px 30px 5px 30px;
+}
+
 
 .forgot-password {
 
@@ -143,7 +186,7 @@
     background-position: center;
     z-index: -1;
     border-radius: 20px;
-  
+
 }
 
 

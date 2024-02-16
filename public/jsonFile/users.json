@@ -3,6 +3,9 @@
     "id": 1,
     "username": "userno1",
     "role": "User",
+    "firstName": "John",
+    "surname": "Doe",
+    "email": "john.doe@example.com",
     "profileImage": "https://via.placeholder.com/55x55",
     "editImage": "https://via.placeholder.com/35x35",
     "deleteImage": "https://via.placeholder.com/22x22"
@@ -11,6 +14,9 @@
     "id": 2,
     "username": "userno2",
     "role": "Admin",
+    "firstName": "Jane",
+    "surname": "Smith",
+    "email": "jane.smith@example.com",
     "profileImage": "https://via.placeholder.com/55x55",
     "editImage": "https://via.placeholder.com/35x35",
     "deleteImage": "https://via.placeholder.com/22x22"
@@ -19,6 +25,9 @@
     "id": 3,
     "username": "use",
     "role": "User",
+    "firstName": "Alice",
+    "surname": "Johnson",
+    "email": "alice.johnson@example.com",
     "profileImage": "https://via.placeholder.com/55x55",
     "editImage": "https://via.placeholder.com/35x35",
     "deleteImage": "https://via.placeholder.com/22x22"
@@ -27,6 +36,9 @@
     "id": 4,
     "username": "useraraikordai",
     "role": "User",
+    "firstName": "Bob",
+    "surname": "Williams",
+    "email": "bob.williams@example.com",
     "profileImage": "https://via.placeholder.com/55x55",
     "editImage": "https://via.placeholder.com/35x35",
     "deleteImage": "https://via.placeholder.com/22x22"
@@ -35,6 +47,9 @@
     "id": 5,
     "username": "นายอาทิตย์",
     "role": "User",
+    "firstName": "David",
+    "surname": "Brown",
+    "email": "david.brown@example.com",
     "profileImage": "https://via.placeholder.com/55x55",
     "editImage": "https://via.placeholder.com/35x35",
     "deleteImage": "https://via.placeholder.com/22x22"
@@ -43,11 +58,11 @@
     "id": 6,
     "username": "นายอาทิตย์",
     "role": "User",
+    "firstName": "Michael",
+    "surname": "Lee",
+    "email": "michael.lee@example.com",
     "profileImage": "https://via.placeholder.com/55x55",
     "editImage": "https://via.placeholder.com/35x35",
     "deleteImage": "https://via.placeholder.com/22x22"
   }
-
-   
-
 ]

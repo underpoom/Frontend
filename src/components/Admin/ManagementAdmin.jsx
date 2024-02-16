@@ -5,7 +5,7 @@ import ManageUser from "./ManageUser";
 import VerifyUsers from "./VerifyUsers";
 import styled from "styled-components";
 import AddFactory from "./AddFactory";
-import Permission from "./Permission";
+import AddPermission from "./AddPermission";
 import ChangeRoleAndPassword from "./ChangeRoleAndPassword";
 import RemoveFactory from "./RemoverFactory";
 
@@ -31,7 +31,9 @@ export const ManagementAdmin = () => {
         {selectedSection === "manage-user" && <ManageUser />}
         {selectedSection === "verify-user" && <VerifyUsers />}
         {selectedSection === "AddFactory" && <AddFactory />}
-        {selectedSection === "Permission" && <Permission />}
+
+        {selectedSection === "add-permission" && <AddPermission />}
+
         {selectedSection === "RemoveFactory" && <RemoveFactory />}
 
         {/* <ChangeRoleAndPassword/> */}

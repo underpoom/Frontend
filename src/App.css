@@ -1,11 +1,11 @@
 .App {
-  
+
   display: flex;
-  
-  
+
+
   text-align: center;
   flex-direction: row;
-  
+
 
 }
 
@@ -39,6 +39,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

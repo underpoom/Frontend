@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
+import TogglePopup from "./TogglePopup";
 
 const ContainerChangePassword = styled.div`
   display: flex;
@@ -163,6 +164,11 @@ const Img = styled.img`
   cursor: pointer;
 `;
 
+const BlackLine = styled.div`
+  background-color: black;
+  height: 2px;
+`;
+
 const imgBack =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
@@ -173,14 +179,39 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
     setSelectedOption(event.target.value);
   };
 
-  console.log(userData);
+  const [password, setPassword] = useState("");
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+
+  const handleClickSubmit = () => {
+    setShowPopup(true);
+    setPopupContent("Do you want to change this user’s password? ?");
+  };
+
+  // ----------------------------------------------------------------
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+    console.log("Password:", password);
+  };
+  const handleRemoveClickYes = () => {};
+
   return (
     <>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleRemoveClickYes}
+        />
+      )}
+
       <NavbarTopAdminContainer>
-        {/* <Img src={imgBack} onClick={handleFactorySelected}></Img> */}
         <Img src={imgBack} onClick={onBackClick}></Img>
-        <PageTitleAdmin>test</PageTitleAdmin>
+        <PageTitleAdmin>Change Password</PageTitleAdmin>
       </NavbarTopAdminContainer>
+
+      <BlackLine />
 
       <ContainerChangePassword>
         <ContentChangePassword>
@@ -196,15 +227,15 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
                 id="newPassword"
                 name="newPassword"
                 maxLength={20}
-                required
+                onChange={handlePasswordChange}
               />
               <Maximum20character>Maximum 20 character</Maximum20character>
             </PasswordInputContent>
           </NewPasswordContent>
-          <Submit>Submit</Submit>
+          <Submit onClick={handleClickSubmit}>Submit</Submit>
         </ContentChangePassword>
 
-        <ContentChangeUserRole>
+        {/* <ContentChangeUserRole>
           Change user’s role
           <NewPasswordContent>
             User’s role :
@@ -222,7 +253,7 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
             </PasswordInputContent>
           </NewPasswordContent>
           <Submit>Submit</Submit>
-        </ContentChangeUserRole>
+        </ContentChangeUserRole> */}
       </ContainerChangePassword>
     </>
   );

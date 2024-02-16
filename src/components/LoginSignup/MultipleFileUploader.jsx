@@ -1,7 +1,6 @@
-
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import axios from "axios";
-import "./MultipleFileUploader.css"
+import "./MultipleFileUploader.css";
 
 export const MultipleFileUploader = () => {
   const [files, setFiles] = useState([]);
@@ -10,7 +9,7 @@ export const MultipleFileUploader = () => {
   function handleMultipleChange(event) {
     setFiles([...event.target.files]);
   }
-  
+
   function handleMultipleSubmit(event) {
     event.preventDefault();
     const url = "http://localhost:3000/uploadFiles";
@@ -35,12 +34,31 @@ export const MultipleFileUploader = () => {
         console.error("Error uploading files: ", error);
       });
   }
+
   return (
     <>
       <form className="input-container" onSubmit={handleMultipleSubmit}>
-        <input type="file" multiple onChange={handleMultipleChange} />
-        <button type="submit">Upload</button>
+        <label>
+          Choose files
+          <input type="file" multiple onChange={handleMultipleChange} />
+        </label>
+
+        {files.length > 0 && (
+          <div className="selected-files">
+            <h3>Selected Files:</h3>
+            <ul>
+              {files.map((file, index) => (
+                <li key={index}>
+                  {file.name.length > 12
+                    ? file.name.substring(0, 12) + "..."
+                    : file.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </form>
+
       <div className="uploaded-files">
         {uploadedFiles.map((file, index) => (
           <img key={index} src={file} alt={`Uploaded content ${index}`} />
@@ -48,7 +66,6 @@ export const MultipleFileUploader = () => {
       </div>
     </>
   );
-  
-}
-export default MultipleFileUploader;
+};
 
+export default MultipleFileUploader;
