@@ -227,6 +227,7 @@ export const ManageUser = (props) => {
   const handleBackClick = () => {
     setSelectedUser(null);
     setShowChangeRoleAndPassword(false);
+    setFilteredData(userData)
   };
 
   const [filteredData, setFilteredData] = useState([]);

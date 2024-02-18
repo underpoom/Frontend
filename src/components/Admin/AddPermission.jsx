@@ -25,22 +25,14 @@ const FactoryDetail = styled.div`
   font-weight: 700;
   width: 100%;
   /* height: 35vh; */
-  padding: 15px 30px 15px 30px;
-  margin-top: 10px;
+  padding: 10px 30px;
+  margin-top: 5px;
   border-radius: 8px;
 `;
 
 const FactoryName = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
-`;
-
-const LocLabel = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: Inter, sans-serif;
-  margin-top: 13px;
-  white-space: nowrap;
 `;
 
 const LocData = styled.div`
@@ -105,9 +97,6 @@ const SearchUserContainer = styled.div`
   }
 `;
 
-
-
-
 const imgRemove =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/3f4c9b5db1e7a6ff8ec6827ec31de5c2c1e83625984ea6446bcdc670a3524c4b?apiKey=34584a6259e046a0be0d44044e057cb8&";
 const imgAdd =
@@ -118,9 +107,9 @@ export const AddPermission = () => {
   const [FactorySelected, setFactorySelected] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [factoryList, setFactoryList] = useState([]);
-    const handleSearchChange = (event) => {
-      setSearchTerm(event.target.value);
-    };
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -130,6 +119,7 @@ export const AddPermission = () => {
         }
         const data = await response.json();
         setFactoryList(data);
+        setFilteredData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -140,6 +130,7 @@ export const AddPermission = () => {
 
   const handleBackClick = () => {
     setFactorySelected(false);
+    setFilteredData(factoryList)
   };
 
   const [FactorySelectedData, setFactorySelectedData] = useState([]);
@@ -149,29 +140,33 @@ export const AddPermission = () => {
     setFactorySelectedData(factory);
   };
 
+  const [filteredData, setFilteredData] = useState([]);
+
+  const showFilteredData = (filteredData) => {
+    console.log("Filtered Data: ", filteredData);
+    setFilteredData(filteredData);
+  };
+
+  console.log(factoryList)
+
   return (
     <>
       {FactorySelected === false ? (
         <>
-          <NavbarTopAdmin pageTitle="Add Factory’s Permission " />
+          <NavbarTopAdmin
+            pageTitle="Add Factory’s Permission"
+            currentData={factoryList}
+            filteredData={showFilteredData}
+          />
           <ContainerPermission>
             <ContentLabel>
               <LabelLG>Factory Name</LabelLG>
               <ContainerLabel>
-                <SearchUserContainer>
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    placeholder="Search users..."
-                    maxLength={20}
-                  />
-                </SearchUserContainer>
                 <LabelLG>Factory Location</LabelLG>
                 <LabelMd>SubDistrict - District - Province</LabelMd>
               </ContainerLabel>
             </ContentLabel>
-            {factoryList.map((factory, index) => (
+            {filteredData.map((factory, index) => (
               <FactoryDetail key={index}>
                 <FactoryName>{factory.name}</FactoryName>
                 <LocData>

@@ -6,84 +6,113 @@ const ContainerFactoryPermission = styled.div`
   display: flex;
   height: 76vh;
   /* border: 1px solid red; */
-  flex-direction: row;
-  aspect-ratio: 1;
-  flex-wrap: wrap;
+  flex-direction: column;
 `;
 
 const CurrentUserGetPermissionContainer = styled.div`
   border-radius: 20px;
   height: 33vh;
   background-color: #eaeaea;
-  display: flex;
   margin-top: 30px;
-  flex-direction: row;
   font-weight: 400;
   flex-wrap: wrap;
   align-content: start;
-  gap: 4px;
   overflow-y: auto;
   width: 100%;
+  padding-left: 22px;
 `;
 
 const CurrentUserGetPermissionLabel = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: start;
   width: 100%;
   color: #000;
-  height: 4vh;
+  background-color: #eaeaea;
+  padding-top: 10px;
   font: 700 24px Inter, sans-serif;
   position: sticky;
-  background-color: #f6f6f6;
   top: 0;
   z-index: 1;
-  /* border: 1px solid red; */
-  padding: 30px 22px;
-  align-items: center;
 `;
 
-const OtherUserLabel = styled.div`
+const LabelHeadContainer = styled.div`
+  align-items: center;
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--stork, #9f9f9f);
   display: flex;
+  margin-top: 10px;
+  font-size: 24px;
+  color: #fff;
+  font-weight: 700;
+  padding: 11px 26px;
   width: 100%;
-  color: #000;
-  height: 4vh;
-  font: 700 24px Inter, sans-serif;
-  position: sticky;
-  background-color: #f6f6f6;
-  top: 0;
-  /* border: 1px solid red; */
-  padding: 33px 0px 33px 22px;
-  align-items: center;
 `;
 
-const UserContent = styled.div`
+const LabelHeadUsername = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+`;
+
+const LabelHeadFirstname = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 64px;
+`;
+
+const LabelHeadSurname = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 80px;
+`;
+
+const LabelHeadEmailAddress = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  margin-left: 170px;
+`;
+
+const LabelHeadVF = styled.div`
+  font: 700 24px/1.5 Inter, sans-serif;
+  color: #fff;
+  width: 140px;
+  margin-left: 145px;
+`;
+
+const ContentUser = styled.div`
+  align-items: center;
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: #fff;
   display: flex;
-  height: 10vh;
+  flex-direction: row;
   justify-content: space-between;
-  gap: 20px;
-  margin-top: 18px;
-  /* border: 1px solid red; */
-  padding: 33px 33px 33px 5px;
-  align-items: center;
-  background-color: #d9d9d9;
-  border: 1px solid var(--stork, #9f9f9f);
-  border-radius: 10px;
-  margin-left: 22px;
-  width: 40.2vh;
+  font-size: 20px;
+  color: #000;
+  font-weight: 400;
+  padding: 5px 30px;
+  width: 100%;
 `;
 
-const UserNameLabel = styled.div`
-  color: #000;
-  text-align: center;
-  font: 20px Inter, sans-serif;
-  width: 15vh;
-`;
+const [RowUserData, RowUserDataEmail] = [
+  styled.div`
+    text-align: center;
+    font-family: Inter, sans-serif;
+    width: 9%;
+    word-wrap: break-word;
+  `,
+  styled.div`
+    text-align: center;
+    font-family: Inter, sans-serif;
+    width: 30%;
+  `,
+];
 
 const UserFile = styled.div`
   border-radius: 10px;
-  border: 1px solid var(--Important-Button, #0a89ff);
+  border: 2px solid var(--Important-Button, #0a89ff);
   background-color: var(--light, #fafafa);
   color: var(--Important-Button, #0a89ff);
-  padding: 13px 28px;
+  padding: 10px 10px;
   font: 16px Inter, sans-serif;
   cursor: pointer;
 `;
@@ -95,23 +124,34 @@ const ImgRemoveAdd = styled.img`
 
 const OtherUserContainer = styled.div`
   border-radius: 20px;
-  height: 33vh;
-  background-color: #f6f6f6;
-  display: flex;
-  margin-top: 30px;
-  flex-direction: row;
+  height: 35vh;
   font-weight: 400;
   flex-wrap: wrap;
   align-content: start;
-  gap: 4px;
   overflow-y: auto;
   width: 100%;
+  padding-left: 22px;
+  margin-top: 20px;
+`;
+
+const OtherUserLabel = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: #000;
+  font: 700 24px Inter, sans-serif;
+  background-color: #f6f6f6;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-top: 10px;
+  align-items: start;
 `;
 
 const SearchUserContainer = styled.div`
-  margin: 0 12vh 0 auto;
+  margin: -35px 0 0 auto;
   input[type="text"] {
-    height: 6.5vh;
+    height: 5.5vh;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -135,14 +175,12 @@ const NavbarTopAdminContainer = styled.div`
   display: flex;
   height: 14vh;
   width: 132vh;
-  /* border: 1px solid #f24e1e; */
   margin: 5vh 5vh 0 0;
   align-items: center;
   padding-right: 2vh;
 `;
 
 const PageTitleAdmin = styled.div`
-  /* border: 1px solid #f24e1e; */
   font-size: xx-large;
   font-weight: 700;
   margin-right: auto;
@@ -242,25 +280,35 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
           <Img src={imgBack} onClick={onBackClick}></Img>
           <PageTitleAdmin>{factoryData.name}</PageTitleAdmin>
         </NavbarTopAdminContainer>
-
         <BlacLineAdmin />
 
         <ContainerFactoryPermission>
           <CurrentUserGetPermissionContainer>
             <CurrentUserGetPermissionLabel>
               Current user get permission :
+              <LabelHeadContainer>
+                <LabelHeadUsername>Username</LabelHeadUsername>
+                <LabelHeadFirstname>Firstname</LabelHeadFirstname>
+                <LabelHeadSurname>Surname</LabelHeadSurname>
+                <LabelHeadEmailAddress>Email Address</LabelHeadEmailAddress>
+                <LabelHeadVF>Verified File</LabelHeadVF>
+              </LabelHeadContainer>
             </CurrentUserGetPermissionLabel>
 
             {userCurrentPermission.map((user, index) => (
-              <UserContent key={index}>
-                <UserNameLabel>{user.username}</UserNameLabel>
-                <UserFile>File</UserFile>
+              <ContentUser key={index}>
+                <RowUserData>{user.username}</RowUserData>
+
+                <RowUserData>{user.firstName}</RowUserData>
+                <RowUserData>{user.surname}</RowUserData>
+                <RowUserDataEmail>{user.email}</RowUserDataEmail>
+                <UserFile>Download</UserFile>
                 <ImgRemoveAdd
                   onClick={() => handleTogglePopupRemove(user)}
                   src={imgRemove}
                   isRemoveAction={true}
                 />
-              </UserContent>
+              </ContentUser>
             ))}
           </CurrentUserGetPermissionContainer>
 
@@ -272,21 +320,33 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
                   type="text"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  placeholder="Search users..."
+                  placeholder="Filter username..."
                   maxLength={20}
                 />
               </SearchUserContainer>
+              <LabelHeadContainer>
+                <LabelHeadUsername>Username</LabelHeadUsername>
+                <LabelHeadFirstname>Firstname</LabelHeadFirstname>
+                <LabelHeadSurname>Surname</LabelHeadSurname>
+                <LabelHeadEmailAddress>Email Address</LabelHeadEmailAddress>
+                <LabelHeadVF>Verified File</LabelHeadVF>
+              </LabelHeadContainer>
             </OtherUserLabel>
+
             {filteredUsers.map((user, index) => (
-              <UserContent key={index}>
-                <UserNameLabel>{user.username}</UserNameLabel>
-                <UserFile>File</UserFile>
+              <ContentUser key={index}>
+                <RowUserData>{user.username}</RowUserData>
+
+                <RowUserData>{user.firstName}</RowUserData>
+                <RowUserData>{user.surname}</RowUserData>
+                <RowUserDataEmail>{user.email}</RowUserDataEmail>
+                <UserFile>Download</UserFile>
                 <ImgRemoveAdd
                   onClick={() => handleTogglePopupAdd(user)}
                   src={imgAdd}
                   isRemoveAction={false} // For add action
                 />
-              </UserContent>
+              </ContentUser>
             ))}
           </OtherUserContainer>
         </ContainerFactoryPermission>

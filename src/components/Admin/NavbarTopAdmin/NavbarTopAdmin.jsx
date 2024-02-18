@@ -38,10 +38,20 @@ const BlacLineAdmin = styled.div`
 `;
 
 export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
+  let Term;
+
+  if (pageTitle === "Manage User" || pageTitle === "Verify Users") {
+    Term = "username";
+  } else if (
+    pageTitle === "Add Factory’s Permission" ||
+    pageTitle === "Remove Factory"
+  ) {
+    Term = "name";
+  }
   const handleSearchChange = (event) => {
     const searchTerm = event.target.value;
     const filterData = currentData.filter((data) =>
-      data.username.toLowerCase().includes(searchTerm.toLowerCase())
+      data[Term].toLowerCase().includes(searchTerm.toLowerCase())
     );
     filteredData(filterData);
   };
@@ -50,14 +60,25 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
     <>
       <NavbarTopAdminContainer>
         <PageTitleAdmin>{pageTitle}</PageTitleAdmin>
-        <SearchUserContainer>
-          <input
-            type="text"
-            onChange={handleSearchChange}
-            placeholder="Search username..."
-            maxLength={20}
-          />
-        </SearchUserContainer>
+        {Term === "username" && (
+          <SearchUserContainer>
+            <input
+              type="text"
+              onChange={handleSearchChange}
+              placeholder="Search username..."
+              maxLength={20}
+            />
+          </SearchUserContainer>
+        )}
+        {Term === "name" && (
+          <SearchUserContainer>
+            <input
+              type="text"
+              onChange={handleSearchChange}
+              placeholder="Search factory..."
+            />
+          </SearchUserContainer>
+        )}
       </NavbarTopAdminContainer>
 
       <BlacLineAdmin />

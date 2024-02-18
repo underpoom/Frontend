@@ -235,11 +235,11 @@ export const MenuToolsAdmin = ({ onSelectSection }) => {
         </Section>
 
         <Section
-          name="RemoveFactory"
+          name="ManageFactory"
           imgSrc={imgRemoveFactory}
-          className="RemoveFactory"
+          className="ManageFactory"
         >
-          Remove Factory
+          Manage Factory
         </Section>
 
         <Section

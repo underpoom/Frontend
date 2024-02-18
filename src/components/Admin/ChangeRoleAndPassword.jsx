@@ -89,6 +89,7 @@ const Submit = styled.div`
   font: 700 24px Inter, sans-serif;
   cursor: pointer;
 `;
+
 const PasswordInput = styled.input`
   margin-top: -1vh;
   border-radius: 10px;

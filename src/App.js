@@ -12,7 +12,7 @@ import { Button } from "reactstrap";
 import Information from './components/User/Information';
 import { ManageUser } from './components/Admin/ManageUser';
 import VerifyUsers from './components/Admin/VerifyUsers';
-import { ManagementAdmin } from './components/Admin/ManagementAdmin';
+import { ManagementAdmin } from './components/Admin/MenuToolsAdmin/ManagementAdmin';
 import PermissionSelected from './components/Admin/PermissionSelected';
 import UserHomepage from './components/User/UserHomepage';
 

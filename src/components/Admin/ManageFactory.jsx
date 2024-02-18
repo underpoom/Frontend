@@ -7,65 +7,101 @@ const ContainerRemoveFactory = styled.div`
   display: flex;
   height: 76vh;
   /* border: 1px solid red; */
-  flex-direction: row;
+  flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   column-gap: 38px;
 `;
 
 const FactoryDetail = styled.div`
-  border-radius: 10px;
-  border: 1px solid var(--stork, #9f9f9f);
-  background-color: #d9d9d9;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: #fff;
   display: flex;
-
-  flex-direction: column;
+  flex-direction: row;
   font-size: 20px;
   color: #000;
   font-weight: 700;
-  width: 30vh;
-  height: 35vh;
-  padding: 3vh 2vh 2vh 2vh;
-  margin-top: 2vh;
+  width: 100%;
+  /* height: 35vh; */
+  padding: 10px 30px;
+  margin-top: 5px;
+  border-radius: 8px;
+`;
+
+const ContainerLabel = styled.div`
+  border-bottom: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--stork, #9f9f9f);
+  display: flex;
+  margin-top: 20px;
+  color: #fff;
+  padding: 16px 24px;
+  font-weight: 700;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 1);
+  padding-left: 50px;
+`;
+
+const ContentLabel = styled.div`
+  font: 400 20px Inter, sans-serif;
+  margin-left: 280px;
 `;
 
 const FactoryName = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
-  margin-bottom: 5vh;
-`;
-
-const LocLabel = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: Inter, sans-serif;
-  margin-top: 13px;
-  white-space: nowrap;
+  /* border: 1px solid red; */
+  width: 200px;
 `;
 
 const LocData = styled.div`
   display: flex;
   justify-content: center;
-  font-family: Inter, sans-serif;
   white-space: nowrap;
   font: 400 20px Inter, sans-serif;
   margin-left: 5px;
+  align-items: center;
   /* border: 1px solid red; */
+  width: 450px;
 `;
 
 const Select = styled.div`
+  font-family: Inter, sans-serif;
   border-radius: 10px;
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--Important-Button, #0a89ff);
-  align-self: center;
-  margin-top: 21px;
   justify-content: center;
   color: #fff;
   white-space: nowrap;
-  padding: 14px 31px;
-  font: 24px Inter, sans-serif;
+  text-align: center;
+  padding: 6px 9px;
   cursor: pointer;
+`;
+
+const DisableEnable = styled.div`
+  font-family: Inter, sans-serif;
+  border-radius: 10px;
+  justify-content: center;
+  color: ${(props) => (props.enabled ? "blue" : "var(--stork, #9f9f9f)")};
+  border: ${(props) =>
+    props.enabled
+      ? "2px solid var(--Important-Button, #0a89ff)"
+      : "2px solid var(--stork, #9f9f9f)"};
+  text-align: center;
+  padding: 6px 9px;
+  cursor: pointer;
+  width: 100px;
+  margin-left: -140px;
+`;
+
+const LabelLG = styled.div`
+  margin: auto 0;
+  font: 700 24px Inter, sans-serif;
+`;
+
+const LabelMd = styled.div`
+  font: 400 20px Inter, sans-serif;
 `;
 
 const imgRemove =
@@ -75,7 +111,7 @@ const imgAdd =
 const imgBack =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
-export const RemoveFactory = () => {
+export const ManageFactory = () => {
   const [FactorySelected, setFactorySelected] = useState(false);
 
   const [factoryList, setFactoryList] = useState([]);
@@ -88,6 +124,7 @@ export const RemoveFactory = () => {
         }
         const data = await response.json();
         setFactoryList(data);
+        setFilteredData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -111,6 +148,18 @@ export const RemoveFactory = () => {
     setFactorySelectedData(factory);
   };
 
+  const handleToggleDisableEnable = (index) => {
+    const updatedFactoryList = [...factoryList];
+    updatedFactoryList[index].enabled = !updatedFactoryList[index].enabled;
+    setFactoryList(updatedFactoryList);
+  };
+
+  const [filteredData, setFilteredData] = useState([]);
+  const showFilteredData = (filteredData) => {
+    console.log("Filtered Data: ", filteredData);
+    setFilteredData(filteredData);
+  };
+
   // ----------------------------------------------------------------
   const handleRemoveClickYes = () => {
     console.log("you remove :", FactorySelectedData.name);
@@ -127,24 +176,34 @@ export const RemoveFactory = () => {
         />
       )}
 
-      <NavbarTopAdmin pageTitle="Remove Factory" />
+      <NavbarTopAdmin
+        pageTitle="Manage Factory "
+        currentData={factoryList}
+        filteredData={showFilteredData}
+      />
+      <ContainerLabel>
+        <LabelLG>Factory Name</LabelLG>
+        <ContentLabel>
+          <LabelLG>Factory Location</LabelLG>
+          <LabelMd>SubDistrict - District - Province</LabelMd>
+        </ContentLabel>
+      </ContainerLabel>
       <ContainerRemoveFactory>
-        {factoryList.map((factory, index) => (
+        {filteredData.map((factory, index) => (
           <FactoryDetail key={index}>
             <FactoryName>{factory.name}</FactoryName>
-            <LocLabel>
-              Province : <LocData>{factory.province}</LocData>
-            </LocLabel>
-            <LocLabel>
-              District : <LocData>{factory.district}</LocData>
-            </LocLabel>
-            <LocLabel>
-              Sub-District : <LocData>{factory.subdistrict}</LocData>
-            </LocLabel>
-
+            <LocData>
+              {factory.province} - {factory.district} - {factory.subdistrict}
+            </LocData>
             <Select onClick={() => handleTogglePopupRemove(factory)}>
               Remove
             </Select>
+            <DisableEnable
+              enabled={factory.enabled}
+              onClick={() => handleToggleDisableEnable(index)}
+            >
+              {factory.enabled ? "Enable" : "Disable"}
+            </DisableEnable>
           </FactoryDetail>
         ))}
       </ContainerRemoveFactory>
@@ -152,4 +211,4 @@ export const RemoveFactory = () => {
   );
 };
 
-export default RemoveFactory;
+export default ManageFactory;

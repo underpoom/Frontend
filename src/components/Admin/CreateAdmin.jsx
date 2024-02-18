@@ -2,93 +2,116 @@ import React, { useState, useEffect } from "react";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import styled from "styled-components";
 
-const ContainerAddFactory = styled.div`
+const ContainerAddAdmin = styled.div`
   display: flex;
-  height: 76vh;
+  /* height: 76vh; */
+  height: fit-content;
   border: 1px solid red;
   flex-direction: column;
   overflow-y: auto;
+  align-items: start;
+  padding: 32px 51px;
+
+  border-radius: 20px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--frame-color, #f6f6f6);
+  display: flex;
+  margin-top: 30px;
+  font: 700 24px Inter, sans-serif;
+`;
+
+const ContentAddAdmin = styled.div`
+  width: 60vh;
+  font: 700 24px Inter, sans-serif;
+  font-size: 24px;
+  /* border: 1px solid red; */
+  margin-top: 2vh;
+  display: flex;
   align-items: center;
-  padding-right: 50vh;
-  padding-top: 5vh;
+
+  justify-content: end;
+`;
+
+const Input = styled.input`
+  border-radius: 10px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--light, #fafafa);
+  width: 39vh;
+  max-width: 100%;
+  height: 5vh;
+  padding: 0 10px;
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  margin-left: 1vh;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const Maximum20character = styled.div`
+  display: flex;
+
+  flex-basis: 0%;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: Inter, sans-serif;
+  margin: 1vh 0 0 32.5vh;
+`;
+
+const Submit = styled.div`
+  border-radius: 10px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  align-self: end;
+  color: #fff;
+  white-space: nowrap;
+  padding: 21px 25px;
+  font: 700 24px Inter, sans-serif;
+  cursor: pointer;
 `;
 
 export const CreateAdmin = () => {
+  const [newAddAdmin, setNewAddAdmin] = useState("");
+
+  const handleChange = (event) => {
+    setNewAddAdmin(event.target.value);
+  };
+
+  
+  const handleClickSubmit = () => {
+    console.log("success")
+   
+  };
+
   return (
     <>
       <NavbarTopAdmin pageTitle="Add Admin" />
 
-      <ContainerAddFactory>
-        <ContentFactoryName>
-          Factory Name :
-          <PasswordInput
-            // type="password"
-            id="newPassword"
-            name="newPassword"
-            maxLength={20}
-            required
-            onChange={handleChange}
-          />
-          <Maximum20character>Maximum 20 character</Maximum20character>
-        </ContentFactoryName>
-
-        <SelectSection>
-          Factory Province :
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <StyledSelect
-              value={selectedProvince}
-              onChange={handleProvinceChange}
-              loading={loading} // Pass loading state as a prop
-            >
-              <option value="">Select the province</option>
-              {provinceList.map((province) => (
-                <option key={province.id} value={province.id}>
-                  {province.name_th}
-                </option>
-              ))}
-            </StyledSelect>
-          )}
-        </SelectSection>
-
-        <SelectSection>
-          Factory District :
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <StyledSelect
-              value={selectedAmphure}
-              onChange={handleAmphureChange}
-            >
-              <option value="">Select the district</option>
-              {filteredAmphures.map((amphure) => (
-                <option key={amphure.id} value={amphure.id}>
-                  {amphure.name_th}
-                </option>
-              ))}
-            </StyledSelect>
-          )}
-        </SelectSection>
-
-        <SelectSection>
-          Factory Sub-district :
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <StyledSelect value={selectedTambon} onChange={handleTambonChange}>
-              <option value="">Select the sub-district</option>
-              {filteredTambons.map((tambon) => (
-                <option key={tambon.id} value={tambon.id}>
-                  {tambon.name_th}
-                </option>
-              ))}
-            </StyledSelect>
-          )}
-        </SelectSection>
-
-        <Submit onClick={handleSubmit}>Submit</Submit>
-      </ContainerAddFactory>
+      <ContainerAddAdmin>
+        Create admin’s account
+        <ContentAddAdmin>
+          Firstname :<Input onChange={handleChange} />
+        </ContentAddAdmin>
+        <ContentAddAdmin>
+          Lastname :<Input onChange={handleChange} />
+        </ContentAddAdmin>
+        <ContentAddAdmin>
+          Email Address :<Input onChange={handleChange} />
+        </ContentAddAdmin>
+        <ContentAddAdmin>
+          Username :<Input maxLength={20} onChange={handleChange} />
+        </ContentAddAdmin>
+        <Maximum20character>Maximum 20 character</Maximum20character>
+        <ContentAddAdmin>
+          Password :
+          <Input type="password" maxLength={20} onChange={handleChange} />
+        </ContentAddAdmin>
+        <Maximum20character>Maximum 20 character</Maximum20character>
+        <Submit onClick={handleClickSubmit}>Submit</Submit>
+      </ContainerAddAdmin>
     </>
   );
 };
