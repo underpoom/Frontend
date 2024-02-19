@@ -3,11 +3,6 @@ import styled from "styled-components";
 import MenuTools from "./MenuTools/MenuTools";
 import NavbarTop from "./NavbarTop/NavbarTop";
 
-const RightContainer = styled.div`
-  display: flex;
-  width: 70%;
-  flex-direction: column;
-`;
 const ContainerInformation = styled.div`
   display: flex;
   width: 133vh;
@@ -169,12 +164,15 @@ const Img2 = styled.img`
   width: 140px;
 `;
 
-export const Information = () => {
+const Information = ({handlepageChange}) => {
+
+  const handlepage = (data) => {
+    handlepageChange(data);
+  };
   return (
     <>
      
-      <RightContainer>
-        <NavbarTop pageTitle="Information" />
+        <NavbarTop pageTitle="Information" changeStatePage={handlepage} />
         <ContainerInformation>
           <Info>Document</Info>
 
@@ -223,7 +221,7 @@ export const Information = () => {
             </Condiv2>
           </Condiv>
         </ContainerInformation>
-      </RightContainer>
+     
     </>
   );
 };

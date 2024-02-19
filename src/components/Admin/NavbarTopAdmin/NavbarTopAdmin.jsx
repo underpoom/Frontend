@@ -44,7 +44,8 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
     Term = "username";
   } else if (
     pageTitle === "Add Factory’s Permission" ||
-    pageTitle === "Remove Factory"
+    pageTitle === "Remove Factory" ||
+    pageTitle === "Factory’s Permission Summary"
   ) {
     Term = "name";
   }
@@ -65,7 +66,7 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
             <input
               type="text"
               onChange={handleSearchChange}
-              placeholder="Search username..."
+              placeholder="Filter username..."
               maxLength={20}
             />
           </SearchUserContainer>
@@ -75,7 +76,7 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
             <input
               type="text"
               onChange={handleSearchChange}
-              placeholder="Search factory..."
+              placeholder="Filter factory..."
             />
           </SearchUserContainer>
         )}

@@ -39,6 +39,12 @@ const ButtonYesNoContainer = styled.button`
 const LabelHead = styled.button`
   width: 80%;
 `;
+const ConfirmEditBuildingDetails = styled.div`
+  color: var(--stork, #9f9f9f);
+  text-align: center;
+  font: 400 20px Inter, sans-serif;
+  margin-top: 10px;
+`;
 
 const ButtonYesNo = styled.button`
   font-family: Inter, sans-serif;
@@ -57,12 +63,17 @@ const ButtonYesNo = styled.button`
   }
 `;
 
-const TogglePopup = ({ content, onYes, onClose, }) => {
+const TogglePopup = ({ content, onYes, onClose }) => {
   return (
     <>
       <PopupContainer>
         <PopupContent>
           {content}
+          {content === "Are you sure to confirm this configuration?" && (
+            <ConfirmEditBuildingDetails>
+              *when confirmed, the old value will be lost.
+            </ConfirmEditBuildingDetails>
+          )}
 
           <ButtonYesNoContainer>
             <ButtonYesNo onClick={onYes}>Yes</ButtonYesNo>

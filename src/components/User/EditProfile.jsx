@@ -20,7 +20,7 @@ const ButtonEnter = styled.button`
 
 const ContainerEditProfile = styled.div`
   display: flex;
-  width: 133vh;
+  width: 132vh;
   height: 76vh;
   border: 1px solid red;
   flex-direction: column;
@@ -45,11 +45,6 @@ const PasswordInput = styled.input`
   &:focus {
     outline: none;
   }
-`;
-const RightContainer = styled.div`
-  display: flex;
-  width: 70%;
-  flex-direction: column;
 `;
 
 const ChangePassword = styled.div`
@@ -121,7 +116,7 @@ const LabelNewPassword = styled.label`
   margin-right: 5vh;
 `;
 
-export const EditProfile = () => {
+export const EditProfile = ({ handlepageChange }) => {
   const [username, setUsername] = useState("user no.11");
   const navigate = useNavigate();
 
@@ -129,50 +124,52 @@ export const EditProfile = () => {
     navigate("/loginsignup");
   }
 
+  const handlepage = (data) => {
+    handlepageChange(data);
+  };
+
   return (
     <>
-      <RightContainer>
+      <NavbarTop pageTitle="Profile" changeStatePage={handlepage} />
+      <ContainerEditProfile>
+        <ChangePassword>Change Password</ChangePassword>
 
-        <ContainerEditProfile>
-          <ChangePassword>Change Password</ChangePassword>
+        <ContainerUsername>
+          <LabelUsername>Username :</LabelUsername>
+          <Username>{username}</Username>
+        </ContainerUsername>
 
-          <ContainerUsername>
-            <LabelUsername>Username :</LabelUsername>
-            <Username>{username}</Username>
-          </ContainerUsername>
+        <FormGroup>
+          <LabelCurrentPassword>Current password :</LabelCurrentPassword>
+          <PasswordInput
+            type="password"
+            id="newPassword"
+            name="currentPassword"
+            maxLength={20}
+            required
+          />
+          <Maximum20Character>Maximum 20 character</Maximum20Character>
+        </FormGroup>
 
-          <FormGroup>
-            <LabelCurrentPassword>Current password :</LabelCurrentPassword>
-            <PasswordInput
-              type="password"
-              id="newPassword"
-              name="currentPassword"
-              maxLength={20}
-              required
-            />
-            <Maximum20Character>Maximum 20 character</Maximum20Character>
-          </FormGroup>
+        <FormGroup>
+          <LabelNewPassword>New Password :</LabelNewPassword>
+          <PasswordInput
+            type="password"
+            id="newPassword"
+            name="newPassword"
+            maxLength={20}
+            required
+          />
+          <Maximum20Character>Maximum 20 character</Maximum20Character>
+        </FormGroup>
 
-          <FormGroup>
-            <LabelNewPassword>New Password :</LabelNewPassword>
-            <PasswordInput
-              type="password"
-              id="newPassword"
-              name="newPassword"
-              maxLength={20}
-              required
-            />
-            <Maximum20Character>Maximum 20 character</Maximum20Character>
-          </FormGroup>
+        <ButtonEnter>Enter</ButtonEnter>
 
-          <ButtonEnter>Enter</ButtonEnter>
-
-          <LogoutButton onClick={handleClickLogout}>
-            Logout
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b04dbcb18a6e4bed2210e137ee2f7f381084698eb632cf45116fd30b3e6fdcda?apiKey=34584a6259e046a0be0d44044e057cb8&" />
-          </LogoutButton>
-        </ContainerEditProfile>
-      </RightContainer>
+        <LogoutButton onClick={handleClickLogout}>
+          Logout
+          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b04dbcb18a6e4bed2210e137ee2f7f381084698eb632cf45116fd30b3e6fdcda?apiKey=34584a6259e046a0be0d44044e057cb8&" />
+        </LogoutButton>
+      </ContainerEditProfile>
     </>
   );
 };

@@ -59,7 +59,6 @@ const BuildingSpace = styled.div`
     border: 1px solid var(--stork, #9f9f9f);
     background-color: var(--Important-Button, #0a89ff);
   }
-  
 
   /* border: 1px solid red; */
   gap: 1.5vh;
@@ -68,7 +67,7 @@ const BuildingSpace = styled.div`
   margin-left: 1vh;
   margin-bottom: 2vh;
   transition: transform 0.3s ease;
-  padding:0 1vh;
+  padding: 0 1vh;
 `;
 
 const ImgLgInformation = styled.img`
@@ -90,6 +89,9 @@ const ImgRemoveBuilding = styled.img`
 export const MenuTools = ({
   onFactoryInformationClick,
   onBuildingInformationClick,
+  onNewBuildingClick,
+  onFactoryClick,
+  onBuildingClick,
 }) => {
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState(null);
@@ -125,20 +127,26 @@ export const MenuTools = ({
 
   const handleFactoryInformation = (factory) => {
     onFactoryInformationClick(factory);
-
-    console.log("in menutiils", factory);
   };
 
   const handleBuildingInformation = (building) => {
     onBuildingInformationClick(building);
-
-    console.log("in menutiils", building);
   };
 
   const handleSectionSelect = (building) => {
     setSelectedSection(building);
-    console.log("Selected building:", building);
-    // Additional logic if needed
+  };
+
+  const handleAddNewBuilding = (factory) => {
+    onNewBuildingClick(factory);
+  };
+
+  const handleBuildingSelect = (data) => {
+    onBuildingClick(data);
+  };
+
+  const handleFactorySelect = (data) => {
+    onFactoryClick(data);
   };
 
   const [selectedSection, setSelectedSection] = useState([]);
@@ -176,7 +184,14 @@ export const MenuTools = ({
                   onClick={() => handleSectionSelect(building)}
                   className={selectedSection == building ? "selected" : ""}
                 >
-                  <img loading="lazy" src={imgBuilding} />
+                  <img
+                    loading="lazy"
+                    src={imgBuilding}
+                    onClick={() => {
+                      handleFactorySelect(factory);
+                      handleBuildingSelect(building);
+                    }}
+                  />
                   {building}
 
                   <ImgMdInformation
@@ -186,6 +201,10 @@ export const MenuTools = ({
                   <ImgRemoveBuilding src={imgRemove} />
                 </BuildingSpace>
               ))}
+
+              <BuildingSpace onClick={() => handleAddNewBuilding(factory)}>
+                + New Building
+              </BuildingSpace>
             </div>
           )}
         </FactorySpace>
