@@ -192,7 +192,10 @@ export const MenuTools = ({
                       handleBuildingSelect(building);
                     }}
                   />
-                  {building}
+                
+                  {building.length > 10
+                    ? `${building.substring(0, 10)}...`
+                    : building}
 
                   <ImgMdInformation
                     src={imgLgInfornation}

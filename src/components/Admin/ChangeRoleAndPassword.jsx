@@ -187,7 +187,7 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
 
   const handleClickSubmit = () => {
     setShowPopup(true);
-    setPopupContent("Do you want to change this user’s password? ?");
+    setPopupContent("Do you want to confirm this picture?");
   };
 
   // ----------------------------------------------------------------

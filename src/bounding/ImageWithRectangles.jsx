@@ -1,4 +1,79 @@
 import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import TogglePopup from "../components/Admin/TogglePopup";
+const ContainerTools = styled.div`
+  height: 650px;
+  width: 240px;
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
+const ShowDefectedCount = styled.div`
+  justify-content: center;
+  align-items: start;
+  border-radius: 8px;
+  background-color: #d9d9d9;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  color: #000;
+  font-weight: 400;
+  padding: 24px 12px;
+  width: 240px;
+  margin-bottom: auto;
+`;
+
+const LabelDefectedCount = styled.div`
+  color: #3b8135;
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+`;
+
+const ContainerButton = styled.div`
+  display: flex;
+  font-family: Inter, sans-serif;
+  justify-content: space-between;
+  /* border: 1px solid red; */
+  width: 240px;
+  height: 100px;
+  margin-top: 300px;
+`;
+
+const DefectedCount = styled.div`
+  font-family: Inter, sans-serif;
+  margin-top: 11px;
+  white-space: nowrap;
+`;
+
+const InsertDelete = styled.button`
+  font-family: Inter, sans-serif;
+  border-radius: 10px;
+  border: 2px solid var(--Important-Button, #0a89ff);
+  background-color: var(--frame-color, #f6f6f6);
+  justify-content: center;
+  color: var(--Important-Button, #0a89ff);
+  width: fit-content;
+  height: fit-content;
+  padding: 8px 16px;
+  font-size: 24px;
+`;
+
+const Confirm = styled.div`
+  font-family: Inter, sans-serif;
+  border-radius: 10px;
+  border: 1px solid var(--stork, #9f9f9f);
+  background-color: var(--Important-Button, #0a89ff);
+  justify-content: center;
+  color: var(--light, #fafafa);
+  padding: 8px 16px;
+  width: fit-content;
+  font-size: 24px;
+  height: fit-content;
+  margin-left: auto;
+`;
 
 const ImageWithRectangles = () => {
   const canvasRef = useRef(null);
@@ -45,7 +120,7 @@ const ImageWithRectangles = () => {
         image.onload = resolve;
       });
 
-      var x = 1.5;
+      var x = 1.35;
       var newWidth = 738 * x;
       var newHeight = 485 * x;
 
@@ -62,85 +137,6 @@ const ImageWithRectangles = () => {
 
     loadImageAndRectangles();
   }, []);
-
-  const insertRectangle = () => {
-    let startX = null;
-    let startY = null;
-    let tempRectangle = null;
-
-    const handleMouseDown = (event) => {
-      const rect = canvasRef.current.getBoundingClientRect();
-      startX = event.clientX - rect.left;
-      startY = event.clientY - rect.top;
-    };
-
-    const handleMouseMove = (event) => {
-      if (startX !== null && startY !== null) {
-        const rect = canvasRef.current.getBoundingClientRect();
-        const currentX = event.clientX - rect.left;
-        const currentY = event.clientY - rect.top;
-
-        const width = Math.abs(currentX - startX);
-        const height = Math.abs(currentY - startY);
-
-        const x = Math.min(startX, currentX);
-        const y = Math.min(startY, currentY);
-
-        tempRectangle = { x, y, width, height };
-
-        drawRectangles([...rectangles, tempRectangle]);
-      }
-    };
-
-    const handleMouseUp = (event) => {
-      if (startX !== null && startY !== null) {
-        const rect = canvasRef.current.getBoundingClientRect();
-        const endX = event.clientX - rect.left;
-        const endY = event.clientY - rect.top;
-
-        const width = Math.abs(endX - startX);
-        const height = Math.abs(endY - startY);
-
-        const x = Math.min(startX, endX);
-        const y = Math.min(startY, endY);
-
-        const newRectangle = { x, y, width, height };
-
-        setRectangles([...rectangles, newRectangle]);
-
-        startX = null;
-        startY = null;
-        tempRectangle = null;
-      }
-    };
-
-    canvasRef.current.addEventListener("mousedown", handleMouseDown);
-    canvasRef.current.addEventListener("mousemove", handleMouseMove);
-    canvasRef.current.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      canvasRef.current.removeEventListener("mousedown", handleMouseDown);
-      canvasRef.current.removeEventListener("mousemove", handleMouseMove);
-      canvasRef.current.removeEventListener("mouseup", handleMouseUp);
-    };
-  };
-
-  const deleteRectangle = () => {
-    if (LastSelectedRectangle !== null) {
-      const newRectangles = rectangles.filter(
-        (_, index) => index !== LastSelectedRectangle
-      );
-
-      setLastSelectedRectangle(null);
-      setSelectedRectangle(null);
-      console.log(newRectangles);
-
-      setRectangles(newRectangles);
-      setTimeout(() => {
-        drawRectangles(newRectangles);
-      }, 10);
-    }
-  };
 
   const saveRectanglesAsJSON = () => {
     const jsonData = rectangles.map(({ Class, x, y, width, height }) => ({
@@ -178,7 +174,11 @@ const ImageWithRectangles = () => {
   };
 
   const drawRectangles = (rectanglesToDraw) => {
-    const ctx = canvasRef.current.getContext("2d");
+    const canvas = canvasRef.current;
+    if (!canvas) return; // Add null check
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return; // Add null check
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
     ctx.drawImage(
@@ -204,11 +204,11 @@ const ImageWithRectangles = () => {
       if (LastSelectedRectangle === index) {
         ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
         ctx.fillRect(x - width / 2, y - height / 2, width, height);
-        canvasRef.current.style.cursor = "pointer";
       }
 
       // Display class
       ctx.fillStyle = "black";
+      ctx.font = "20px Arial";
       ctx.fillText(`${defectClass}`, x - width / 2, y - height / 2 - 5);
       // console.log(`Class: ${defectClass}`);
     });
@@ -287,20 +287,70 @@ const ImageWithRectangles = () => {
     console.log("hove :", hoveredRectangle);
   };
 
+  const deleteRectangle = () => {
+    if (LastSelectedRectangle !== null) {
+      const newRectangles = rectangles.filter(
+        (_, index) => index !== LastSelectedRectangle
+      );
+
+      setLastSelectedRectangle(null);
+      setSelectedRectangle(null);
+      setRectangles(newRectangles);
+    }
+  };
+
+  drawRectangles(rectangles);
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+  const handleClickSubmit = () => {
+    setShowPopup(true);
+    setPopupContent("Do you want to change this user’s password? ?");
+  };
+
+  const handleRemoveClickYes = () => {
+    console.log(rectangles);
+  };
+
   return (
-    <div>
+    <>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleRemoveClickYes}
+        />
+      )}
+
       <canvas
         ref={canvasRef}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       />
-      <button onClick={insertRectangle}>Insert Rectangle</button>
-      {LastSelectedRectangle !== null && (
-        <button onClick={deleteRectangle}>Delete Rectangle</button>
-      )}
-      <button onClick={saveRectanglesAsJSON}>Save Rectangles as JSON</button>
-    </div>
+      {/* <button onClick={insertRectangle}>Insert Rectangle</button> */}
+
+      {/* <button onClick={saveRectanglesAsJSON}>Save Rectangles as JSON</button> */}
+      <ContainerTools>
+        <ShowDefectedCount>
+          <LabelDefectedCount>Defected : 12 Location</LabelDefectedCount>
+
+          <DefectedCount>Rock : 1</DefectedCount>
+          <DefectedCount>Birddrop : 1</DefectedCount>
+          <DefectedCount>Glue : 8</DefectedCount>
+          <DefectedCount>Mud : 1</DefectedCount>
+          <DefectedCount>Other : 1</DefectedCount>
+        </ShowDefectedCount>
+
+        <ContainerButton>
+          <InsertDelete>Insert</InsertDelete>
+          {LastSelectedRectangle !== null && (
+            <InsertDelete onClick={deleteRectangle}>Delete</InsertDelete>
+          )}
+        </ContainerButton>
+        <Confirm onClick={handleClickSubmit}>Confirm</Confirm>
+      </ContainerTools>
+    </>
   );
 };
 

@@ -33,15 +33,38 @@ const ImgInfo = styled.div`
   margin-right: 2vh;
 `;
 
-export const NavbarTop = ({ pageTitle, changeStatePage }) => {
+const ImgBack = styled.img`
+  aspect-ratio: 0.57;
+  object-fit: auto;
+  object-position: center;
+  width: 20px;
+  fill: #000;
+  margin-right: 2vh;
+  cursor: pointer;
+`;
+const imgBack =
+  "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
+
+export const NavbarTop = ({ pageTitle, changeStatePage, onBackClick }) => {
   const handleChangeStatePageClick = (data) => {
     changeStatePage(data);
     // console.log(data);
+  };
+  const handleBackClick = () => {
+    onBackClick(true);
   };
 
   return (
     <>
       <ContainerNavbarTop>
+        {pageTitle !== "Information" &&
+          pageTitle !== "Profile" &&
+          pageTitle !== "Factory Details" &&
+          pageTitle !== "Building Details" &&
+          pageTitle !== "All Data History" && (
+            <ImgBack src={imgBack} onClick={handleBackClick}></ImgBack>
+          )}
+
         <PageTitle>{pageTitle}</PageTitle>
 
         <ImgInfo onClick={() => handleChangeStatePageClick("Information")}>

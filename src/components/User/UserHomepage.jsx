@@ -104,7 +104,6 @@ export const UserHomepage = () => {
             factoryData={selectedFactoryData}
             buildingData={selectedBuildingData}
             handlepageChange={handleSelectSection}
-            showUploadFile={false}
           />
         )}
       </RightContainer>

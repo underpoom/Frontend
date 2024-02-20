@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import TogglePopup from "../Admin/TogglePopup";
 import ViewUploadFile from "./ViewUploadFile";
+import VerifySummary from "./VerifySummary";
+
 const ContainerEditProfile = styled.div`
   display: flex;
   width: 132vh;
@@ -83,7 +85,7 @@ const LabelDate = styled.div`
   font-family: Inter, sans-serif;
 `;
 
-const Date = styled.div`
+const DateValue = styled.div`
   font-family: Inter, sans-serif;
 `;
 
@@ -114,32 +116,74 @@ const ButtonDelete = styled.div`
   font-size: 24px;
 `;
 
+const getCurrentDateTime = () => {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  return {
+    date: `${day} - ${month} - ${year}`,
+    time: `${hours} : ${minutes}`,
+  };
+};
+
 export const AllDataHistory = ({
   factoryData,
   buildingData,
   handlepageChange,
-  showUploadFile,
 }) => {
   const handlepage = (data) => {
     handlepageChange(data);
   };
 
   const handleUpload = (data) => {
-    // setUploadFile(data);
-    setUploadFile(true);
+    setUploadedFile(true);
   };
 
-  const [uploadFile, setUploadFile] = useState(false);
+  const handleView = (data) => {
+    setVerifySummary(true);
+  };
+
+  const handleBackClick = (data) => {
+    setUploadedFile(false);
+    setVerifySummary(false);
+  };
+
+  const [uploadedFile, setUploadedFile] = useState(false);
+  const [verifySummary, setVerifySummary] = useState(false);
+
+  useEffect(() => {
+    setUploadedFile(false);
+    setVerifySummary(false);
+  }, [buildingData]);
+
+  const [dateTime, setDateTime] = useState(getCurrentDateTime());
+
+  const handleNewButtonClick = () => {
+    const newDateTime = getCurrentDateTime();
+    setDateTime(newDateTime);
+  };
+
+  const now = new Date();
+  const currentDate = now.toLocaleDateString("en-US");
+  const currentTime = now.toLocaleTimeString("en-US");
+  console.log(currentDate); // Output: MM/DD/YYYY
+  console.log(currentTime); // Output: HH:MM:SS AM/PM
 
   return (
     <>
-      <NavbarTop pageTitle={buildingData} changeStatePage={handlepage} />
-      {uploadFile === false ? (
+      {uploadedFile === false && verifySummary === false && (
         <>
+          <NavbarTop
+            pageTitle="All Data History"
+            changeStatePage={handlepage}
+          />
           <ContainerEditProfile>
             <Label>
-              All data history
-              
+              {buildingData}
+
               <ButtonNew>
                 <Img
                   loading="lazy"
@@ -152,20 +196,47 @@ export const AllDataHistory = ({
             <ContainerDate>
               <ContentDate>
                 <LabelDate>day - month - year</LabelDate>
-                <Date>30 - 12 - 24</Date>
+                <DateValue>30 - 12 - 24</DateValue>
                 <LabelDate>Time</LabelDate>
-                <Date>13 : 04</Date>
+                <DateValue>13 : 04</DateValue>
               </ContentDate>
 
-              <ContainerButton>
+              <div>
+                <ButtonView onClick={handleView}>View</ButtonView>
+                <ButtonDelete>Delete</ButtonDelete>
+              </div>
+            </ContainerDate>
+
+            <ContainerDate>
+              <ContentDate>
+                <LabelDate>Day - Month - Year</LabelDate>
+                <DateValue>{dateTime.date}</DateValue>
+                <LabelDate>Time</LabelDate>
+                <DateValue>{dateTime.time}</DateValue>
+              </ContentDate>
+              <div>
                 <ButtonView onClick={handleUpload}>Upload</ButtonView>
                 <ButtonDelete>Delete</ButtonDelete>
-              </ContainerButton>
+              </div>
             </ContainerDate>
           </ContainerEditProfile>
         </>
-      ) : (
-        <ViewUploadFile />
+      )}
+
+      {uploadedFile === true && (
+        <ViewUploadFile
+          buildingDataW={buildingData}
+          onBackClick={handleBackClick}
+          handlepageChange={handlepage}
+        />
+      )}
+
+      {verifySummary === true && (
+        <VerifySummary
+          buildingDataW={buildingData}
+          onBackClick={handleBackClick}
+          handlepageChange={handlepage}
+        />
       )}
     </>
   );

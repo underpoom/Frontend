@@ -7,15 +7,16 @@ import TogglePopup from "../Admin/TogglePopup";
 const ContainerEditProfile = styled.div`
   display: flex;
   width: 132vh;
-  height: 76vh;
+  height: 68vh;
   /* border: 1px solid red; */
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
   font: 700 32px Inter, sans-serif;
-  padding: 1.5vh 1.5vh 0 1.5vh;
+  padding: 1.5vh 0vh 0 1.5vh;
   padding-left: 5vh;
   gap: 1vh;
+  /* border: 1px solid red; */
 `;
 
 const Label = styled.div`
@@ -35,17 +36,26 @@ const ButtonNew = styled.div`
   border-radius: 10px;
   background-color: var(--Important-Button, #0a89ff);
   display: flex;
-  gap: 12px;
+
   color: var(--light, #fafafa);
   font-weight: 700;
   white-space: nowrap;
-  padding: 14px 18px;
+  padding: 8px 27px;
   margin-left: auto;
-  margin-right: 58px;
+
+  label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
 `;
 
 const Img = styled.img`
-  aspect-ratio: 1;
   object-fit: auto;
   object-position: center;
   width: 20px;
@@ -60,7 +70,6 @@ const LabelMd = styled.div`
   font-family: Inter, sans-serif;
   margin-top: 40px;
   margin-left: -490px;
-
 `;
 
 const Div = styled.div`
@@ -74,10 +83,7 @@ const Div = styled.div`
   font-size: 20px;
   margin-top: 15px;
   width: 250px;
-
 `;
-
-
 
 const ImgDelete = styled.img`
   aspect-ratio: 1;
@@ -89,9 +95,71 @@ const ImgDelete = styled.img`
   align-self: start;
 `;
 
-export const ViewUploadFile = () => {
+const BlackLine = styled.div`
+  background-color: black;
+  height: 2px;
+`;
+
+const DivLine = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  color: var(--light, #fafafa);
+  font-weight: 700;
+  white-space: nowrap;
+`;
+
+const LineBottom = styled.div`
+  background-color: #0e1821;
+  min-height: 1px;
+  width: 100%;
+`;
+
+const ButtonProcess = styled.div`
+  font-family: Inter, sans-serif;
+  border-radius: 10px;
+  background-color: var(--Important-Button, #0a89ff);
+  align-self: end;
+  margin-top: 20px;
+  justify-content: center;
+  padding: 8px 27px;
+`;
+
+const imgBack =
+  "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
+
+export const ViewUploadFile = ({
+  buildingDataW,
+  onBackClick,
+  handlepageChange,
+}) => {
+  const [files, setFiles] = useState([]);
+
+  const handlepage = (data) => {
+    handlepageChange(data);
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setFiles(selectedFiles);
+  };
+
+  const handleFileDelete = (index) => {
+    const updatedFiles = [...files];
+    updatedFiles.splice(index, 1);
+    setFiles(updatedFiles);
+  };
+
   return (
     <>
+      <NavbarTop
+        pageTitle={buildingDataW}
+        changeStatePage={handlepage}
+        onBackClick={onBackClick}
+      />
+
+      {/* <BlackLine /> */}
+
       <ContainerEditProfile>
         <Label>
           Upload File
@@ -100,30 +168,41 @@ export const ViewUploadFile = () => {
             Your .srt file must have same name as your .mp4 file.
           </LabelMd>
           <ButtonNew>
-            <Img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&"
+            <label htmlFor="file-upload">
+              <Img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&"
+              />
+              Upload
+            </label>
+            <input
+              type="file"
+              id="file-upload"
+              // accept=".mp4,.srt"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleFileChange}
             />
-            Upload
           </ButtonNew>
         </Label>
 
-        <Div>
-          DJI_040.mp4
-          <ImgDelete
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/c37a1b1202a409c4cc0de55bac3f84cca354a05c7465d097599fe377b80d6f35?apiKey=34584a6259e046a0be0d44044e057cb8&"
-          />
-        </Div>
-
-        <Div>
-          DJI_040.mp4
-          <ImgDelete
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/c37a1b1202a409c4cc0de55bac3f84cca354a05c7465d097599fe377b80d6f35?apiKey=34584a6259e046a0be0d44044e057cb8&"
-          />
-        </Div>
+        {files.map((file, index) => (
+          <Div key={index}>
+            {file.name.length > 10
+              ? `${file.name.substring(0, 10)}...`
+              : file.name}
+            <ImgDelete
+              loading="lazy"
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/c37a1b1202a409c4cc0de55bac3f84cca354a05c7465d097599fe377b80d6f35?apiKey=34584a6259e046a0be0d44044e057cb8&"
+              onClick={() => handleFileDelete(index)}
+            />
+          </Div>
+        ))}
       </ContainerEditProfile>
+      <DivLine>
+        <LineBottom />
+        <ButtonProcess>Process</ButtonProcess>
+      </DivLine>
     </>
   );
 };
