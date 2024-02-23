@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { UserProvider } from '../src/bounding/UserContext';
 import Loginsignup from './components/LoginSignup/LoginSignup';
 import MultipleFileUploader from './components/LoginSignup/MultipleFileUploader';
 import { EditProfile } from './components/User/EditProfile';
@@ -18,18 +19,22 @@ import UserHomepage from './components/User/UserHomepage';
 
 function App() {
   return (
-    <div className='App'>
-      <Routes>
-        <Route path="loginsignup" element={<Loginsignup />} />
-        <Route path="editprofile" element={<EditProfile />} />
-        <Route path="information" element={<Information />} />
-        <Route path="manageuser" element={<ManageUser />} />
-        <Route path="verifyusers" element={<VerifyUsers />} />
-        <Route path="managementadmin" element={<ManagementAdmin />} />
-        <Route path="userhomepage" element={<UserHomepage />} />
-        
-      </Routes>
-    </div>
+    <UserProvider>
+
+      <div className='App'>
+        <Routes>
+          <Route path="/" element={<Navigate to="/loginsignup" />} />
+          <Route path="loginsignup" element={<Loginsignup />} />
+          <Route path="editprofile" element={<EditProfile />} />
+          <Route path="information" element={<Information />} />
+          <Route path="manageuser" element={<ManageUser />} />
+          <Route path="verifyusers" element={<VerifyUsers />} />
+          <Route path="managementadmin" element={<ManagementAdmin />} />
+          <Route path="userhomepage" element={<UserHomepage />} />
+        </Routes>
+      </div>
+
+    </UserProvider >
   );
 }
 

@@ -24,11 +24,14 @@ const Label = styled.div`
   color: #000;
   gap: 20px;
   font-size: 24px;
-  margin-top: 24px;
+  margin-top: 12px;
+  margin-bottom: 12px;
   font-family: Inter, sans-serif;
   font-weight: 400;
   width: 100%;
   height: 60px;
+  align-items:center;
+
   /* border: 1px solid red; */
 `;
 
@@ -43,6 +46,7 @@ const ButtonNew = styled.div`
   padding: 14px 18px;
   margin-left: auto;
   margin-right: 58px;
+  
 `;
 
 const Img = styled.img`

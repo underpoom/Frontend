@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import MenuTools from "./MenuTools/MenuTools";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import BuildingDetails from "./BuildingDetails";
 import Information from "./Information";
 import NewBuilding from "./NewBuilding";
 import AllDataHistory from "./AllDataHistory";
+import { UserContext } from "../../bounding/UserContext";
 
 const RightContainer = styled.div`
   display: flex;
@@ -58,6 +59,10 @@ export const UserHomepage = () => {
     setSelectedSection(section);
     console.log("Selected section:", section);
   };
+
+  const { user } = useContext(UserContext);
+
+
 
   return (
     <>

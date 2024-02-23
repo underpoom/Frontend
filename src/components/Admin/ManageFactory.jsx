@@ -3,15 +3,18 @@ import styled from "styled-components";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import TogglePopup from "./TogglePopup";
 
+import axios from "axios";
+const url = "http://127.0.0.1:8000";
+
 const ContainerRemoveFactory = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
   /* flex-wrap: wrap; */
   column-gap: 38px;
+  /* border: 1px solid red; */
 `;
 
 const FactoryDetail = styled.div`
@@ -63,7 +66,7 @@ const LocData = styled.div`
   margin-left: 5px;
   align-items: center;
   /* border: 1px solid red; */
-  width: 450px;
+  width: 600px;
 `;
 
 const Select = styled.div`
@@ -92,7 +95,7 @@ const DisableEnable = styled.div`
   padding: 6px 9px;
   cursor: pointer;
   width: 100px;
-  margin-left: -140px;
+  margin-left: -60px;
 `;
 
 const LabelLG = styled.div`
@@ -115,23 +118,24 @@ export const ManageFactory = () => {
   const [FactorySelected, setFactorySelected] = useState(false);
 
   const [factoryList, setFactoryList] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("../jsonFile/factories.json");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setFactoryList(data);
-        setFilteredData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
+  useEffect(() => {
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${url}/get_admin_manage_factory`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setFactoryList(data);
+      setFilteredData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleBackClick = () => {
     setFactorySelected(false);
@@ -148,10 +152,22 @@ export const ManageFactory = () => {
     setFactorySelectedData(factory);
   };
 
-  const handleToggleDisableEnable = (index) => {
-    const updatedFactoryList = [...factoryList];
-    updatedFactoryList[index].enabled = !updatedFactoryList[index].enabled;
-    setFactoryList(updatedFactoryList);
+  const handleToggleDisableEnable = async (index) => {
+
+    const facto_id = factoryList[index].factory_id;
+    try {
+      const response = await axios.put(`${url}/put_change_facto_status`, {
+        facto_id: facto_id,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("successful:", response.data);
+      fetchData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const [filteredData, setFilteredData] = useState([]);
@@ -161,9 +177,23 @@ export const ManageFactory = () => {
   };
 
   // ----------------------------------------------------------------
-  const handleRemoveClickYes = () => {
-    console.log("you remove :", FactorySelectedData.name);
-    setShowPopup(false);
+  const handleRemoveClickYes = async () => {
+    try {
+      const response = await axios.delete(`${url}/factory`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          facto_id: FactorySelectedData.factory_id,
+        },
+      });
+      console.log("Delete successful:", response.data);
+      setShowPopup(false);
+      fetchData();
+    } catch (error) {
+      console.error("Error Delete:", error);
+    }
   };
 
   return (
@@ -181,28 +211,31 @@ export const ManageFactory = () => {
         currentData={factoryList}
         filteredData={showFilteredData}
       />
-      <ContainerLabel>
+      
+      <ContainerRemoveFactory>
+        <ContainerLabel>
         <LabelLG>Factory Name</LabelLG>
         <ContentLabel>
           <LabelLG>Factory Location</LabelLG>
           <LabelMd>SubDistrict - District - Province</LabelMd>
         </ContentLabel>
       </ContainerLabel>
-      <ContainerRemoveFactory>
         {filteredData.map((factory, index) => (
           <FactoryDetail key={index}>
-            <FactoryName>{factory.name}</FactoryName>
+            <FactoryName>{factory.factory_name}</FactoryName>
             <LocData>
-              {factory.province} - {factory.district} - {factory.subdistrict}
+              {factory.factory_details.replace(/_/g, " - ")}
+              {/* {factory.province} - {factory.district} - {factory.subdistrict} */}
             </LocData>
             <Select onClick={() => handleTogglePopupRemove(factory)}>
               Remove
             </Select>
+
             <DisableEnable
-              enabled={factory.enabled}
+              enabled={factory.is_disable}
               onClick={() => handleToggleDisableEnable(index)}
             >
-              {factory.enabled ? "Enable" : "Disable"}
+              {factory.is_disable === false? "Disable" : "Enable"}
             </DisableEnable>
           </FactoryDetail>
         ))}

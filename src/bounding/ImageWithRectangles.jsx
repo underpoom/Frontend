@@ -3,12 +3,13 @@ import styled from "styled-components";
 import TogglePopup from "../components/Admin/TogglePopup";
 const ContainerTools = styled.div`
   height: 650px;
-  width: 240px;
+  width: 220px;
   margin-left: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
+ 
 `;
 
 const ShowDefectedCount = styled.div`
@@ -24,6 +25,7 @@ const ShowDefectedCount = styled.div`
   padding: 24px 12px;
   width: 240px;
   margin-bottom: auto;
+ 
 `;
 
 const LabelDefectedCount = styled.div`
@@ -305,7 +307,7 @@ const ImageWithRectangles = () => {
   const [popupContent, setPopupContent] = useState("");
   const handleClickSubmit = () => {
     setShowPopup(true);
-    setPopupContent("Do you want to change this user’s password? ?");
+    setPopupContent("Do you want to confirm this picture?");
   };
 
   const handleRemoveClickYes = () => {

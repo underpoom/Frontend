@@ -3,6 +3,9 @@ import styled from "styled-components";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import PermissionSelected from "./PermissionSelected";
 
+import axios from "axios";
+const url = "http://127.0.0.1:8000";
+
 const ContainerPermission = styled.div`
   display: flex;
   height: 76vh;
@@ -28,11 +31,13 @@ const FactoryDetail = styled.div`
   padding: 10px 30px;
   margin-top: 5px;
   border-radius: 8px;
+
 `;
 
 const FactoryName = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
+  width: 200px;
 `;
 
 const LocData = styled.div`
@@ -43,6 +48,7 @@ const LocData = styled.div`
   margin-left: 5px;
   align-items: center;
   /* border: 1px solid red; */
+  width: 600px;
 `;
 
 const Select = styled.div`
@@ -64,7 +70,7 @@ const ContentLabel = styled.div`
   display: flex;
   margin-top: 20px;
   color: #fff;
-  padding: 16px 24px;
+  padding: 16px 60px;
   font-weight: 700;
   font-size: 24px;
   color: rgba(255, 255, 255, 1);
@@ -72,12 +78,13 @@ const ContentLabel = styled.div`
 
 const ContainerLabel = styled.div`
   font: 400 20px Inter, sans-serif;
-  margin-left: 340px;
+  margin-left: 350px;
 `;
 
 const LabelLG = styled.div`
   margin: auto 0;
   font: 700 24px Inter, sans-serif;
+  
 `;
 
 const LabelMd = styled.div`
@@ -113,7 +120,7 @@ export const AddPermission = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("../jsonFile/factories.json");
+        const response = await fetch(`${url}/get_admin_manage_factory`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -168,9 +175,10 @@ export const AddPermission = () => {
             </ContentLabel>
             {filteredData.map((factory, index) => (
               <FactoryDetail key={index}>
-                <FactoryName>{factory.name}</FactoryName>
+                <FactoryName>{factory.factory_name}</FactoryName>
                 <LocData>
-                  {factory.province} - {factory.district} -{factory.subdistrict}
+                  {/* {factory.province} - {factory.district} -{factory.subdistrict} */}
+                  {factory.factory_details.replace(/_/g, " - ")}
                 </LocData>
 
                 <Select onClick={() => handleFactorySelected(factory)}>

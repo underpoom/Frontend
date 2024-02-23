@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { UserContext } from "../../../bounding/UserContext";
 import styled, { css } from "styled-components";
+
+import axios from "axios";
+const url = "http://127.0.0.1:8000";
+
 const ContainerMenutools = styled.div`
   display: flex;
   flex-direction: column;
@@ -95,6 +100,9 @@ export const MenuTools = ({
 }) => {
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState(null);
+  const { user } = useContext(UserContext);
+
+  console.log(user);
 
   const imgFactory =
     "https://cdn.builder.io/api/v1/image/assets/TEMP/4e5ad0d00ab460ea192b2777c8b4f4210a018fad5ab76df4a8acc1b6e3d1d12a?apiKey=34584a6259e046a0be0d44044e057cb8&";
@@ -114,12 +122,37 @@ export const MenuTools = ({
     "https://cdn.builder.io/api/v1/image/assets/TEMP/8ecf12dfcc299c4d77bebc194b8fb77f9bd76b7ced54ffd7c2676c690e6d9678?apiKey=34584a6259e046a0be0d44044e057cb8&";
   const imgMdInformation =
     "https://cdn.builder.io/api/v1/image/assets/TEMP/7b2afe12059a0d6aba177b4eb04cbd5a2f927e443bfd63eec24764d2bb10d9d5?apiKey=34584a6259e046a0be0d44044e057cb8&";
+
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${url}/get_user_factory?username=${user}`,
+  //       {
+  //       headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     console.log("successful:", response.data);
+  //     setFactories(response.data);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+ // useEffect(() => {
+  //   fetchData();
+  // }, []);
   useEffect(() => {
     fetch("../jsonFile/factories.json")
       .then((response) => response.json())
       .then((data) => setFactories(data))
       .catch((error) => console.error("Error fetching factories:", error));
   }, []);
+
+
+
+ 
 
   const handleFactoryClick = (factory) => {
     setSelectedFactory(factory);
@@ -158,6 +191,60 @@ export const MenuTools = ({
         <span style={{ fontSize: "24px" }}>& Buildings</span>
       </HomePage>
       <WhiteLine />
+      {/* {factories.map((factory, index_f) => (
+        <FactorySpace key={index_f} onClick={() => handleFactoryClick(factory)}>
+          <img loading="lazy" src={imgFactory} />
+          {factory.factory_name}
+          <ImgLgInformation
+            loading="lazy"
+            src={imgLgInfornation}
+            onClick={() => handleFactoryInformation(factory)}
+          />
+          <BoldArrow
+            loading="lazy"
+            src={selectedFactory === factory ? imgBoldDown : imgBoldLeft}
+          />
+
+          {selectedFactory &&
+            selectedFactory.factory_id === factory.factory_id && (
+              <div>
+                {factory.buildings.map((building, index) => (
+                  <BuildingSpace
+                    key={index}
+                    selected={building.selected}
+                    onClick={() => handleSectionSelect(building)}
+                    className={selectedSection == building ? "selected" : ""}
+                  >
+                    <img
+                      loading="lazy"
+                      src={imgBuilding}
+                      onClick={() => {
+                        handleFactorySelect(factory);
+                        handleBuildingSelect(building);
+                      }}
+                    />
+
+                    {building.length > 10
+                      ? `${building.substring(0, 10)}...`
+                      : building}
+                   
+
+                    <ImgMdInformation
+                      src={imgLgInfornation}
+                      onClick={() => handleBuildingInformation(building)}
+                    />
+                    <ImgRemoveBuilding src={imgRemove} />
+                  </BuildingSpace>
+                ))}
+
+                <BuildingSpace onClick={() => handleAddNewBuilding(factory)}>
+                  + New Building
+                </BuildingSpace>
+              </div>
+            )}
+        </FactorySpace>
+      ))} */}
+
       {factories.map((factory) => (
         <FactorySpace
           key={factory.id}
@@ -192,7 +279,7 @@ export const MenuTools = ({
                       handleBuildingSelect(building);
                     }}
                   />
-                
+
                   {building.length > 10
                     ? `${building.substring(0, 10)}...`
                     : building}

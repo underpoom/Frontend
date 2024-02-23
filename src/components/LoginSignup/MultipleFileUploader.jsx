@@ -2,38 +2,36 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./MultipleFileUploader.css";
 
-export const MultipleFileUploader = () => {
+const MultipleFileUploader = () => {
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-  function handleMultipleChange(event) {
+  const handleMultipleChange = (event) => {
     setFiles([...event.target.files]);
-  }
+  };
 
-  function handleMultipleSubmit(event) {
+  const handleMultipleSubmit = async (event) => {
     event.preventDefault();
-    const url = "http://localhost:3000/uploadFiles";
+    const url = "http://127.0.0.1:8000/upload_user_file";
     const formData = new FormData();
-    files.forEach((file, index) => {
-      formData.append(`file${index}`, file);
+
+    files.forEach((file) => {
+      formData.append("file", file);
     });
 
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-
-    axios
-      .post(url, formData, config)
-      .then((response) => {
-        console.log(response.data);
-        setUploadedFiles(response.data.files);
-      })
-      .catch((error) => {
-        console.error("Error uploading files: ", error);
+    try {
+      const response = await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          accept: "application/json",
+        },
       });
-  }
+      console.log("Files uploaded successfully:", response.data);
+      setUploadedFiles(response.data.files || []); // Ensure uploadedFiles is always an array
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
 
   return (
     <>
@@ -50,20 +48,24 @@ export const MultipleFileUploader = () => {
               {files.map((file, index) => (
                 <li key={index}>
                   {file.name.length > 12
-                    ? file.name.substring(0, 12) + "..."
+                    ? `${file.name.substring(0, 12)}...`
                     : file.name}
                 </li>
               ))}
             </ul>
           </div>
         )}
+
+        <button type="submit">Upload</button>
       </form>
 
-      <div className="uploaded-files">
-        {uploadedFiles.map((file, index) => (
-          <img key={index} src={file} alt={`Uploaded content ${index}`} />
-        ))}
-      </div>
+      {uploadedFiles.length > 0 && (
+        <div className="uploaded-files">
+          {uploadedFiles.map((file, index) => (
+            <img key={index} src={file} alt={`Uploaded content ${index}`} />
+          ))}
+        </div>
+      )}
     </>
   );
 };

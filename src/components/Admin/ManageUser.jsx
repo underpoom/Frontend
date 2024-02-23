@@ -5,6 +5,9 @@ import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
 import ChangeRoleAndPassword from "./ChangeRoleAndPassword";
+import TogglePopup from "./TogglePopup";
+import axios from "axios";
+import { handleDownload } from "../../utils/downloadUtils";
 
 const ContainerManageUser = styled.div`
   display: flex;
@@ -192,7 +195,7 @@ export const ManageUser = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("../jsonFile/users.json");
+      const response = await fetch("http://127.0.0.1:8000/get_user_verified");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -207,6 +210,7 @@ export const ManageUser = (props) => {
   };
 
   const [editedIndex, setEditedIndex] = useState(null);
+
   const togglePopup = (index) => {
     setEditedIndex(index);
   };
@@ -227,7 +231,7 @@ export const ManageUser = (props) => {
   const handleBackClick = () => {
     setSelectedUser(null);
     setShowChangeRoleAndPassword(false);
-    setFilteredData(userData)
+    setFilteredData(userData);
   };
 
   const [filteredData, setFilteredData] = useState([]);
@@ -236,10 +240,46 @@ export const ManageUser = (props) => {
     setFilteredData(filteredData);
   };
 
-  
+  const [userSelected, setUserSelected] = useState([]);
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+
+  const handleDeleteClick = (user) => {
+    setShowPopup(true);
+    setPopupContent("Do you want to delete this user?");
+    setUserSelected(user.username);
+  };
+
+  const handleClickYes = async () => {
+    try {
+      const response = await axios.delete(`http://127.0.0.1:8000/user/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          username: userSelected,
+        },
+      });
+      console.log("successful:", response.data);
+      setShowPopup(false);
+      fetchData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleClickYes}
+        />
+      )}
+
       {showChangeRoleAndPassword ? (
         <ChangeRoleAndPassword
           userData={selectedUser}
@@ -253,20 +293,6 @@ export const ManageUser = (props) => {
             filteredData={showFilteredData}
           />
           <ContainerManageUser>
-            {editedIndex !== null && (
-              <PopupContainer>
-                <PopupContent>
-                  <div>
-                    Do you want to delete <br /> this user?
-                  </div>
-                  <ButtonYesNoContainer>
-                    <ButtonYesNo onClick={props.onYes}>Yes</ButtonYesNo>
-                    <ButtonYesNo onClick={closePopup}>No</ButtonYesNo>
-                  </ButtonYesNoContainer>
-                </PopupContent>
-              </PopupContainer>
-            )}
-
             <LabelHeadContainer>
               <LabelHeadUsername>Username</LabelHeadUsername>
               <LabelHeadFirstname>Firstname</LabelHeadFirstname>
@@ -282,7 +308,7 @@ export const ManageUser = (props) => {
                 <RolRole>{user.role}</RolRole> */}
                 <RowUserData>{user.username}</RowUserData>
 
-                <RowUserData>{user.firstName}</RowUserData>
+                <RowUserData>{user.firstname}</RowUserData>
                 <RowUserData>{user.surname}</RowUserData>
                 <RowUserDataEmail>{user.email}</RowUserDataEmail>
 
@@ -291,10 +317,15 @@ export const ManageUser = (props) => {
                 >
                   Change
                 </ChangePasswordButton>
-                <DownloadAttatchedFileButton>
+                <DownloadAttatchedFileButton
+                  onClick={() => handleDownload(user)}
+                >
                   Download
                 </DownloadAttatchedFileButton>
-                <ImgDeleteButton src={imgDelete} onClick={togglePopup} />
+                <ImgDeleteButton
+                  src={imgDelete}
+                  onClick={() => handleDeleteClick(user)}
+                />
               </ContentUser>
             ))}
           </ContainerManageUser>

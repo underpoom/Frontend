@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import styled from "styled-components";
 
+import axios from "axios";
+const url = "http://127.0.0.1:8000";
+
 const ContainerAddAdmin = styled.div`
   display: flex;
   /* height: 76vh; */
@@ -80,11 +83,38 @@ export const CreateAdmin = () => {
     setNewAddAdmin(event.target.value);
   };
 
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [verified_file_path, setVerified_file_path] = useState("");
+
   
-  const handleClickSubmit = () => {
-    console.log("success")
+  const handleClickSubmit = async () => {
+    try {
+      const response = await axios.post(`${url}/create_admin`, {
+        firstname: firstname,
+        surname: lastname,
+        email: email,
+        username: username,
+        password: password,
+        verified_file_path: verified_file_path,
+      });
+      console.log("create_admin successful:", response.data);
+
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setUsername("");
+      setPassword("");
+      setVerified_file_path("");
    
+    } catch (error) {
+      console.error("Error create_admin:", error);
+    }
   };
+
 
   return (
     <>
@@ -93,21 +123,40 @@ export const CreateAdmin = () => {
       <ContainerAddAdmin>
         Create admin’s account
         <ContentAddAdmin>
-          Firstname :<Input onChange={handleChange} />
+          Firstname :
+          <Input
+            value={firstname}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
         </ContentAddAdmin>
         <ContentAddAdmin>
-          Lastname :<Input onChange={handleChange} />
+          Lastname :
+          <Input
+            value={lastname}
+            onChange={(e) => setLastName(e.target.value)}
+          />
         </ContentAddAdmin>
         <ContentAddAdmin>
-          Email Address :<Input onChange={handleChange} />
+          Email Address :
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </ContentAddAdmin>
         <ContentAddAdmin>
-          Username :<Input maxLength={20} onChange={handleChange} />
+          Username :
+          <Input
+            maxLength={20}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </ContentAddAdmin>
         <Maximum20character>Maximum 20 character</Maximum20character>
         <ContentAddAdmin>
           Password :
-          <Input type="password" maxLength={20} onChange={handleChange} />
+          <Input
+            type="password"
+            value={password}
+            maxLength={20}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </ContentAddAdmin>
         <Maximum20character>Maximum 20 character</Maximum20character>
         <Submit onClick={handleClickSubmit}>Submit</Submit>

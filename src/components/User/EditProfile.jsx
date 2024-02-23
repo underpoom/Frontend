@@ -22,7 +22,7 @@ const ContainerEditProfile = styled.div`
   display: flex;
   width: 132vh;
   height: 76vh;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   flex-direction: column;
 
   font: 700 32px Inter, sans-serif;

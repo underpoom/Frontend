@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
 import TogglePopup from "./TogglePopup";
+import axios from "axios";
 
 const ContainerManageUser = styled.div`
   display: flex;
@@ -88,21 +89,20 @@ export const ManageAdmin = (props) => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("../jsonFile/admin.json");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setUserData(data);
-        setFilteredData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/get_admin");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
-
+      const data = await response.json();
+      setUserData(data);
+      setFilteredData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -122,8 +122,25 @@ export const ManageAdmin = (props) => {
   };
 
   // ----------------------------------------------------------------
-  const handleRemoveClickYes = () => {
+  const handleRemoveClickYes = async () => {
     console.log("Clicked 'Yes' for remove admin :", selectedUser.username);
+
+    try {
+      const response = await axios.delete(`http://127.0.0.1:8000/user/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          username: selectedUser.username,
+        },
+      });
+      console.log("successful:", response.data);
+      setShowPopup(false);
+      fetchData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -137,7 +154,7 @@ export const ManageAdmin = (props) => {
       )}
 
       <NavbarTopAdmin
-        pageTitle="Manage User"
+        pageTitle="Manage Admin"
         currentData={userData}
         filteredData={showFilteredData}
       />
@@ -152,7 +169,7 @@ export const ManageAdmin = (props) => {
         {filteredData.map((user, index) => (
           <ContentUser key={index}>
             <RowUserData>{user.username}</RowUserData>
-            <RowUserData>{user.firstName}</RowUserData>
+            <RowUserData>{user.firstname}</RowUserData>
             <RowUserData>{user.surname}</RowUserData>
             <RowUserDataEmail>{user.email}</RowUserDataEmail>
             <ImgDeleteButton

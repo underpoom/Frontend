@@ -1,68 +1,64 @@
-import { upload } from "@testing-library/user-event/dist/upload";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
-import TogglePopup from "../Admin/TogglePopup";
-import ImageWithRectangles from "../../bounding/ImageWithRectangles";
 import LabelImage from "./LabelImage";
 import Summary from "./Summary";
+import axios from "axios";
+import { BigRec } from "./BigRec";
+
 
 const ContainerEditProfile = styled.div`
   display: flex;
   width: 132vh;
   height: 68vh;
-  /* border: 1px solid red; */
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
   justify-content: start;
   font: 700 32px Inter, sans-serif;
   gap: 1vh;
-  border: 1px solid red;
   margin-top: 2vh;
-`;
-
-const BigRec = styled.img`
-  border: 1px solid red;
-  width: 600px;
-  height: 657px;
 `;
 
 const ContainerSmallRec = styled.div`
   display: flex;
-  padding: 20px 30px;
-  gap: 30px;
-  width: 658px;
+  padding: 10px 20px;
+  gap: 20px;
+  width: 590px;
   justify-content: space-between;
-  height: 658px;
-  border: 1px solid blue;
+  height: 627px;
   flex-wrap: wrap;
   flex-direction: row;
   overflow-y: auto;
 `;
 
 const ContentSmallRec = styled.div`
-  border: 1px solid blue;
-  width: 269px;
-  /* height: 181px; */
-  height: fit-content;
-
+  width: 242px;
+  height: 136px;
   cursor: pointer;
   position: relative;
+  margin-bottom: 40px;
+  
 `;
 
 const SmallRec = styled.div`
-  border: 1px solid red;
-  width: 269px;
-  height: 151px;
+  width: 242px;
+  height: 136px;
   cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  background-image: url(${(props) => props.imgSrc});
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const Img = styled.img`
   width: 50px;
+  height: 50px;
   fill: #0a89ff;
   position: absolute;
-  top: 0;
   right: 0;
 `;
 
@@ -93,8 +89,6 @@ const ContentVerified = styled.div`
     css`
       color: #000;
       border-bottom: none;
-
-      /* background-color: #000; */
     `}
   cursor: pointer;
   transition: all 0.5s ease;
@@ -114,7 +108,6 @@ const ContentSummary = styled.div`
     css`
       color: #000;
       border-bottom: none;
-      /* background-color: #000; */
     `}
   cursor: pointer;
   transition: all 0.5s ease;
@@ -125,15 +118,14 @@ const Line2 = styled.div`
   width: 100%;
 `;
 
-const Div = styled.div`
+const DefectCount = styled.div`
   font-family: Inter, sans-serif;
   background-color: #000;
   color: white;
   font-size: 24px;
+  width: 242px;
 `;
 
-const imgBack =
-  "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
 const imgVerified =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/8136dc1d4a7187d64fad29f59cd3285157f97f06b9257a37205da26bd618700f?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
@@ -143,8 +135,36 @@ export const VerifySummary = ({
   handlepageChange,
 }) => {
   const [selectedSection, setSelectSection] = useState("Verify");
-
   const [selectedImage, setSelectImage] = useState(null);
+  const [imageList, setImageList] = useState([]);
+  const [imageListDetail, setImageListDetail] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/get_image?history_id=65d65c3c8684db6de0c5c887`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("successful:", response.data);
+      setImageListDetail(response.data[1]);
+      const newImageList = response.data[0].map((item) => ({
+        ...item,
+        image_path: item.image_path.replace("data/", ""),
+      }));
+      setImageList(newImageList);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleSection = (section) => {
     setSelectSection(section);
@@ -195,31 +215,28 @@ export const VerifySummary = ({
               <BigRec />
 
               <ContainerSmallRec>
-                <ContentSmallRec>
-                  <SmallRec onClick={() => handleSelectedImage("/img1")} />
-                  <Img src={imgVerified} />
-                  <Div>Defect : 40</Div>
-                </ContentSmallRec>
-
-                
+                {imageList.map((img, index) => (
+                  <ContentSmallRec key={index}>
+                    <Img src={imgVerified} />
+                    <SmallRec
+                      onClick={() => handleSelectedImage(`frame${index}.png`)}
+                      imgSrc={img.image_path}
+                    />
+                    <DefectCount>Defect : {img.defect_count}</DefectCount>
+                  </ContentSmallRec>
+                ))}
               </ContainerSmallRec>
             </ContainerEditProfile>
           )}
 
-          {selectedSection === "Summary" && (
-            <>
-              <Summary />
-            </>
-          )}
+          {selectedSection === "Summary" && <Summary />}
         </>
       ) : (
-        <>
-          <LabelImage
-            imgData={selectedImage}
-            onBackClick={onBackClickThis}
-            handlepageChange={handlepage}
-          />
-        </>
+        <LabelImage
+          imgData={selectedImage}
+          onBackClick={onBackClickThis}
+          handlepageChange={handlepage}
+        />
       )}
     </>
   );

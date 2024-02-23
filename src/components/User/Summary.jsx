@@ -179,7 +179,7 @@ export const Summary = () => {
 
         <ContainerUv>
           <ContentDFS>
-            <LabelDFS>Detect from system</LabelDFS>
+            <LabelDFS>User verified</LabelDFS>
             <ValueUV>{ValueUv}</ValueUV>
             <Defects>defects</Defects>
           </ContentDFS>

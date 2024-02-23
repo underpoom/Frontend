@@ -38,7 +38,6 @@ const FactoryName = styled.div`
   width: 200px;
 `;
 
-
 const ContainerLabel = styled.div`
   border-bottom: 1px solid var(--stork, #9f9f9f);
   background-color: var(--stork, #9f9f9f);
@@ -51,7 +50,6 @@ const ContainerLabel = styled.div`
   color: rgba(255, 255, 255, 1);
   padding-left: 50px;
 `;
-
 
 const LabelHeadFactoryname = styled.div`
   font: 700 24px Inter, sans-serif;
@@ -88,7 +86,9 @@ export const PermissionSummary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("../jsonFile/permission.json");
+        const response = await fetch(
+          "http://127.0.0.1:8000/permission_summary"
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -96,6 +96,19 @@ export const PermissionSummary = () => {
         setFactoryList(data);
         setFilteredData(data);
         console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/permission_summary"
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data.factory_name);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -117,20 +130,21 @@ export const PermissionSummary = () => {
         filteredData={showFilteredData}
       />
 
-      <ContainerLabel>
+      
+
+      <ContainerRemoveFactory>
+        <ContainerLabel>
         <LabelHeadFactoryname>Factory Name</LabelHeadFactoryname>
         <LabelHeadUserCount>User Count</LabelHeadUserCount>
         <LabelHeadMemberUsername>Member’s Username</LabelHeadMemberUsername>
       </ContainerLabel>
-
-      <ContainerRemoveFactory>
         {filteredData.map((factory, index) => (
           <FactoryDetail key={index}>
-            <FactoryName>{factory.name}</FactoryName>
-            {factory.users.length}
+            <FactoryName>{factory.factory_name}</FactoryName>
+            {factory.user_count}
 
             <Members>
-              {factory.users.map((user, userIndex) => (
+              {factory.user_permis.map((user, userIndex) => (
                 <Member key={userIndex}>{user.username}</Member>
               ))}
             </Members>

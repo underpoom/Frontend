@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { handleDownload } from "../../utils/downloadUtils";
 
 const ContainerVerifyUsers = styled.div`
   display: flex;
@@ -37,26 +39,26 @@ const LabelHeadUsername = styled.div`
 const LabelHeadFirstname = styled.div`
   font: 700 24px/1.5 Inter, sans-serif;
   color: #fff;
-  margin-left: 58px;
+  margin-left: 60px;
 `;
 
 const LabelHeadSurname = styled.div`
   font: 700 24px/1.5 Inter, sans-serif;
   color: #fff;
-  margin-left: 62px;
+  margin-left: 60px;
 `;
 
 const LabelHeadEmailAddress = styled.div`
   font: 700 24px/1.5 Inter, sans-serif;
   color: #fff;
-  margin-left: 160px;
+  margin-left: 170px;
 `;
 
 const LabelHeadVF = styled.div`
   font: 700 24px/1.5 Inter, sans-serif;
   color: #fff;
-  margin-left: 175px;
-  width: 85px;
+  margin-left: 145px;
+  width: 130px;
 `;
 
 const ContentUser = styled.div`
@@ -99,7 +101,7 @@ const [DownloadAttatchedFileButton] = [
     font: 16px Inter, sans-serif;
     cursor: pointer;
     width: fit-content;
-  `
+  `,
 ];
 
 const PopupContainer = styled.div`
@@ -187,7 +189,7 @@ export const VerifyUsers = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("../jsonFile/users.json");
+      const response = await fetch("http://127.0.0.1:8000/get_user_unverified");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -199,26 +201,67 @@ export const VerifyUsers = (props) => {
     }
   };
 
-  const togglePopupAccept = (index) => {
-    setEditedIndexAccept(index);
-  };
-
   const closePopupAccept = () => {
     setEditedIndexAccept(null);
-  };
-  const togglePopupDecline = (index) => {
-    setEditedIndexDecline(index);
   };
 
   const closePopupDecline = () => {
     setEditedIndexDecline(null);
   };
 
-   const [filteredData, setFilteredData] = useState([]);
-   const showFilteredData = (filteredData) => {
-     console.log("Filtered Data: ", filteredData);
-     setFilteredData(filteredData);
-   };
+  const togglePopupDecline = (user) => {
+    setEditedIndexDecline(user);
+    setUserSelected(user.username);
+  };
+  const togglePopupAccept = (user) => {
+    setEditedIndexAccept(user);
+    setUserSelected(user.username);
+  };
+
+  const handleAcceptClickYes = async () => {
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/put_verified`, {
+        verified: true,
+        username: userSelected,
+      });
+      console.log("Delete successful:", response.data);
+      
+      closePopupAccept();
+      fetchData();
+    } catch (error) {
+      console.error("Error Delete:", error);
+    }
+   
+  };
+
+  const handleDeclineClickYes = async () => {
+
+    try {
+      const response = await axios.delete(`http://127.0.0.1:8000/user/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          username: userSelected,
+        },
+      });
+      console.log("successful:", response.data);
+      fetchData();
+      closePopupDecline();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    
+  };
+
+  const [userSelected, setUserSelected] = useState([]);
+
+  const [filteredData, setFilteredData] = useState([]);
+  const showFilteredData = (filteredData) => {
+    console.log("Filtered Data: ", filteredData);
+    setFilteredData(filteredData);
+  };
 
   return (
     <>
@@ -236,7 +279,7 @@ export const VerifyUsers = (props) => {
                 Do you want to accept <br /> this user?
               </div>
               <ButtonYesNoContainer>
-                <ButtonYesNo>Yes</ButtonYesNo>
+                <ButtonYesNo onClick={handleAcceptClickYes}>Yes</ButtonYesNo>
                 <ButtonYesNo onClick={closePopupAccept}>No</ButtonYesNo>
               </ButtonYesNoContainer>
             </PopupContent>
@@ -250,7 +293,7 @@ export const VerifyUsers = (props) => {
                 Do you want to decline <br /> this user?
               </div>
               <ButtonYesNoContainer>
-                <ButtonYesNo>Yes</ButtonYesNo>
+                <ButtonYesNo onClick={handleDeclineClickYes}>Yes</ButtonYesNo>
                 <ButtonYesNo onClick={closePopupDecline}>No</ButtonYesNo>
               </ButtonYesNoContainer>
             </PopupContent>
@@ -269,13 +312,21 @@ export const VerifyUsers = (props) => {
           <ContentUser key={index}>
             <RowUserData>{user.username}</RowUserData>
 
-            <RowUserData>{user.firstName}</RowUserData>
+            <RowUserData>{user.firstname}</RowUserData>
             <RowUserData>{user.surname}</RowUserData>
             <RowUserDataEmail>{user.email}</RowUserDataEmail>
-            <DownloadAttatchedFileButton>Download</DownloadAttatchedFileButton>
+            <DownloadAttatchedFileButton onClick={() => handleDownload(user)}>
+              Download
+            </DownloadAttatchedFileButton>
 
-            <ImgAcceptButton src={imgAccept} onClick={togglePopupAccept} />
-            <ImgDeclineButton src={imgDecline} onClick={togglePopupDecline} />
+            <ImgAcceptButton
+              src={imgAccept}
+              onClick={() => togglePopupAccept(user)}
+            />
+            <ImgDeclineButton
+              src={imgDecline}
+              onClick={() => togglePopupDecline(user)}
+            />
           </ContentUser>
         ))}
       </ContainerVerifyUsers>

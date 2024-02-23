@@ -5,6 +5,7 @@ import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
 import TogglePopup from "./TogglePopup";
+import axios from "axios";
 
 const ContainerChangePassword = styled.div`
   display: flex;
@@ -55,7 +56,7 @@ const UsernameData = styled.div`
   flex-grow: 1;
 `;
 
-const NewPasswordContent = styled.div`
+const CurrentPasswordContent = styled.div`
   display: flex;
   margin-top: 5vh;
   max-width: 100%;
@@ -64,7 +65,19 @@ const NewPasswordContent = styled.div`
   white-space: nowrap;
   flex-grow: 1;
   font: 700 24px Inter, sans-serif;
-  /* border: 1px solid red; */
+`;
+
+const NewPasswordContent = styled.div`
+  display: flex;
+  margin-top: 3vh;
+  max-width: 100%;
+  justify-content: space-between;
+  gap: 20px;
+  white-space: nowrap;
+  flex-grow: 1;
+  font: 700 24px Inter, sans-serif;
+
+  margin-left: 38px;
 `;
 
 const PasswordInputContent = styled.div`
@@ -180,22 +193,39 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
     setSelectedOption(event.target.value);
   };
 
-  const [password, setPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+
+  const [newPassword, setNewPassword] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState("");
 
   const handleClickSubmit = () => {
     setShowPopup(true);
-    setPopupContent("Do you want to confirm this picture?");
+    setPopupContent("Do you want to change this user’s password?");
+
+    console.log(currentPassword, newPassword);
   };
 
   // ----------------------------------------------------------------
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-    console.log("Password:", password);
+
+  const handleClickYes = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/put_change_password`,
+        {
+          username: userData.username,
+          old_password: currentPassword,
+          new_password: newPassword,
+        }
+      );
+      console.log("change_password successful:", response.data);
+      setShowPopup(false);
+      // navigate("/userhomepage");
+    } catch (error) {
+      console.error("Error change_password:", error);
+    }
   };
-  const handleRemoveClickYes = () => {};
 
   return (
     <>
@@ -203,7 +233,7 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
         <TogglePopup
           content={popupContent}
           onClose={() => setShowPopup(false)}
-          onYes={handleRemoveClickYes}
+          onYes={handleClickYes}
         />
       )}
 
@@ -220,6 +250,19 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
           <UsernameContent>
             Username :<UsernameData>{userData.username}</UsernameData>
           </UsernameContent>
+          <CurrentPasswordContent>
+            Current password :
+            <PasswordInputContent>
+              <PasswordInput
+                type="password"
+                id="newPassword"
+                name="newPassword"
+                maxLength={20}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
+              <Maximum20character>Maximum 20 character</Maximum20character>
+            </PasswordInputContent>
+          </CurrentPasswordContent>
           <NewPasswordContent>
             New password :
             <PasswordInputContent>
@@ -228,7 +271,7 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
                 id="newPassword"
                 name="newPassword"
                 maxLength={20}
-                onChange={handlePasswordChange}
+                onChange={(e) => setNewPassword(e.target.value)}
               />
               <Maximum20character>Maximum 20 character</Maximum20character>
             </PasswordInputContent>

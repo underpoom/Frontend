@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TogglePopup from "./TogglePopup";
+import { handleDownload } from "../../utils/downloadUtils";
+
+import axios from "axios";
+const url = "http://127.0.0.1:8000";
 
 const ContainerFactoryPermission = styled.div`
   display: flex;
@@ -149,7 +153,7 @@ const OtherUserLabel = styled.div`
 `;
 
 const SearchUserContainer = styled.div`
-  margin: -35px 0 0 auto;
+  margin: -35px 10px 0 auto;
   input[type="text"] {
     height: 5.5vh;
     padding: 8px;
@@ -201,28 +205,50 @@ const imgBack =
 export const PermissionSelected = ({ factoryData, onBackClick }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [userCurrentPermission, setUserCurrentPermission] = useState([]);
+  const [userOtherPermission, setUserOtherPermission] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${url}/get_permission_factory?facto_id=${factoryData.factory_id}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("successful UserCurrent:", response.data);
+      setUserCurrentPermission(response.data);
+    } catch (error) {
+      console.error("Error UserCurrent:", error);
+    }
+
+    try {
+      const response = await axios.get(
+        `${url}/get_not_permission_factory?facto_id=${factoryData.factory_id}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("successful UserOther:", response.data);
+      setUserOtherPermission(response.data);
+    } catch (error) {
+      console.error("Error UserOther:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("../jsonFile/users.json");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setUserCurrentPermission(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
-  const filteredUsers = userCurrentPermission.filter((user) =>
+  const filteredUsers = userOtherPermission.filter((user) =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -246,21 +272,48 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
   };
 
   // ----------------------------------------------------------------
-  const handleRemoveClickYes = () => {
+  const handleRemoveClickYes = async () => {
     if (isRemoveAction) {
       console.log(
         "Clicked 'Yes' for remove permision",
-        userSelectedData.username,
+        userSelectedData._id,
         "from",
-        factoryData.name
+        factoryData.factory_id
       );
+      try {
+        const response = await axios.delete(`${url}/del_permission`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: {
+            user_id: userSelectedData._id,
+            fac_id: factoryData.factory_id,
+          },
+        });
+        console.log("Delete successful:", response.data);
+        setShowPopup(false);
+        fetchData();
+      } catch (error) {
+        console.error("Error Delete:", error);
+      }
     } else {
-      console.log(
-        "Clicked 'Yes' for add permision",
-        userSelectedData.username,
-        "to",
-        factoryData.name
-      );
+      try {
+        const response = await axios.post(`${url}/post_permission`, {
+          username: userSelectedData.username,
+          factory_name: factoryData.factory_name,
+          factory_details: factoryData.factory_details,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("successful:", response.data);
+        setShowPopup(false);
+        fetchData();
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
     setShowPopup(false);
   };
@@ -278,7 +331,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
       <>
         <NavbarTopAdminContainer>
           <Img src={imgBack} onClick={onBackClick}></Img>
-          <PageTitleAdmin>{factoryData.name}</PageTitleAdmin>
+          <PageTitleAdmin>{factoryData.factory_name}</PageTitleAdmin>
         </NavbarTopAdminContainer>
         <BlacLineAdmin />
 
@@ -302,7 +355,9 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
                 <RowUserData>{user.firstName}</RowUserData>
                 <RowUserData>{user.surname}</RowUserData>
                 <RowUserDataEmail>{user.email}</RowUserDataEmail>
-                <UserFile>Download</UserFile>
+                <UserFile onClick={() => handleDownload(user)}>
+                  Download
+                </UserFile>
                 <ImgRemoveAdd
                   onClick={() => handleTogglePopupRemove(user)}
                   src={imgRemove}
@@ -337,10 +392,12 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
               <ContentUser key={index}>
                 <RowUserData>{user.username}</RowUserData>
 
-                <RowUserData>{user.firstName}</RowUserData>
+                <RowUserData>{user.firstname}</RowUserData>
                 <RowUserData>{user.surname}</RowUserData>
                 <RowUserDataEmail>{user.email}</RowUserDataEmail>
-                <UserFile>Download</UserFile>
+                <UserFile onClick={() => handleDownload(user)}>
+                  Download
+                </UserFile>
                 <ImgRemoveAdd
                   onClick={() => handleTogglePopupAdd(user)}
                   src={imgAdd}

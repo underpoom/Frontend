@@ -47,7 +47,7 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
     pageTitle === "Remove Factory" ||
     pageTitle === "Factory’s Permission Summary"
   ) {
-    Term = "name";
+    Term = "factory_name";
   }
   const handleSearchChange = (event) => {
     const searchTerm = event.target.value;
@@ -71,7 +71,7 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
             />
           </SearchUserContainer>
         )}
-        {Term === "name" && (
+        {Term === "factory_name" && (
           <SearchUserContainer>
             <input
               type="text"

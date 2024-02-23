@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import styled from "styled-components";
 
+import axios from "axios";
+const url = "http://127.0.0.1:8000";
+
 const ContainerAddFactory = styled.div`
   display: flex;
   height: 76vh;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   flex-direction: column;
   overflow-y: auto;
   align-items: center;
@@ -213,9 +216,22 @@ export const AddFactory = () => {
   }, [selectedTambon]);
 
   // ----------------------------------------------------------------
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (factoryLocation !== null) {
-      console.log("You craet", newFactoryName, "at ", factoryLocation);
+      // console.log("You craet", newFactoryName, "at ", factoryLocation);
+      try {
+        const response = await axios.post(`${url}/post_factory`, {
+          factory_name: newFactoryName,
+          factory_details: factoryLocation,
+        });
+        console.log("post_factory successful:", response.data);
+        setNewFactoryName("")
+        setSelectedProvince("")
+        setSelectedAmphure("")
+        setSelectedTambon("")
+      } catch (error) {
+        console.error("Error post_factory:", error);
+      }
     }
   };
 
@@ -233,12 +249,9 @@ export const AddFactory = () => {
         <ContentFactoryName>
           Factory Name :
           <PasswordInput
-            // type="password"
-            id="newPassword"
-            name="newPassword"
-            maxLength={20}
-            required
-            onChange={handleChange}
+            // maxLength={20}
+            value={newFactoryName}
+            onChange={(e) => setNewFactoryName(e.target.value)}
           />
           <Maximum20character>Maximum 20 character</Maximum20character>
         </ContentFactoryName>

@@ -1,7 +1,8 @@
-import React from "react";
 import styled from "styled-components";
 import MenuTools from "./MenuTools/MenuTools";
 import NavbarTop from "./NavbarTop/NavbarTop";
+import React, { useContext, useState, useEffect } from "react";
+import { UserContext, } from "../../bounding/UserContext";
 
 const ContainerInformation = styled.div`
   display: flex;
@@ -164,64 +165,63 @@ const Img2 = styled.img`
   width: 140px;
 `;
 
-const Information = ({handlepageChange}) => {
-
+const Information = ({ handlepageChange }) => {
+  const { user } = useContext(UserContext);
   const handlepage = (data) => {
     handlepageChange(data);
   };
+
   return (
     <>
-     
-        <NavbarTop pageTitle="Information" changeStatePage={handlepage} />
-        <ContainerInformation>
-          <Info>Document</Info>
+      <NavbarTop pageTitle="Information" changeStatePage={handlepage} />
+      <ContainerInformation>
+        <Info>Document</Info>
 
-          <Condiv>
-            <Condiv2>
-              <Concolumn>
-                <Condiv3>
-                  <Condiv4>
-                    <Img1 src="https://cdn.builder.io/api/v1/image/assets/TEMP/9f32db4ef39b87efda9d2258e8443d21f1f01d24a9e2774c960c693c1015164e?apiKey=34584a6259e046a0be0d44044e057cb8&" />
-                  </Condiv4>
-                  <Condiv5>
-                    Drone flight <br />
-                    requirements
-                  </Condiv5>
-                  <Condiv6>
-                    <span style={{ fontWeight: "bold" }}>About</span>
-                    <span> : Speed of drone, </span>
+        <Condiv>
+          <Condiv2>
+            <Concolumn>
+              <Condiv3>
+                <Condiv4>
+                  <Img1 src="https://cdn.builder.io/api/v1/image/assets/TEMP/9f32db4ef39b87efda9d2258e8443d21f1f01d24a9e2774c960c693c1015164e?apiKey=34584a6259e046a0be0d44044e057cb8&" />
+                </Condiv4>
+                <Condiv5>
+                  Drone flight <br />
+                  requirements
+                </Condiv5>
+                <Condiv6>
+                  <span style={{ fontWeight: "bold" }}>About</span>
+                  <span> : Speed of drone, </span>
 
-                    <span>Time to fly the drone, Drone camera angle.</span>
-                    <br />
-                    <span>etc.</span>
-                  </Condiv6>
+                  <span>Time to fly the drone, Drone camera angle.</span>
+                  <br />
+                  <span>etc.</span>
+                </Condiv6>
 
-                  <Condiv7>Download</Condiv7>
-                </Condiv3>
-              </Concolumn>
-              <Concolumn2>
-                <Condiv8>
-                  <Condiv9>
-                    <Img2 src="https://cdn.builder.io/api/v1/image/assets/TEMP/1bd0207a8dfcd20c9a8b2110b179a6468af2bfccef906b8fdfd23eb863253ec8?apiKey=34584a6259e046a0be0d44044e057cb8&" />
-                  </Condiv9>
-                  <Condiv10>
-                    How to
-                    <br />
-                    use website
-                  </Condiv10>
-                  <Condiv6>
-                    <span style={{ fontWeight: "bold" }}>About</span>
-                    <span> : How to add video to website,</span>
-                    <span>How to adjust defect in picture, etc. </span>{" "}
-                  </Condiv6>
+                <Condiv7>Download</Condiv7>
+              </Condiv3>
+            </Concolumn>
+            <Concolumn2>
+              <Condiv8>
+                <Condiv9>
+                  <Img2 src="https://cdn.builder.io/api/v1/image/assets/TEMP/1bd0207a8dfcd20c9a8b2110b179a6468af2bfccef906b8fdfd23eb863253ec8?apiKey=34584a6259e046a0be0d44044e057cb8&" />
+                </Condiv9>
+                <Condiv10>
+                  How to
+                  <br />
+                  use website
+                </Condiv10>
+                <Condiv6>
+                  <span style={{ fontWeight: "bold" }}>About</span>
+                  <span> : How to add video to website,</span>
+                  <span>How to adjust defect in picture, etc. </span>{" "}
+                </Condiv6>
 
-                  <Condiv12>Download</Condiv12>
-                </Condiv8>
-              </Concolumn2>
-            </Condiv2>
-          </Condiv>
-        </ContainerInformation>
-     
+                <Condiv12 >Download</Condiv12>
+              </Condiv8>
+            </Concolumn2>
+          </Condiv2>
+        </Condiv>
+      </ContainerInformation>
     </>
   );
 };
