@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
@@ -8,6 +8,7 @@ import ChangeRoleAndPassword from "./ChangeRoleAndPassword";
 import TogglePopup from "./TogglePopup";
 import axios from "axios";
 import { handleDownload } from "../../utils/downloadUtils";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerManageUser = styled.div`
   display: flex;
@@ -188,6 +189,7 @@ const imgDelete =
 export const ManageUser = (props) => {
   const [userData, setUserData] = useState([]);
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     fetchData();
@@ -195,18 +197,19 @@ export const ManageUser = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/get_user_verified");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setUserData(data);
-      setFilteredData(data);
+      const response = await axios.get(`${url}/get_user_verified`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log("successful:", response.data);
+      setUserData(response.data);
+      setFilteredData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error:", error);
     }
-
-    console.log(userData);
   };
 
   const [editedIndex, setEditedIndex] = useState(null);
@@ -253,10 +256,11 @@ export const ManageUser = (props) => {
 
   const handleClickYes = async () => {
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/user/`, {
+      const response = await axios.delete(`${url}/user/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
         data: {
           username: userSelected,
@@ -268,6 +272,10 @@ export const ManageUser = (props) => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleDownloadClick = (userData) => {
+    handleDownload(userData, user.token);
   };
 
   return (
@@ -318,7 +326,7 @@ export const ManageUser = (props) => {
                   Change
                 </ChangePasswordButton>
                 <DownloadAttatchedFileButton
-                  onClick={() => handleDownload(user)}
+                  onClick={() => handleDownloadClick(user)}
                 >
                   Download
                 </DownloadAttatchedFileButton>

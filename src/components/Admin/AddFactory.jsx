@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import styled from "styled-components";
 
 import axios from "axios";
-const url = "http://127.0.0.1:8000";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerAddFactory = styled.div`
   display: flex;
@@ -96,6 +96,7 @@ export const AddFactory = () => {
   const [filteredAmphures, setFilteredAmphures] = useState([]);
   const [filteredTambons, setFilteredTambons] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province.json"
@@ -215,20 +216,31 @@ export const AddFactory = () => {
     }
   }, [selectedTambon]);
 
+  const { user } = useContext(UserContext);
   // ----------------------------------------------------------------
   const handleSubmit = async () => {
     if (factoryLocation !== null) {
       // console.log("You craet", newFactoryName, "at ", factoryLocation);
       try {
-        const response = await axios.post(`${url}/post_factory`, {
-          factory_name: newFactoryName,
-          factory_details: factoryLocation,
-        });
+        const response = await axios.post(
+          `${url}/post_factory`,
+          {
+            factory_name: newFactoryName,
+            factory_details: factoryLocation,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         console.log("post_factory successful:", response.data);
-        setNewFactoryName("")
-        setSelectedProvince("")
-        setSelectedAmphure("")
-        setSelectedTambon("")
+        setNewFactoryName("");
+        setSelectedProvince("");
+        setSelectedAmphure("");
+        setSelectedTambon("");
       } catch (error) {
         console.error("Error post_factory:", error);
       }

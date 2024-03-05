@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MenuTools from "./MenuTools/MenuTools";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import styled from "styled-components";
@@ -8,7 +8,7 @@ import BuildingDetails from "./BuildingDetails";
 import Information from "./Information";
 import NewBuilding from "./NewBuilding";
 import AllDataHistory from "./AllDataHistory";
-import { UserContext } from "../../bounding/UserContext";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const RightContainer = styled.div`
   display: flex;
@@ -39,7 +39,6 @@ export const UserHomepage = () => {
   };
 
   const handleBuildingClick = (data) => {
-
     // console.log("Selected section:", building);
     setSelectedBuildingData(data);
     // console.log("fac ",selectedFactoryData)
@@ -47,7 +46,11 @@ export const UserHomepage = () => {
     setSelectedSection("AllDataHistory");
   };
 
-  
+  const handleNewBuildingClick = (data) => {
+    setSelectedBuildingData(data);
+    handleFetch(data)
+    setSelectedSection("AllDataHistory");
+  };
 
   const [showFactoryDetails, setShowFactoryDetails] = useState(false);
   const [showBuildingDetails, setShowBuildingDetails] = useState(false);
@@ -62,7 +65,7 @@ export const UserHomepage = () => {
 
   const { user } = useContext(UserContext);
 
-
+  const handleFetch = () => {};
 
   return (
     <>
@@ -73,6 +76,7 @@ export const UserHomepage = () => {
         onNewBuildingClick={handleNewBuilding}
         onBuildingClick={handleBuildingClick}
         onFactoryClick={handleFactoryClick}
+        ishandleFetch={handleFetch}
       />
 
       <RightContainer>
@@ -101,6 +105,8 @@ export const UserHomepage = () => {
           <NewBuilding
             factoryData={selectedFactoryData}
             handlepageChange={handleSelectSection}
+            handleNewBuildingClickConfirm={handleNewBuildingClick}
+            handleFetch={handleFetch}
           />
         )}
 

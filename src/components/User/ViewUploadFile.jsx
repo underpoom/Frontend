@@ -1,8 +1,10 @@
 import { upload } from "@testing-library/user-event/dist/upload";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import TogglePopup from "../Admin/TogglePopup";
+import { UserContext, url } from "../../bounding/UserContext";
+import axios from "axios";
 
 const ContainerEditProfile = styled.div`
   display: flex;
@@ -32,7 +34,7 @@ const Label = styled.div`
   /* border: 1px solid red; */
 `;
 
-const ButtonNew = styled.div`
+const ButtonNew = styled.form`
   border-radius: 10px;
   background-color: var(--Important-Button, #0a89ff);
   display: flex;
@@ -123,6 +125,7 @@ const ButtonProcess = styled.div`
   margin-top: 20px;
   justify-content: center;
   padding: 8px 27px;
+  cursor: pointer;
 `;
 
 const imgBack =
@@ -132,16 +135,18 @@ export const ViewUploadFile = ({
   buildingDataW,
   onBackClick,
   handlepageChange,
+  dataHistorySelected,
 }) => {
+  const { user } = useContext(UserContext);
   const [files, setFiles] = useState([]);
-
+  const [input_dir, setinput_dir] = useState(null);
+  const [output_dir, setoutput_dir] = useState(null);
   const handlepage = (data) => {
     handlepageChange(data);
   };
 
-  const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    setFiles(selectedFiles);
+  const handleFileChange = (event) => {
+    setFiles([...event.target.files]);
   };
 
   const handleFileDelete = (index) => {
@@ -150,10 +155,66 @@ export const ViewUploadFile = ({
     setFiles(updatedFiles);
   };
 
+  console.log(dataHistorySelected);
+  // ----------------------------------------------------------------
+  const handleProcessClick = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+
+    files.forEach((file) => {
+      formData.append("fileList", file);
+    });
+
+    try {
+      const uploadResponse = await axios.post(
+        `${url}/upload_video_srt_file`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            accept: "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("Files uploaded successfully:", uploadResponse.data);
+      const inputDir = uploadResponse.data.path;
+      const outputDir = dataHistorySelected.history_path;
+ 
+
+      console.log(inputDir);
+      console.log(outputDir);
+
+      try {
+        const response = await axios.post(
+          `${url}/extract_video`,
+          {
+            input_dir: inputDir,
+            output_dir: outputDir,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+
+        console.log("process successful:", response.data);
+      } catch (error) {
+        console.error("Error process:", error);
+      }
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+
+  };
+
   return (
     <>
       <NavbarTop
-        pageTitle={buildingDataW}
+        pageTitle={buildingDataW.building_name}
         changeStatePage={handlepage}
         onBackClick={onBackClick}
       />
@@ -168,21 +229,21 @@ export const ViewUploadFile = ({
             Your .srt file must have same name as your .mp4 file.
           </LabelMd>
           <ButtonNew>
-            <label htmlFor="file-upload">
-              <Img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&"
-              />
-              Upload
-            </label>
-            <input
-              type="file"
-              id="file-upload"
-              // accept=".mp4,.srt"
-              multiple
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
+           
+              <label>
+                <Img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&"
+                />
+                Upload
+                <input
+                  type="file"
+                  accept=".mp4,.srt"
+                  multiple
+                  onChange={handleFileChange}
+                />
+              </label>
+            
           </ButtonNew>
         </Label>
 
@@ -201,7 +262,7 @@ export const ViewUploadFile = ({
       </ContainerEditProfile>
       <DivLine>
         <LineBottom />
-        <ButtonProcess>Process</ButtonProcess>
+        <ButtonProcess onClick={handleProcessClick}>Process</ButtonProcess>
       </DivLine>
     </>
   );

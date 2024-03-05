@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import LabelImage from "./LabelImage";
 import Summary from "./Summary";
 import axios from "axios";
 import { BigRec } from "./BigRec";
+import { UserContext, url } from "../../bounding/UserContext";
 
 
 const ContainerEditProfile = styled.div`
@@ -18,11 +19,12 @@ const ContainerEditProfile = styled.div`
   font: 700 32px Inter, sans-serif;
   gap: 1vh;
   margin-top: 2vh;
+  
 `;
 
 const ContainerSmallRec = styled.div`
   display: flex;
-  padding: 10px 20px;
+  padding: 3px 10px;
   gap: 20px;
   width: 590px;
   justify-content: space-between;
@@ -30,6 +32,7 @@ const ContainerSmallRec = styled.div`
   flex-wrap: wrap;
   flex-direction: row;
   overflow-y: auto;
+
 `;
 
 const ContentSmallRec = styled.div`
@@ -133,20 +136,23 @@ export const VerifySummary = ({
   buildingDataW,
   onBackClick,
   handlepageChange,
+  dataHistorySelected,
 }) => {
   const [selectedSection, setSelectSection] = useState("Verify");
   const [selectedImage, setSelectImage] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [imageListDetail, setImageListDetail] = useState([]);
+  const { user } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/get_image?history_id=65d65c3c8684db6de0c5c887`,
+        `${url}/get_image?history_id=${dataHistorySelected._id}`,
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
         }
       );
@@ -164,7 +170,7 @@ export const VerifySummary = ({
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [onBackClick]);
 
   const handleSection = (section) => {
     setSelectSection(section);
@@ -176,18 +182,29 @@ export const VerifySummary = ({
 
   const onBackClickThis = () => {
     setSelectImage(null);
+    fetchData();
   };
 
   const handlepage = (data) => {
     handlepageChange(data);
   };
 
+   const [hoveredImage, setHoveredImage] = useState(null);
+
+    const handleMouseEnter = (img) => {
+      setHoveredImage(img);
+      console.log("Hovered Image:", img);
+    };
+
+    const handleMouseLeave = () => {
+      setHoveredImage(null);
+    };
   return (
     <>
       {selectedImage === null ? (
         <>
           <NavbarTop
-            pageTitle={buildingDataW}
+            pageTitle={buildingDataW.building_name}
             changeStatePage={handlepage}
             onBackClick={onBackClick}
           />
@@ -209,27 +226,34 @@ export const VerifySummary = ({
             </ContentSummary>
             <Line2 />
           </HeadVS>
-
           {selectedSection === "Verify" && (
             <ContainerEditProfile>
-              <BigRec />
+              <BigRec
+                hoveredImage={hoveredImage}
+                dataHistorySelected={dataHistorySelected}
+              />
 
               <ContainerSmallRec>
                 {imageList.map((img, index) => (
                   <ContentSmallRec key={index}>
-                    <Img src={imgVerified} />
+                    {img.is_verified && <Img src={imgVerified} />}
+
                     <SmallRec
-                      onClick={() => handleSelectedImage(`frame${index}.png`)}
+                      onMouseEnter={() => handleMouseEnter(img)}
+                      onMouseLeave={handleMouseLeave}
+                      onClick={() => handleSelectedImage(img)}
                       imgSrc={img.image_path}
                     />
+
                     <DefectCount>Defect : {img.defect_count}</DefectCount>
                   </ContentSmallRec>
                 ))}
               </ContainerSmallRec>
             </ContainerEditProfile>
           )}
-
-          {selectedSection === "Summary" && <Summary />}
+          {selectedSection === "Summary" && (
+            <Summary dataHistorySelected={dataHistorySelected} />
+          )}
         </>
       ) : (
         <LabelImage

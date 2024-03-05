@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import MenuTools from "./MenuTools/MenuTools";
 import { Link } from "react-router-dom";
 import NavbarTop from "./NavbarTop/NavbarTop";
+import TogglePopup from "../Admin/TogglePopup";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext, url } from "../../bounding/UserContext";
+
 const ButtonEnter = styled.button`
   border-radius: 10px;
   border: 1px solid var(--stork, #9f9f9f);
@@ -34,7 +38,7 @@ const PasswordInput = styled.input`
   border-radius: 10px;
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--light, #fafafa);
-  width: 20vh;
+  width: 26vh;
   max-width: 100%;
   height: 5vh;
   padding: 0 10px;
@@ -59,13 +63,11 @@ const ContainerUsername = styled.div`
   width: 60vh;
   background: transparent;
   padding-top: 5px;
-  /* border: 1px solid red; */
   font: 700 24px Inter, sans-serif;
-  justify-content: center;
 `;
 
 const LabelUsername = styled.span`
-  margin-left: -3vh;
+  margin-left: 10.5vh;
 `;
 
 const Username = styled.span`
@@ -119,6 +121,11 @@ const LabelNewPassword = styled.label`
 export const EditProfile = ({ handlepageChange }) => {
   const [username, setUsername] = useState("user no.11");
   const navigate = useNavigate();
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+  const { user } = useContext(UserContext);
 
   function handleClickLogout(event) {
     navigate("/loginsignup");
@@ -128,25 +135,65 @@ export const EditProfile = ({ handlepageChange }) => {
     handlepageChange(data);
   };
 
+  const handleClickSubmit = () => {
+    setShowPopup(true);
+    setPopupContent("Do you want to change password?");
+  };
+
+  const handleClickYes = async () => {
+    try {
+      const response = await axios.put(
+        `${url}/put_change_password`,
+        {
+          username: user.username,
+          old_password: currentPassword,
+          new_password: newPassword,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("change_password successful:", response.data);
+      // setCurrentPassword("");
+      // setNewPassword("");
+      setShowPopup(false);
+    } catch (error) {
+      console.error("Error change_password:", error);
+    }
+  };
+
+  console.log(newPassword)
+
   return (
     <>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleClickYes}
+        />
+      )}
       <NavbarTop pageTitle="Profile" changeStatePage={handlepage} />
       <ContainerEditProfile>
         <ChangePassword>Change Password</ChangePassword>
 
         <ContainerUsername>
           <LabelUsername>Username :</LabelUsername>
-          <Username>{username}</Username>
+          <Username>{user.username}</Username>
         </ContainerUsername>
 
         <FormGroup>
           <LabelCurrentPassword>Current password :</LabelCurrentPassword>
           <PasswordInput
             type="password"
-            id="newPassword"
-            name="currentPassword"
             maxLength={20}
             required
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
           />
           <Maximum20Character>Maximum 20 character</Maximum20Character>
         </FormGroup>
@@ -155,15 +202,14 @@ export const EditProfile = ({ handlepageChange }) => {
           <LabelNewPassword>New Password :</LabelNewPassword>
           <PasswordInput
             type="password"
-            id="newPassword"
-            name="newPassword"
             maxLength={20}
             required
+            onChange={(e) => setNewPassword(e.target.value)}
           />
           <Maximum20Character>Maximum 20 character</Maximum20Character>
         </FormGroup>
 
-        <ButtonEnter>Enter</ButtonEnter>
+        <ButtonEnter onClick={handleClickSubmit}>Enter</ButtonEnter>
 
         <LogoutButton onClick={handleClickLogout}>
           Logout

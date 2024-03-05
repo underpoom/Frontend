@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../../bounding/UserContext";
+import { UserContext, url } from "../../../bounding/UserContext";
 import styled, { css } from "styled-components";
-
+import TogglePopup from "../../Admin/TogglePopup";
 import axios from "axios";
-const url = "http://127.0.0.1:8000";
 
 const ContainerMenutools = styled.div`
   display: flex;
@@ -97,12 +96,11 @@ export const MenuTools = ({
   onNewBuildingClick,
   onFactoryClick,
   onBuildingClick,
+  ishandleFetch,
 }) => {
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState(null);
   const { user } = useContext(UserContext);
-
-  console.log(user);
 
   const imgFactory =
     "https://cdn.builder.io/api/v1/image/assets/TEMP/4e5ad0d00ab460ea192b2777c8b4f4210a018fad5ab76df4a8acc1b6e3d1d12a?apiKey=34584a6259e046a0be0d44044e057cb8&";
@@ -122,37 +120,28 @@ export const MenuTools = ({
     "https://cdn.builder.io/api/v1/image/assets/TEMP/8ecf12dfcc299c4d77bebc194b8fb77f9bd76b7ced54ffd7c2676c690e6d9678?apiKey=34584a6259e046a0be0d44044e057cb8&";
   const imgMdInformation =
     "https://cdn.builder.io/api/v1/image/assets/TEMP/7b2afe12059a0d6aba177b4eb04cbd5a2f927e443bfd63eec24764d2bb10d9d5?apiKey=34584a6259e046a0be0d44044e057cb8&";
-
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${url}/get_user_factory?username=${user}`,
-  //       {
-  //       headers: {
-  //           Accept: "application/json",
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     console.log("successful:", response.data);
-  //     setFactories(response.data);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
- // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  // console.log(user.token);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${url}/get_user_factory?username=${user.username}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("successful:", response.data);
+      setFactories(response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   useEffect(() => {
-    fetch("../jsonFile/factories.json")
-      .then((response) => response.json())
-      .then((data) => setFactories(data))
-      .catch((error) => console.error("Error fetching factories:", error));
-  }, []);
-
-
-
- 
+    fetchData();
+  }, [ishandleFetch]);
 
   const handleFactoryClick = (factory) => {
     setSelectedFactory(factory);
@@ -182,70 +171,119 @@ export const MenuTools = ({
     onFactoryClick(data);
   };
 
+  const handleRemoveBuilding = (building) => {
+    console.log(building);
+  };
   const [selectedSection, setSelectedSection] = useState([]);
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+
+  const [selectedBuilding, setSelectedBuilding] = useState(null);
+
+  const handleClickSubmit = (data) => {
+    setShowPopup(true);
+    setPopupContent("Do you want to remove this building?");
+    setSelectedBuilding(data);
+  };
+  const handleClickYes = async () => {
+    console.log(selectedBuilding.building_id);
+    try {
+      const response = await axios.delete(`${url}/building`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        data: {
+          build_id: selectedBuilding.building_id,
+        },
+      });
+      console.log("delete successful:", response.data);
+
+      setSelectedBuilding(null);
+      setShowPopup(false);
+      fetchData();
+    } catch (error) {
+      console.error("Error delete:", error);
+    }
+  };
+
   return (
-    <ContainerMenutools>
-      <HomePage>
-        <span style={{ fontSize: "40px" }}>Factories</span>
-        <span style={{ fontSize: "24px" }}>& Buildings</span>
-      </HomePage>
-      <WhiteLine />
-      {/* {factories.map((factory, index_f) => (
-        <FactorySpace key={index_f} onClick={() => handleFactoryClick(factory)}>
-          <img loading="lazy" src={imgFactory} />
-          {factory.factory_name}
-          <ImgLgInformation
-            loading="lazy"
-            src={imgLgInfornation}
-            onClick={() => handleFactoryInformation(factory)}
-          />
-          <BoldArrow
-            loading="lazy"
-            src={selectedFactory === factory ? imgBoldDown : imgBoldLeft}
-          />
+    <>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleClickYes}
+        />
+      )}
+      <ContainerMenutools>
+        <HomePage>
+          <span style={{ fontSize: "40px" }}>Factories</span>
+          <span style={{ fontSize: "24px" }}>& Buildings</span>
+        </HomePage>
+        <WhiteLine />
+        {factories.map((factory, index_f) => (
+          <FactorySpace
+            key={index_f}
+            onClick={() => handleFactoryClick(factory)}
+          >
+            <img loading="lazy" src={imgFactory} />
+            {factory.factory_name}
+            <ImgLgInformation
+              loading="lazy"
+              src={imgLgInfornation}
+              onClick={() => handleFactoryInformation(factory)}
+            />
+            <BoldArrow
+              loading="lazy"
+              src={selectedFactory === factory ? imgBoldDown : imgBoldLeft}
+            />
 
-          {selectedFactory &&
-            selectedFactory.factory_id === factory.factory_id && (
-              <div>
-                {factory.buildings.map((building, index) => (
-                  <BuildingSpace
-                    key={index}
-                    selected={building.selected}
-                    onClick={() => handleSectionSelect(building)}
-                    className={selectedSection == building ? "selected" : ""}
-                  >
-                    <img
-                      loading="lazy"
-                      src={imgBuilding}
-                      onClick={() => {
-                        handleFactorySelect(factory);
-                        handleBuildingSelect(building);
-                      }}
-                    />
+            {selectedFactory &&
+              selectedFactory.factory_id === factory.factory_id && (
+                <div>
+                  {factory.buildings.map((building, index) => (
+                    <BuildingSpace
+                      key={index}
+                      selected={building.selected}
+                      onClick={() => handleSectionSelect(building)}
+                      className={selectedSection == building ? "selected" : ""}
+                    >
+                      <img
+                        loading="lazy"
+                        src={imgBuilding}
+                        onClick={() => {
+                          handleFactorySelect(factory);
+                          handleBuildingSelect(building);
+                        }}
+                      />
 
-                    {building.length > 10
-                      ? `${building.substring(0, 10)}...`
-                      : building}
-                   
+                      {building.building_name.length > 10
+                        ? `${building.building_name.substring(0, 10)}...`
+                        : building.building_name}
 
-                    <ImgMdInformation
-                      src={imgLgInfornation}
-                      onClick={() => handleBuildingInformation(building)}
-                    />
-                    <ImgRemoveBuilding src={imgRemove} />
+                      <ImgMdInformation
+                        src={imgLgInfornation}
+                        onClick={() => handleBuildingInformation(building)}
+                      />
+                      <ImgRemoveBuilding
+                        src={imgRemove}
+                        onClick={() => handleClickSubmit(building)}
+                      />
+                    </BuildingSpace>
+                  ))}
+
+                  <BuildingSpace onClick={() => handleAddNewBuilding(factory)}>
+                    + New Building
                   </BuildingSpace>
-                ))}
+                </div>
+              )}
+          </FactorySpace>
+        ))}
 
-                <BuildingSpace onClick={() => handleAddNewBuilding(factory)}>
-                  + New Building
-                </BuildingSpace>
-              </div>
-            )}
-        </FactorySpace>
-      ))} */}
-
-      {factories.map((factory) => (
+        {/* {factories.map((factory) => (
         <FactorySpace
           key={factory.id}
           onClick={() => handleFactoryClick(factory)}
@@ -298,12 +336,13 @@ export const MenuTools = ({
             </div>
           )}
         </FactorySpace>
-      ))}
+      ))} */}
 
-      {/* <Button color="primary" type="button" size="lg" class>
+        {/* <Button color="primary" type="button" size="lg" class>
         Add Building
       </Button> */}
-    </ContainerMenutools>
+      </ContainerMenutools>
+    </>
   );
 };
 export default MenuTools;

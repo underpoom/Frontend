@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import PermissionSelected from "./PermissionSelected";
 
 import axios from "axios";
-const url = "http://127.0.0.1:8000";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerPermission = styled.div`
   display: flex;
@@ -117,16 +117,20 @@ export const AddPermission = () => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+  const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${url}/get_admin_manage_factory`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setFactoryList(data);
-        setFilteredData(data);
+        const response = await axios.get(`${url}/get_admin_manage_factory`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        setFactoryList(response.data);
+        setFilteredData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

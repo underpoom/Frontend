@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import TogglePopup from "./TogglePopup";
 import { handleDownload } from "../../utils/downloadUtils";
 
 import axios from "axios";
-const url = "http://127.0.0.1:8000";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerFactoryPermission = styled.div`
   display: flex;
@@ -206,7 +206,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [userCurrentPermission, setUserCurrentPermission] = useState([]);
   const [userOtherPermission, setUserOtherPermission] = useState([]);
-
+  const { user } = useContext(UserContext);
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -215,6 +215,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
         }
       );
@@ -231,6 +232,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
         }
       );
@@ -285,6 +287,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
           data: {
             user_id: userSelectedData._id,
@@ -299,15 +302,21 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
       }
     } else {
       try {
-        const response = await axios.post(`${url}/post_permission`, {
-          username: userSelectedData.username,
-          factory_name: factoryData.factory_name,
-          factory_details: factoryData.factory_details,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+        const response = await axios.post(
+          `${url}/post_permission`,
+          {
+            username: userSelectedData.username,
+            factory_name: factoryData.factory_name,
+            factory_details: factoryData.factory_details,
           },
-        });
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         console.log("successful:", response.data);
         setShowPopup(false);
         fetchData();
@@ -316,6 +325,9 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
       }
     }
     setShowPopup(false);
+  };
+  const handleDownloadClick = (userData) => {
+    handleDownload(userData, user.token);
   };
 
   return (
@@ -355,7 +367,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
                 <RowUserData>{user.firstName}</RowUserData>
                 <RowUserData>{user.surname}</RowUserData>
                 <RowUserDataEmail>{user.email}</RowUserDataEmail>
-                <UserFile onClick={() => handleDownload(user)}>
+                <UserFile onClick={() => handleDownloadClick(user)}>
                   Download
                 </UserFile>
                 <ImgRemoveAdd
@@ -395,7 +407,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
                 <RowUserData>{user.firstname}</RowUserData>
                 <RowUserData>{user.surname}</RowUserData>
                 <RowUserDataEmail>{user.email}</RowUserDataEmail>
-                <UserFile onClick={() => handleDownload(user)}>
+                <UserFile onClick={() => handleDownloadClick(user)}>
                   Download
                 </UserFile>
                 <ImgRemoveAdd

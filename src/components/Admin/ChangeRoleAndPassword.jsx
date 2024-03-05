@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
@@ -6,6 +6,7 @@ import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
 import TogglePopup from "./TogglePopup";
 import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerChangePassword = styled.div`
   display: flex;
@@ -188,6 +189,7 @@ const imgBack =
 
 export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
   const [selectedOption, setSelectedOption] = useState("");
+  const { user } = useContext(UserContext);
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
@@ -212,16 +214,22 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
   const handleClickYes = async () => {
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/put_change_password`,
+        `${url}/put_change_password`,
         {
           username: userData.username,
           old_password: currentPassword,
           new_password: newPassword,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
         }
       );
       console.log("change_password successful:", response.data);
       setShowPopup(false);
-      // navigate("/userhomepage");
     } catch (error) {
       console.error("Error change_password:", error);
     }

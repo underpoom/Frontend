@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import TogglePopup from "./TogglePopup";
 
 import axios from "axios";
-const url = "http://127.0.0.1:8000";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerRemoveFactory = styled.div`
   display: flex;
@@ -122,16 +122,19 @@ export const ManageFactory = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const { user } = useContext(UserContext);
   const fetchData = async () => {
     try {
-      const response = await fetch(`${url}/get_admin_manage_factory`);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setFactoryList(data);
-      setFilteredData(data);
+      const response = await axios.get(`${url}/get_admin_manage_factory`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      setFactoryList(response.data);
+      setFilteredData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -153,16 +156,21 @@ export const ManageFactory = () => {
   };
 
   const handleToggleDisableEnable = async (index) => {
-
     const facto_id = factoryList[index].factory_id;
     try {
-      const response = await axios.put(`${url}/put_change_facto_status`, {
-        facto_id: facto_id,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+      const response = await axios.put(
+        `${url}/put_change_facto_status`,
+        {
+          facto_id: facto_id,
         },
-      });
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       console.log("successful:", response.data);
       fetchData();
     } catch (error) {
@@ -183,6 +191,7 @@ export const ManageFactory = () => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
         data: {
           facto_id: FactorySelectedData.factory_id,
@@ -211,15 +220,15 @@ export const ManageFactory = () => {
         currentData={factoryList}
         filteredData={showFilteredData}
       />
-      
+
       <ContainerRemoveFactory>
         <ContainerLabel>
-        <LabelLG>Factory Name</LabelLG>
-        <ContentLabel>
-          <LabelLG>Factory Location</LabelLG>
-          <LabelMd>SubDistrict - District - Province</LabelMd>
-        </ContentLabel>
-      </ContainerLabel>
+          <LabelLG>Factory Name</LabelLG>
+          <ContentLabel>
+            <LabelLG>Factory Location</LabelLG>
+            <LabelMd>SubDistrict - District - Province</LabelMd>
+          </ContentLabel>
+        </ContainerLabel>
         {filteredData.map((factory, index) => (
           <FactoryDetail key={index}>
             <FactoryName>{factory.factory_name}</FactoryName>
@@ -235,7 +244,7 @@ export const ManageFactory = () => {
               enabled={factory.is_disable}
               onClick={() => handleToggleDisableEnable(index)}
             >
-              {factory.is_disable === false? "Disable" : "Enable"}
+              {factory.is_disable === false ? "Disable" : "Enable"}
             </DisableEnable>
           </FactoryDetail>
         ))}

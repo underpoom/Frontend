@@ -27,10 +27,12 @@ const BlackLine = styled.div`
 const ImgUser = styled.div`
   /* border: 1px solid #f24e1e; */
   margin-right: 2vh;
+  cursor: pointer;
 `;
 const ImgInfo = styled.div`
   /* border: 1px solid #f24e1e; */
   margin-right: 2vh;
+  cursor: pointer;
 `;
 
 const ImgBack = styled.img`
@@ -61,7 +63,8 @@ export const NavbarTop = ({ pageTitle, changeStatePage, onBackClick }) => {
           pageTitle !== "Profile" &&
           pageTitle !== "Factory Details" &&
           pageTitle !== "Building Details" &&
-          pageTitle !== "All Data History" && (
+          pageTitle !== "All Data History" &&
+          pageTitle !== "New Building" && (
             <ImgBack src={imgBack} onClick={handleBackClick}></ImgBack>
           )}
 

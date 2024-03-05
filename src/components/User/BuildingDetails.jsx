@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import TogglePopup from "../Admin/TogglePopup";
+import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerFactoryDetails = styled.div`
   display: flex;
@@ -108,10 +110,11 @@ const ButtonConfigConfirm = styled.button`
 `;
 
 export const BuildingDetails = ({ buildingData, handlepageChange }) => {
-  const [valueLenght, setValueLenght] = useState(143.42);
-  const [valueWidth, setValueWidth] = useState(46.42);
-  const [valueLatitude, setValueLatitude] = useState(13.729058);
-  const [valueLongitude, setValueLongitude] = useState(100.775088);
+  const { user } = useContext(UserContext);
+  const [valueLenght, setValueLenght] = useState();
+  const [valueWidth, setValueWidth] = useState();
+  const [valueLatitude, setValueLatitude] = useState();
+  const [valueLongitude, setValueLongitude] = useState();
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -123,8 +126,35 @@ export const BuildingDetails = ({ buildingData, handlepageChange }) => {
     setPopupContent("Are you sure to confirm this configuration?");
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${url}/get_building_info?build_id=${buildingData.building_id}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("successful:", response.data);
+      setValueLenght(response.data.building_length);
+      setValueWidth(response.data.building_width);
+      setValueLatitude(response.data.building_latitude);
+      setValueLongitude(response.data.building_longitude);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+    setIsEditing(false);
+  }, [buildingData]);
+
+  console.log(buildingData);
   // ----------------------------------------------------------------
-  const handleSaveClickYes = () => {
+  const handleSaveClickYes = async () => {
     setShowPopup(false);
     setIsEditing(false);
 
@@ -132,6 +162,30 @@ export const BuildingDetails = ({ buildingData, handlepageChange }) => {
     console.log("valueWidth :", valueWidth);
     console.log("valueLatitude :", valueLatitude);
     console.log("valueLongitude :", valueLongitude);
+
+    try {
+      const response = await axios.put(
+        `${url}/change_building_detail`,
+        {
+          building_id: buildingData.building_id,
+          building_length: valueLenght,
+          building_width: valueWidth,
+          building_latitude: valueLatitude,
+          building_longitude: valueLongitude,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("save successful:", response.data);
+      fetchData();
+    } catch (error) {
+      console.error("Error save:", error);
+    }
   };
 
   const handlepage = (data) => {
@@ -153,7 +207,7 @@ export const BuildingDetails = ({ buildingData, handlepageChange }) => {
         <Box>
           <ContentData>
             <LabelBuildingName>Building Name : </LabelBuildingName>
-            <BuildingName>{buildingData}</BuildingName>
+            <BuildingName>{buildingData.building_name}</BuildingName>
           </ContentData>
 
           <BuildingWL>

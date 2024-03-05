@@ -1,13 +1,21 @@
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { UserContext, url } from "../bounding/UserContext";
 
-export const handleDownload = async (user) => {
+export const handleDownload = async (userData, userToken) => {
+  console.log(userToken);
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/get_verification_file",
+      `${url}/get_verification_file`,
       {
-        username: user.username,
+        username: userData.username,
       },
       {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
         responseType: "blob",
       }
     );
@@ -16,7 +24,7 @@ export const handleDownload = async (user) => {
 
     const link = document.createElement("a");
     link.href = blobUrl;
-    link.setAttribute("download", `${user.username}_verification.jpg`);
+    link.setAttribute("download", `${userData.username}_verification.jpg`);
     link.style.display = "none";
 
     document.body.appendChild(link);

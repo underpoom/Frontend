@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import styled from "styled-components";
-
-import axios from "axios";
-const url = "http://127.0.0.1:8000";
 
 const ContainerAddAdmin = styled.div`
   display: flex;
@@ -78,6 +77,7 @@ const Submit = styled.div`
 
 export const CreateAdmin = () => {
   const [newAddAdmin, setNewAddAdmin] = useState("");
+  const { user } = useContext(UserContext);
 
   const handleChange = (event) => {
     setNewAddAdmin(event.target.value);
@@ -90,17 +90,26 @@ export const CreateAdmin = () => {
   const [password, setPassword] = useState("");
   const [verified_file_path, setVerified_file_path] = useState("");
 
-  
   const handleClickSubmit = async () => {
     try {
-      const response = await axios.post(`${url}/create_admin`, {
-        firstname: firstname,
-        surname: lastname,
-        email: email,
-        username: username,
-        password: password,
-        verified_file_path: verified_file_path,
-      });
+      const response = await axios.post(
+        `${url}/create_admin`,
+        {
+          firstname: firstname,
+          surname: lastname,
+          email: email,
+          username: username,
+          password: password,
+          verified_file_path: verified_file_path,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       console.log("create_admin successful:", response.data);
 
       setFirstName("");
@@ -109,12 +118,10 @@ export const CreateAdmin = () => {
       setUsername("");
       setPassword("");
       setVerified_file_path("");
-   
     } catch (error) {
       console.error("Error create_admin:", error);
     }
   };
-
 
   return (
     <>

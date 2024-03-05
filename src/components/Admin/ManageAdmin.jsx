@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
 import TogglePopup from "./TogglePopup";
 import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerManageUser = styled.div`
   display: flex;
@@ -88,18 +89,22 @@ export const ManageAdmin = (props) => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState("");
+  const { user } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/get_admin");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setUserData(data);
-      setFilteredData(data);
+      const response = await axios.get(`${url}/get_admin`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log("successful:", response.data);
+      setUserData(response.data);
+      setFilteredData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error:", error);
     }
   };
   useEffect(() => {
@@ -126,10 +131,11 @@ export const ManageAdmin = (props) => {
     console.log("Clicked 'Yes' for remove admin :", selectedUser.username);
 
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/user/`, {
+      const response = await axios.delete(`${url}/user/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
         data: {
           username: selectedUser.username,

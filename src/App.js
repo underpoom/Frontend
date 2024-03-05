@@ -5,7 +5,6 @@ import { UserProvider } from '../src/bounding/UserContext';
 import Loginsignup from './components/LoginSignup/LoginSignup';
 import MultipleFileUploader from './components/LoginSignup/MultipleFileUploader';
 import { EditProfile } from './components/User/EditProfile';
-import ImgDraw from './bounding/ImgDraw';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./assets/vendor/nucleo/css/nucleo.css";
 import "./assets/vendor/font-awesome/css/font-awesome.min.css";

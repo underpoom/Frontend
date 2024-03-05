@@ -49,6 +49,9 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
   ) {
     Term = "factory_name";
   }
+  else if(pageTitle === "Log"){
+    Term = "timestamp";
+  }
   const handleSearchChange = (event) => {
     const searchTerm = event.target.value;
     const filterData = currentData.filter((data) =>
@@ -77,6 +80,15 @@ export const NavbarTopAdmin = ({ pageTitle, currentData, filteredData }) => {
               type="text"
               onChange={handleSearchChange}
               placeholder="Filter factory..."
+            />
+          </SearchUserContainer>
+        )}
+        {Term === "timestamp" && (
+          <SearchUserContainer>
+            <input
+              type="text"
+              onChange={handleSearchChange}
+              placeholder="Filter timestamp..."
             />
           </SearchUserContainer>
         )}

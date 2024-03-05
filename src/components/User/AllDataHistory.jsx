@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import TogglePopup from "../Admin/TogglePopup";
 import ViewUploadFile from "./ViewUploadFile";
 import VerifySummary from "./VerifySummary";
+import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerEditProfile = styled.div`
   display: flex;
@@ -30,7 +32,7 @@ const Label = styled.div`
   font-weight: 400;
   width: 100%;
   height: 60px;
-  align-items:center;
+  align-items: center;
 
   /* border: 1px solid red; */
 `;
@@ -46,7 +48,7 @@ const ButtonNew = styled.div`
   padding: 14px 18px;
   margin-left: auto;
   margin-right: 58px;
-  
+  cursor: pointer;
 `;
 
 const Img = styled.img`
@@ -118,35 +120,29 @@ const ButtonDelete = styled.div`
   color: #0a89ff;
   padding: 15px 11px;
   font-size: 24px;
+  cursor: pointer;
 `;
 
-const getCurrentDateTime = () => {
-  const now = new Date();
-  const day = String(now.getDate()).padStart(2, "0");
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const year = now.getFullYear();
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-  return {
-    date: `${day} - ${month} - ${year}`,
-    time: `${hours} : ${minutes}`,
-  };
-};
+const imgButtonNew =
+  "https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
 export const AllDataHistory = ({
   factoryData,
   buildingData,
   handlepageChange,
 }) => {
+  const { user } = useContext(UserContext);
   const handlepage = (data) => {
     handlepageChange(data);
   };
 
   const handleUpload = (data) => {
+    setDataHistorySelected(data);
     setUploadedFile(true);
   };
 
   const handleView = (data) => {
+    setDataHistorySelected(data);
     setVerifySummary(true);
   };
 
@@ -161,20 +157,75 @@ export const AllDataHistory = ({
   useEffect(() => {
     setUploadedFile(false);
     setVerifySummary(false);
+    console.log(buildingData)
   }, [buildingData]);
 
-  const [dateTime, setDateTime] = useState(getCurrentDateTime());
-
-  const handleNewButtonClick = () => {
-    const newDateTime = getCurrentDateTime();
-    setDateTime(newDateTime);
+  const handleNewButtonClick = async () => {
+    try {
+      const response = await axios.post(
+        `${url}/post_history`,
+        {
+          build_id: buildingData.building_id,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("new successful:", response.data);
+      fetchData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
-  const now = new Date();
-  const currentDate = now.toLocaleDateString("en-US");
-  const currentTime = now.toLocaleTimeString("en-US");
-  console.log(currentDate); // Output: MM/DD/YYYY
-  console.log(currentTime); // Output: HH:MM:SS AM/PM
+  const handleDeleteButtonClick = async (data) => {
+    try {
+      const response = await axios.delete(`${url}/delete_history`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        data: {
+          histo_id: data._id,
+        },
+      });
+      console.log("delete successful:", response.data);
+      fetchData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const [dataHistory, setDataHistory] = useState([]);
+  const [dataHistorySelected, setDataHistorySelected] = useState([]);
+
+  console.log(buildingData);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${url}/get_history?id_building=${buildingData.building_id}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("successful:", response.data);
+      setDataHistory(response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [buildingData]);
 
   return (
     <>
@@ -186,43 +237,38 @@ export const AllDataHistory = ({
           />
           <ContainerEditProfile>
             <Label>
-              {buildingData}
+              {buildingData.building_name}
 
-              <ButtonNew>
-                <Img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&"
-                />
+              <ButtonNew onClick={handleNewButtonClick}>
+                <Img loading="lazy" src={imgButtonNew} />
                 new
               </ButtonNew>
             </Label>
 
-            <ContainerDate>
-              <ContentDate>
-                <LabelDate>day - month - year</LabelDate>
-                <DateValue>30 - 12 - 24</DateValue>
-                <LabelDate>Time</LabelDate>
-                <DateValue>13 : 04</DateValue>
-              </ContentDate>
-
-              <div>
-                <ButtonView onClick={handleView}>View</ButtonView>
-                <ButtonDelete>Delete</ButtonDelete>
-              </div>
-            </ContainerDate>
-
-            <ContainerDate>
-              <ContentDate>
-                <LabelDate>Day - Month - Year</LabelDate>
-                <DateValue>{dateTime.date}</DateValue>
-                <LabelDate>Time</LabelDate>
-                <DateValue>{dateTime.time}</DateValue>
-              </ContentDate>
-              <div>
-                <ButtonView onClick={handleUpload}>Upload</ButtonView>
-                <ButtonDelete>Delete</ButtonDelete>
-              </div>
-            </ContainerDate>
+            {dataHistory.map((history, index) => (
+              <ContainerDate key={index}>
+                <ContentDate>
+                  <LabelDate>Day - Month - Year</LabelDate>
+                  <DateValue>{history.create_date}</DateValue>
+                  <LabelDate>Time</LabelDate>
+                  <DateValue>{history.create_time}</DateValue>
+                </ContentDate>
+                <div>
+                  {!history.is_process ? (
+                    <ButtonView onClick={() => handleUpload(history)}>Upload</ButtonView>
+                  ) : (
+                    <ButtonView onClick={() => handleView(history)}>
+                      View
+                    </ButtonView>
+                  )}
+                  <ButtonDelete
+                    onClick={() => handleDeleteButtonClick(history)}
+                  >
+                    Delete
+                  </ButtonDelete>
+                </div>
+              </ContainerDate>
+            ))}
           </ContainerEditProfile>
         </>
       )}
@@ -230,6 +276,7 @@ export const AllDataHistory = ({
       {uploadedFile === true && (
         <ViewUploadFile
           buildingDataW={buildingData}
+          dataHistorySelected={dataHistorySelected}
           onBackClick={handleBackClick}
           handlepageChange={handlepage}
         />
@@ -238,6 +285,7 @@ export const AllDataHistory = ({
       {verifySummary === true && (
         <VerifySummary
           buildingDataW={buildingData}
+          dataHistorySelected={dataHistorySelected}
           onBackClick={handleBackClick}
           handlepageChange={handlepage}
         />

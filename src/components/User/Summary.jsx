@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
+import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
+
 const ContainerSummary = styled.div`
   display: flex;
   width: 132vh;
@@ -116,86 +119,95 @@ const ContentItem = styled.div`
   margin-left: 50px;
 `;
 
+export const Summary = ({ dataHistorySelected }) => {
+  const { user } = useContext(UserContext);
+  const [summaryData, setSummaryData] = useState(null);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${url}/get_summary_user_verified?histo_id=${dataHistorySelected._id}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("sum successful:", response.data);
+      setSummaryData(response.data[0]);
 
-export const Summary = () => {
+      console.log(response.data[0]);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
-    
-  const dataDfs = [
-    { label: "Briddrop", count: 235 },
-    { label: "Glue", count: 300 },
-    { label: "Mud", count: 0 },
-    { label: "Rock", count: 46 },
-    { label: "Rust", count: 150 },
-    { label: "Stain", count: 1000 },
-    { label: "Tape", count: 450 },
-    { label: "Other", count: 159 },
-  ];
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const dataUs = [
-    { label: "Briddrop", count: 2305 },
-    { label: "Glue", count: 3000 },
-    { label: "Mud", count: 0 },
-    { label: "Rock", count: 406 },
-    { label: "Rust", count: 1500 },
-    { label: "Stain", count: 10000 },
-    { label: "Tape", count: 4500 },
-    { label: "Other", count: 15009 },
-  ];
-
-
-  let ValueNoC = 12340;
-  let ValueDfs = 2340;
-  let ValueUv = 2040604;
-
+  if (summaryData !== null) {
+    console.log("summm", summaryData.summary_user[0]);
+  }
   return (
     <>
-      <ContainerSummary>
-        <ContainerDFS>
-          <ContentDFS>
-            <LabelDFS>Number of picture</LabelDFS>
-            <ValueDFS>{ValueNoC}</ValueDFS>
-            <Defects>defects</Defects>
-          </ContentDFS>
-        </ContainerDFS>
+      {summaryData !== null && (
+        <ContainerSummary>
+          <ContainerDFS>
+            <ContentDFS>
+              <LabelDFS>Number of picture</LabelDFS>
+              <ValueDFS>{summaryData.photo_count}</ValueDFS>
+              <Defects>defects</Defects>
+            </ContentDFS>
+          </ContainerDFS>
 
-        <ContainerDFS>
-          <ContentDFS>
-            <LabelDFS>Detect from system</LabelDFS>
-            <ValueDFS>{ValueDfs}</ValueDFS>
-            <Defects>defects</Defects>
-          </ContentDFS>
-          <ContainerDetails>
-            <LLine />
-            <Detail>Detail</Detail>
+          <ContainerDFS>
+            <ContentDFS>
+              <LabelDFS>Detect from system</LabelDFS>
+              <ValueDFS>
+                {summaryData.summary_systems[0].summary_defect}
+              </ValueDFS>
+              <Defects>defects</Defects>
+            </ContentDFS>
+            <ContainerDetails>
+              <LLine />
+              <Detail>Detail</Detail>
 
-            {dataDfs.map((item, index) => (
-              <ContentItem key={index}>
-                <ItemLabel>{item.label} :</ItemLabel>
-                <ItemCount>{item.count}</ItemCount>
-              </ContentItem>
-            ))}
-          </ContainerDetails>
-        </ContainerDFS>
+              {Object.entries(summaryData.summary_systems[0]).map(
+                ([key, value], index) =>
+                  key !== "summary_defect" && (
+                    <ContentItem key={index}>
+                      <ItemLabel>{key} :</ItemLabel>
+                      <ItemCount>{value}</ItemCount>
+                    </ContentItem>
+                  )
+              )}
+            </ContainerDetails>
+          </ContainerDFS>
+          <ContainerUv>
+            <ContentDFS>
+              <LabelDFS>User verified</LabelDFS>
+              <ValueUV>{summaryData.summary_user[0].summary_defect}</ValueUV>
+              <Defects>defects</Defects>
+            </ContentDFS>
+            <ContainerDetails>
+              <LLine />
+              <Detail>Detail</Detail>
 
-        <ContainerUv>
-          <ContentDFS>
-            <LabelDFS>User verified</LabelDFS>
-            <ValueUV>{ValueUv}</ValueUV>
-            <Defects>defects</Defects>
-          </ContentDFS>
-          <ContainerDetails>
-            <LLine />
-            <Detail>Detail</Detail>
-
-            {dataUs.map((item, index) => (
-              <ContentItem key={index}>
-                <ItemLabel>{item.label} :</ItemLabel>
-                <ItemCount>{item.count}</ItemCount>
-              </ContentItem>
-            ))}
-          </ContainerDetails>
-        </ContainerUv>
-      </ContainerSummary>
+              {Object.entries(summaryData.summary_user[0]).map(
+                ([key, value], index) =>
+                  key !== "summary_defect" && (
+                    <ContentItem key={index}>
+                      <ItemLabel>{key} :</ItemLabel>
+                      <ItemCount>{value}</ItemCount>
+                    </ContentItem>
+                  )
+              )}
+            </ContainerDetails>
+          </ContainerUv>
+        </ContainerSummary>
+      )}
     </>
   );
 };

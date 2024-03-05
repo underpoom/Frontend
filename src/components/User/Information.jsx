@@ -2,7 +2,8 @@ import styled from "styled-components";
 import MenuTools from "./MenuTools/MenuTools";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import React, { useContext, useState, useEffect } from "react";
-import { UserContext, } from "../../bounding/UserContext";
+import { UserContext, url } from "../../bounding/UserContext";
+import axios from "axios";
 
 const ContainerInformation = styled.div`
   display: flex;
@@ -82,6 +83,7 @@ const Condiv7 = styled.div`
   text-align: center;
   padding: 19px 22px;
   font: 700 16px Inter, sans-serif;
+  cursor: pointer;
 `;
 const Condiv10 = styled.div`
   color: #000;
@@ -103,6 +105,7 @@ const Condiv12 = styled.div`
   text-align: center;
   padding: 19px 22px;
   font: 700 16px Inter, sans-serif;
+  cursor: pointer;
 `;
 const Concolumn2 = styled.div`
   display: flex;
@@ -171,6 +174,36 @@ const Information = ({ handlepageChange }) => {
     handlepageChange(data);
   };
 
+  const downloadFile = async (fileName) => {
+    try {
+      // Make a GET request to the server endpoint for downloading the file
+      const response = await axios.get(`/data/${fileName}`, {
+        responseType: "blob", // Set the response type to blob
+      });
+
+      // Create a Blob object from the file data
+      const blob = new Blob([response.data]);
+
+      // Create a temporary anchor element
+      const tempAnchor = document.createElement("a");
+      tempAnchor.href = URL.createObjectURL(blob);
+
+      // Set the download attribute to specify the file name
+      tempAnchor.download = fileName;
+
+      // Simulate a click to trigger the download
+      tempAnchor.click();
+
+      // Clean up
+      URL.revokeObjectURL(tempAnchor.href);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
+  const handleDownloadControlDrone = () => {downloadFile("ControlDrone.pdf");};
+  const handleDownloadHowToUse = () => {downloadFile("HowToUse.pdf");};
+
   return (
     <>
       <NavbarTop pageTitle="Information" changeStatePage={handlepage} />
@@ -197,7 +230,7 @@ const Information = ({ handlepageChange }) => {
                   <span>etc.</span>
                 </Condiv6>
 
-                <Condiv7>Download</Condiv7>
+                <Condiv7 onClick={handleDownloadControlDrone}>Download</Condiv7>
               </Condiv3>
             </Concolumn>
             <Concolumn2>
@@ -216,7 +249,7 @@ const Information = ({ handlepageChange }) => {
                   <span>How to adjust defect in picture, etc. </span>{" "}
                 </Condiv6>
 
-                <Condiv12 >Download</Condiv12>
+                <Condiv12 onClick={handleDownloadHowToUse}>Download</Condiv12>
               </Condiv8>
             </Concolumn2>
           </Condiv2>

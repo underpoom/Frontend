@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerEditProfile = styled.div`
   position: relative;
@@ -15,10 +16,12 @@ const ImageWrapper = styled.div`
   width: calc(100% / ${(props) => props.maxX});
   height: calc(100% / ${(props) => props.maxY});
   position: relative;
-  /* border: 1px solid red; */
+  border: 1px solid red;
+  border: ${(props) => (props.isHovered ? "1px solid red" : "none")};
 `;
 
-export const BigRec = () => {
+export const BigRec = ({ hoveredImage, dataHistorySelected }) => {
+  const { user } = useContext(UserContext);
   const [selectedImage, setSelectImage] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [imageListDetail, setImageListDetail] = useState({
@@ -26,14 +29,17 @@ export const BigRec = () => {
     max_y: 1,
   });
 
+  console.log(hoveredImage);
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/get_image?history_id=65d65c3c8684db6de0c5c887`,
+        `${url}/get_image?history_id=${dataHistorySelected._id}`,
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
         }
       );
@@ -56,6 +62,7 @@ export const BigRec = () => {
 
   return (
     <>
+      
       {selectedImage === null ? (
         <>
           {/* Your NavbarTop and other UI components */}
@@ -65,7 +72,7 @@ export const BigRec = () => {
 
               const { max_x, max_y } = imageListDetail;
 
-              console.log("uuu",max_x, max_y);
+              // console.log("uuu",max_x, max_y);
               const scale = 674 / (max_x * 3840); // Adjust the scale according to your needs
               const gridWidth = 674 / max_x;
               const gridHeight = 627 / max_y;
@@ -74,7 +81,6 @@ export const BigRec = () => {
               // const left = ;
               // const top = y_offset * gridHeight ;
 
-            
               return (
                 <ImageWrapper
                   key={index}
@@ -84,6 +90,11 @@ export const BigRec = () => {
                     top: `${y_offset * gridHeight}px`,
                     width: `${gridWidth}px`,
                     height: `${gridHeight}px`,
+                    border:
+                      hoveredImage != null &&
+                      hoveredImage.image_id === img.image_id
+                        ? "3px solid red"
+                        : "none",
                   }}
                 >
                   <img

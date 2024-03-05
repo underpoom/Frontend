@@ -11,6 +11,7 @@ import ManageFactory from "../ManageFactory";
 import CreateAdmin from "../CreateAdmin";
 import ManageAdmin from "../ManageAdmin";
 import PermissionSummary from "../PermissionSummary";
+import Log from "../Log";
 const RightContainer = styled.div`
   display: flex;
   width: 132vh;
@@ -41,6 +42,7 @@ export const ManagementAdmin = () => {
 
         {selectedSection === "add-permission" && <AddPermission />}
         {selectedSection === "permission-summary" && <PermissionSummary />}
+        {selectedSection === "Log" && <Log />}
 
         {/* <ChangeRoleAndPassword/> */}
       </RightContainer>

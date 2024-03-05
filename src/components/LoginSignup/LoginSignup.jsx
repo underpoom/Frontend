@@ -9,8 +9,7 @@ import { useNavigate } from "react-router-dom";
 import "./MultipleFileUploader.css";
 import axios from "axios";
 import { UserContext } from "../../bounding/UserContext";
-
-const url = "http://127.0.0.1:8000";
+import { url } from "../../bounding/apiConfig";
 
 const LoginSignup = () => {
   const [action, setAction] = useState("Login");
@@ -35,10 +34,12 @@ const LoginSignup = () => {
         verified_file_path: path,
       });
       console.log("Sign up successful:", response.data);
-
-      login(username);
-
-
+      setName("");
+      setLastName("");
+      setEmail("");
+      setUsername("");
+      setPassword("");
+      setAction("Login");
       // navigate("/userhomepage");
     } catch (error) {
       console.error("Error signing up:", error);
@@ -65,8 +66,34 @@ const LoginSignup = () => {
         }
       );
       console.log("Login successful:", response.data);
-      navigate("/userhomepage");
-      login(username);
+      // login(username);
+      login({ username: username, token: response.data.access_token });
+      navigateRole(response.data.access_token);
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
+
+  const navigateRole = async (token) => {
+    try {
+      const response = await axios.get(
+        `${url}/users/me/`,
+
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Login successful:", response.data);
+
+      if (response.data.is_admin) {
+        navigate("/managementadmin");
+      } else {
+        navigate("/userhomepage");
+      }
     } catch (error) {
       console.error("Error logging in:", error);
     }
@@ -81,7 +108,6 @@ const LoginSignup = () => {
 
   const handleMultipleSubmit = async (event) => {
     event.preventDefault();
-    const url = "http://127.0.0.1:8000/upload_user_file";
     const formData = new FormData();
 
     files.forEach((file) => {
@@ -89,13 +115,13 @@ const LoginSignup = () => {
     });
 
     try {
-      const response = await axios.post(url, formData, {
+      const response = await axios.post(`${url}/upload_user_file`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           accept: "application/json",
         },
       });
-      // console.log("Files uploaded successfully:", response.data);
+      console.log("Files uploaded successfully:", response.data);
       setPath(response.data);
       handleSignUp(response.data.path);
       setUploadedFiles(response.data.files || []); // Ensure uploadedFiles is always an array

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
+import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerFactoryDetails = styled.div`
   display: flex;
@@ -61,6 +63,7 @@ const Confirm = styled.div`
   font-weight: 700;
   white-space: nowrap;
   padding: 15px 26px;
+  cursor: pointer;
 `;
 
 const InputBuildingValue = styled.input`
@@ -73,11 +76,17 @@ const InputBuildingValue = styled.input`
   width: 300px;
 `;
 
-export const NewBuilding = ({ factoryData, handlepageChange }) => {
+export const NewBuilding = ({
+  factoryData,
+  handlepageChange,
+  handleFetch,
+  handleNewBuildingClickConfirm,
+}) => {
+  const { user } = useContext(UserContext);
   const handlepage = (data) => {
     handlepageChange(data);
   };
-  //   console.log(factoryData);
+  // console.log(factoryData);
   const [buildingName, setBuildingName] = useState("");
   const [buildingLength, setBuildingLength] = useState("");
   const [buildingWidth, setBuildingWidth] = useState("");
@@ -104,12 +113,62 @@ export const NewBuilding = ({ factoryData, handlepageChange }) => {
     setBuildingLongitude(e.target.value);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     console.log("BuildingName ", buildingName);
     console.log("Building Length ", buildingLength);
     console.log("Building Width ", buildingWidth);
     console.log("Building Latitude ", buildingLatitude);
     console.log("Building Longitude ", buildingLongitude);
+    console.log("factory_id ", factoryData.factory_id);
+
+    try {
+      const response = await axios.post(
+        `${url}/post_building`,
+        {
+          building_name: buildingName,
+          building_length: buildingLength,
+          building_width: buildingWidth,
+          building_latitude: buildingLatitude,
+          building_longitude: buildingLongitude,
+          factory_id: factoryData.factory_id,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("successful:", response.data);
+      nextAllDataHistory(response.data);
+    } catch (error) {
+      console.error("Error:", error.response.data);
+    }
+  };
+
+  const nextAllDataHistory = async (data_id) => {
+    try {
+      const response = await axios.get(
+        `${url}/get_building_info?build_id=${data_id}`,
+
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("successful:", response.data);
+      
+      handleNewBuildingClickConfirm({
+        building_id: data_id,
+        building_name: response.data.building_name,
+      });
+    } catch (error) {
+      console.error("Error:", error.response.data);
+    }
   };
 
   return (

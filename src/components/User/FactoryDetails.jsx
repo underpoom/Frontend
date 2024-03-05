@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
+import axios from "axios";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerFactoryDetails = styled.div`
   display: flex;
@@ -46,7 +48,7 @@ const Label = styled.div`
 
 const Content = styled.div`
   display: flex;
-  width: 600px;
+  width: 800px;
   max-width: 100%;
   justify-content: start;
   gap: 10px;
@@ -63,9 +65,37 @@ const Address = styled.div`
 `;
 
 export const FactoryDetails = ({ factoryData, handlepageChange }) => {
+  const { user } = useContext(UserContext);
   const handlepage = (data) => {
     handlepageChange(data);
   };
+
+  console.log(factoryData);
+
+  const [detailParts, setDetailParts] = useState();
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${url}/get_factory_info?facto_id=${factoryData.factory_id}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("successful:", response.data);
+      setDetailParts(response.data.factory_details.split("_"));
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -74,20 +104,24 @@ export const FactoryDetails = ({ factoryData, handlepageChange }) => {
         <LabelHead>This factory detail :</LabelHead>
         <ContentDetails>
           <Content>
-            <Label>Factory Name :</Label> {factoryData.name}
+            <Label>Factory Name :</Label> {factoryData.factory_name}
           </Content>
 
           <Address>Address</Address>
 
-          <Content>
-            <Label>Province :</Label> {factoryData.province}
-          </Content>
-          <Content>
-            <Label>District :</Label> {factoryData.district}
-          </Content>
-          <Content>
-            <Label>Sub - District :</Label> {factoryData.subdistrict}
-          </Content>
+          {detailParts && detailParts.length >= 3 && (
+            <>
+              <Content>
+                <Label>Province :</Label> {detailParts[0]}
+              </Content>
+              <Content>
+                <Label>District :</Label> {detailParts[1]}
+              </Content>
+              <Content>
+                <Label>Sub - District :</Label> {detailParts[2]}
+              </Content>
+            </>
+          )}
         </ContentDetails>
       </ContainerFactoryDetails>
     </>

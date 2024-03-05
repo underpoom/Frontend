@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import TogglePopup from "./TogglePopup";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
-
+import { UserContext, url } from "../../bounding/UserContext";
+import axios from "axios";
 const ContainerRemoveFactory = styled.div`
   display: flex;
   height: 76vh;
@@ -83,35 +84,26 @@ const Member = styled.div`
 
 export const PermissionSummary = () => {
   const [factoryList, setFactoryList] = useState([]);
+  const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "http://127.0.0.1:8000/permission_summary"
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setFactoryList(data);
-        setFilteredData(data);
-        console.log(data);
+        const response = await axios.get(`${url}/permission_summary`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+       
+   
+        setFactoryList(response.data);
+        setFilteredData(response.data);
+ 
       } catch (error) {
         console.error("Error fetching data:", error);
       }
 
-      try {
-        const response = await fetch(
-          "http://127.0.0.1:8000/permission_summary"
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log(data.factory_name);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
     };
 
     fetchData();

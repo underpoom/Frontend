@@ -58,7 +58,9 @@ const imgLogout =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/18a69ef420c65facab96b2f931e2dad1d16d1c4e0280a6f46d15388f30a80e7e?apiKey=34584a6259e046a0be0d44044e057cb8&";
 const imgRemoveFactory =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/a2e88c1a61b33b23b5150e281d3c3707bfa6ebb978c42bddc2484fce78f7d68f?apiKey=34584a6259e046a0be0d44044e057cb8&";
-export const MenuToolsAdmin = ({ onSelectSection }) => {
+const imgLog =
+  "https://cdn.builder.io/api/v1/image/assets/TEMP/21d683f244525500a1f10ad7d51d8b6c2018ce21826a8435e64d15c8a79e500e?";
+  export const MenuToolsAdmin = ({ onSelectSection }) => {
   const [selectedSection, setSelectedSection] = useState(null);
   const [userSelectedSection, setUserSelectedSection] = useState(null);
 
@@ -262,6 +264,10 @@ export const MenuToolsAdmin = ({ onSelectSection }) => {
             <PermissionSummary />
           </>
         )}
+
+        <Section name="Log" imgSrc={imgLog} className="Log">
+          Log
+        </Section>
 
         <div className="Logout" onClick={handleClickLogout}>
           Logout

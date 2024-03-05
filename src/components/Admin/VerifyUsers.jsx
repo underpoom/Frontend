@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
@@ -6,6 +6,7 @@ import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { handleDownload } from "../../utils/downloadUtils";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const ContainerVerifyUsers = styled.div`
   display: flex;
@@ -182,22 +183,25 @@ export const VerifyUsers = (props) => {
   const navigate = useNavigate();
   const [editedIndexAccept, setEditedIndexAccept] = useState(null);
   const [editedIndexDecline, setEditedIndexDecline] = useState(null);
-
+  const { user } = useContext(UserContext);
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/get_user_unverified");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setUserData(data);
-      setFilteredData(data);
+      const response = await axios.get(`${url}/get_user_unverified`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log("successful:", response.data);
+      setUserData(response.data);
+      setFilteredData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -220,39 +224,50 @@ export const VerifyUsers = (props) => {
 
   const handleAcceptClickYes = async () => {
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/put_verified`, {
-        verified: true,
-        username: userSelected,
-      });
-      console.log("Delete successful:", response.data);
-      
+      const response = await axios.put(
+        `${url}/put_verified`,
+        {
+          verified: true,
+          username: userSelected,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("successful:", response.data);
+
       closePopupAccept();
       fetchData();
     } catch (error) {
-      console.error("Error Delete:", error);
+      console.error("Error:", error);
     }
-   
   };
 
   const handleDeclineClickYes = async () => {
-
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/user/`, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        data: {
-          username: userSelected,
-        },
-      });
+      const response = await axios.delete(
+        `${url}/user/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          data: {
+            username: userSelected,
+          },
+        }
+      );
       console.log("successful:", response.data);
       fetchData();
       closePopupDecline();
     } catch (error) {
       console.error("Error:", error);
     }
-    
   };
 
   const [userSelected, setUserSelected] = useState([]);
@@ -263,6 +278,9 @@ export const VerifyUsers = (props) => {
     setFilteredData(filteredData);
   };
 
+   const handleDownloadClick = (userData) => {
+     handleDownload(userData, user.token);
+   };
   return (
     <>
       <NavbarTopAdmin
@@ -315,7 +333,9 @@ export const VerifyUsers = (props) => {
             <RowUserData>{user.firstname}</RowUserData>
             <RowUserData>{user.surname}</RowUserData>
             <RowUserDataEmail>{user.email}</RowUserDataEmail>
-            <DownloadAttatchedFileButton onClick={() => handleDownload(user)}>
+            <DownloadAttatchedFileButton
+              onClick={() => handleDownloadClick(user)}
+            >
               Download
             </DownloadAttatchedFileButton>
 
