@@ -158,7 +158,7 @@ export const Summary = ({ dataHistorySelected }) => {
             <ContentDFS>
               <LabelDFS>Number of picture</LabelDFS>
               <ValueDFS>{summaryData.photo_count}</ValueDFS>
-              <Defects>defects</Defects>
+              <Defects>pictures</Defects>
             </ContentDFS>
           </ContainerDFS>
 

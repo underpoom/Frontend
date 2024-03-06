@@ -39,7 +39,9 @@ const LoginSignup = () => {
       setEmail("");
       setUsername("");
       setPassword("");
+      setFiles("");
       setAction("Login");
+
       // navigate("/userhomepage");
     } catch (error) {
       console.error("Error signing up:", error);

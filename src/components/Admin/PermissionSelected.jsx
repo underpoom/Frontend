@@ -364,7 +364,7 @@ export const PermissionSelected = ({ factoryData, onBackClick }) => {
               <ContentUser key={index}>
                 <RowUserData>{user.username}</RowUserData>
 
-                <RowUserData>{user.firstName}</RowUserData>
+                <RowUserData>{user.firstname}</RowUserData>
                 <RowUserData>{user.surname}</RowUserData>
                 <RowUserDataEmail>{user.email}</RowUserDataEmail>
                 <UserFile onClick={() => handleDownloadClick(user)}>

@@ -57,17 +57,6 @@ const UsernameData = styled.div`
   flex-grow: 1;
 `;
 
-const CurrentPasswordContent = styled.div`
-  display: flex;
-  margin-top: 5vh;
-  max-width: 100%;
-  justify-content: space-between;
-  gap: 20px;
-  white-space: nowrap;
-  flex-grow: 1;
-  font: 700 24px Inter, sans-serif;
-`;
-
 const NewPasswordContent = styled.div`
   display: flex;
   margin-top: 3vh;
@@ -78,7 +67,7 @@ const NewPasswordContent = styled.div`
   flex-grow: 1;
   font: 700 24px Inter, sans-serif;
 
-  margin-left: 38px;
+ 
 `;
 
 const PasswordInputContent = styled.div`
@@ -132,23 +121,6 @@ const Maximum20character = styled.div`
   font-weight: 400;
   font-family: Inter, sans-serif;
   margin: 15px 0 0 0vh;
-`;
-
-const Dropdown = styled.select`
-  border-radius: 10px;
-  border: 1px solid var(--stork, #9f9f9f);
-  margin-top: -8px;
-  width: 200px;
-  padding: 10px;
-  font-size: 20px;
-  padding-right: 20px;
-`;
-
-const SelectedContent = styled.div`
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: Inter, sans-serif;
 `;
 
 const NavbarTopAdminContainer = styled.div`
@@ -214,10 +186,10 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
   const handleClickYes = async () => {
     try {
       const response = await axios.put(
-        `${url}/put_change_password`,
+        `${url}/admin_change_password`,
         {
           username: userData.username,
-          old_password: currentPassword,
+
           new_password: newPassword,
         },
         {
@@ -258,19 +230,7 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
           <UsernameContent>
             Username :<UsernameData>{userData.username}</UsernameData>
           </UsernameContent>
-          <CurrentPasswordContent>
-            Current password :
-            <PasswordInputContent>
-              <PasswordInput
-                type="password"
-                id="newPassword"
-                name="newPassword"
-                maxLength={20}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <Maximum20character>Maximum 20 character</Maximum20character>
-            </PasswordInputContent>
-          </CurrentPasswordContent>
+         
           <NewPasswordContent>
             New password :
             <PasswordInputContent>
