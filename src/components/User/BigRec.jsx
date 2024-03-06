@@ -29,8 +29,6 @@ export const BigRec = ({ hoveredImage, dataHistorySelected }) => {
     max_y: 1,
   });
 
-  console.log(hoveredImage);
-
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -62,7 +60,6 @@ export const BigRec = ({ hoveredImage, dataHistorySelected }) => {
 
   return (
     <>
-      
       {selectedImage === null ? (
         <>
           {/* Your NavbarTop and other UI components */}

@@ -157,7 +157,7 @@ export const AllDataHistory = ({
   useEffect(() => {
     setUploadedFile(false);
     setVerifySummary(false);
-    console.log(buildingData)
+    console.log(buildingData);
   }, [buildingData]);
 
   const handleNewButtonClick = async () => {
@@ -182,7 +182,17 @@ export const AllDataHistory = ({
     }
   };
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+  const [historyDataSelected, setHistoryDataSelected] = useState(null);
+
   const handleDeleteButtonClick = async (data) => {
+    setShowPopup(true);
+    setPopupContent("Do you want to delete this history?");
+    setHistoryDataSelected(data);
+  };
+
+  const handleClickYes = async () => {
     try {
       const response = await axios.delete(`${url}/delete_history`, {
         headers: {
@@ -191,11 +201,12 @@ export const AllDataHistory = ({
           Authorization: `Bearer ${user.token}`,
         },
         data: {
-          histo_id: data._id,
+          histo_id: historyDataSelected._id,
         },
       });
       console.log("delete successful:", response.data);
       fetchData();
+      setShowPopup(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -229,6 +240,14 @@ export const AllDataHistory = ({
 
   return (
     <>
+      {showPopup && (
+        <TogglePopup
+          content={popupContent}
+          onClose={() => setShowPopup(false)}
+          onYes={handleClickYes}
+        />
+      )}
+
       {uploadedFile === false && verifySummary === false && (
         <>
           <NavbarTop
@@ -255,7 +274,9 @@ export const AllDataHistory = ({
                 </ContentDate>
                 <div>
                   {!history.is_process ? (
-                    <ButtonView onClick={() => handleUpload(history)}>Upload</ButtonView>
+                    <ButtonView onClick={() => handleUpload(history)}>
+                      Upload
+                    </ButtonView>
                   ) : (
                     <ButtonView onClick={() => handleView(history)}>
                       View
