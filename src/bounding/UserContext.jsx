@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
+import { url } from "../bounding/apiConfig";
 
-export const url = "http://127.0.0.1:8000";
+export { url } ;
 
 export const UserContext = createContext();
 

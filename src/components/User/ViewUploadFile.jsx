@@ -120,6 +120,25 @@ const ButtonProcess = styled.div`
   cursor: pointer;
 `;
 
+const Progress = styled.div`
+  font-family: Inter, sans-serif;
+  border-radius: 10px;
+  background-color: var(--Important-Button, #0a89ff);
+  padding: 5px 20px 15px 20px;
+  justify-content: center;
+  width: 30%;
+  height: 70%;
+  margin-top: -55px;
+  margin-left: 700px;
+  height:90px;
+`;
+
+const progressStyle = {
+  width: "100%",
+  height: "30px", // Adjust height as needed
+  marginTop: "-10px",
+};
+
 export const ViewUploadFile = ({
   buildingDataW,
   onBackClick,
@@ -128,11 +147,13 @@ export const ViewUploadFile = ({
 }) => {
   const { user } = useContext(UserContext);
   const [files, setFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const handlepage = (data) => {
     handlepageChange(data);
   };
 
   const [showPopupAlert, setShowPopupAlert] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const [popupContentAlert, setPopupContentAlert] = useState("");
 
   const handleFileChange = (event) => {
@@ -145,11 +166,13 @@ export const ViewUploadFile = ({
     setFiles(updatedFiles);
   };
 
+
   console.log(dataHistorySelected);
   // ----------------------------------------------------------------
   const handleProcessClick = async (event) => {
     setPopupContentAlert("Processing video ... ");
     setShowPopupAlert(true);
+    setShowProgress(true);
     event.preventDefault();
     const formData = new FormData();
 
@@ -166,6 +189,11 @@ export const ViewUploadFile = ({
             "Content-Type": "multipart/form-data",
             accept: "application/json",
             Authorization: `Bearer ${user.token}`,
+          },
+
+          onUploadProgress: (progressEvent) => {
+            const percent = (progressEvent.loaded / progressEvent.total) * 100;
+            setUploadProgress(percent);
           },
         }
       );
@@ -208,7 +236,7 @@ export const ViewUploadFile = ({
           content={popupContentAlert}
           onClose={() => {
             setShowPopupAlert(false);
-            onBackClick();
+            // onBackClick();
           }}
         />
       )}
@@ -261,6 +289,15 @@ export const ViewUploadFile = ({
       <DivLine>
         <LineBottom />
         <ButtonProcess onClick={handleProcessClick}>Process</ButtonProcess>
+
+
+        {showProgress === true && (
+          <Progress>
+          <p>Upload Progress: {uploadProgress.toFixed(2)}%</p>
+          <progress value={uploadProgress} max={100} style={progressStyle} />
+        </Progress>
+        )}
+        
       </DivLine>
     </>
   );

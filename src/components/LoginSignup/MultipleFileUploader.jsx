@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./MultipleFileUploader.css";
+import { UserContext, url } from "../../bounding/UserContext";
 
 const MultipleFileUploader = () => {
   const [files, setFiles] = useState([]);
@@ -12,7 +13,6 @@ const MultipleFileUploader = () => {
 
   const handleMultipleSubmit = async (event) => {
     event.preventDefault();
-    const url = "http://127.0.0.1:8000/upload_user_file";
     const formData = new FormData();
 
     files.forEach((file) => {
@@ -20,7 +20,7 @@ const MultipleFileUploader = () => {
     });
 
     try {
-      const response = await axios.post(url, formData, {
+      const response = await axios.post(`${url}/upload_user_file`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           accept: "application/json",

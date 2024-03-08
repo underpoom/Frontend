@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./MultipleFileUploader.css";
 import axios from "axios";
 import { UserContext } from "../../bounding/UserContext";
-import { url } from "../../bounding/apiConfig";
+import { url } from "../../bounding/UserContext";
 
 const LoginSignup = () => {
   const [action, setAction] = useState("Login");
