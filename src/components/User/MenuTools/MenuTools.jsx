@@ -23,7 +23,7 @@ const ContainerMenutools = styled.div`
 const FactorySpace = styled.div`
   display: flex;
   margin-top: 2vh;
-  /* border: 1px solid red; */
+
   flex-wrap: wrap;
   gap: 2vh;
   transition: transform 0.3s ease;
@@ -37,7 +37,7 @@ const HomePage = styled.div`
   display: flex;
   flex-direction: column;
   font-family: Inter, sans-serif;
-  /* border: 1px solid red; */
+
   align-items: start;
 `;
 
@@ -47,9 +47,7 @@ const WhiteLine = styled.div`
   height: 2px;
 `;
 
-const BoldArrow = styled.img`
-  /* border: 1px solid red; */
-`;
+const BoldArrow = styled.img``;
 
 const BuildingSpace = styled.div`
   display: flex;
@@ -64,7 +62,6 @@ const BuildingSpace = styled.div`
     background-color: var(--Important-Button, #0a89ff);
   }
 
-  /* border: 1px solid red; */
   gap: 1.5vh;
   font-size: 25px;
   width: 30vh;
@@ -77,18 +74,14 @@ const BuildingSpace = styled.div`
 const ImgLgInformation = styled.img`
   width: 25px;
   margin-left: auto;
-  /* border: 1px solid red; */
 `;
 
 const ImgMdInformation = styled.img`
   width: 20px;
   margin-left: auto;
-  /* border: 1px solid red; */
 `;
 
-const ImgRemoveBuilding = styled.img`
-  /* border: 1px solid red; */
-`;
+const ImgRemoveBuilding = styled.img``;
 
 export const MenuTools = ({
   onFactoryInformationClick,

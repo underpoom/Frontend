@@ -87,14 +87,14 @@ const [RowUserData, RowUserDataEmail] = [
   styled.div`
     text-align: center;
     font-family: Inter, sans-serif;
-    /* border: 1px solid red; */
+
     width: 9%;
     word-wrap: break-word;
   `,
   styled.div`
     text-align: center;
     font-family: Inter, sans-serif;
-    /* border: 1px solid red; */
+
     width: 30%;
   `,
 ];

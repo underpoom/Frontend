@@ -1,12 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const ContainerNavbarTop = styled.div`
   display: flex;
   height: 14vh;
   width: 132vh;
-  /* border: 1px solid #f24e1e; */
   margin: 5vh 5vh 0 0;
   align-items: center;
   padding-right: 2vh;
@@ -14,7 +12,6 @@ const ContainerNavbarTop = styled.div`
 
 const PageTitle = styled.div`
   margin-left: 5vh;
-  /* border: 1px solid #f24e1e; */
   font-size: xx-large;
   font-weight: 700;
   margin-right: auto;
@@ -25,12 +22,10 @@ const BlackLine = styled.div`
   height: 2px;
 `;
 const ImgUser = styled.div`
-  /* border: 1px solid #f24e1e; */
   margin-right: 2vh;
   cursor: pointer;
 `;
 const ImgInfo = styled.div`
-  /* border: 1px solid #f24e1e; */
   margin-right: 2vh;
   cursor: pointer;
 `;
@@ -50,7 +45,6 @@ const imgBack =
 export const NavbarTop = ({ pageTitle, changeStatePage, onBackClick }) => {
   const handleChangeStatePageClick = (data) => {
     changeStatePage(data);
-    // console.log(data);
   };
   const handleBackClick = () => {
     onBackClick(true);

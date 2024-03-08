@@ -9,7 +9,7 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerPermission = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
@@ -31,7 +31,6 @@ const FactoryDetail = styled.div`
   padding: 10px 30px;
   margin-top: 5px;
   border-radius: 8px;
-
 `;
 
 const FactoryName = styled.div`
@@ -47,7 +46,7 @@ const LocData = styled.div`
   font: 400 20px Inter, sans-serif;
   margin-left: 5px;
   align-items: center;
-  /* border: 1px solid red; */
+
   width: 600px;
 `;
 
@@ -84,7 +83,6 @@ const ContainerLabel = styled.div`
 const LabelLG = styled.div`
   margin: auto 0;
   font: 700 24px Inter, sans-serif;
-  
 `;
 
 const LabelMd = styled.div`
@@ -141,7 +139,7 @@ export const AddPermission = () => {
 
   const handleBackClick = () => {
     setFactorySelected(false);
-    setFilteredData(factoryList)
+    setFilteredData(factoryList);
   };
 
   const [FactorySelectedData, setFactorySelectedData] = useState([]);
@@ -158,7 +156,7 @@ export const AddPermission = () => {
     setFilteredData(filteredData);
   };
 
-  console.log(factoryList)
+  console.log(factoryList);
 
   return (
     <>

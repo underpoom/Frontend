@@ -1,7 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import MenuTools from "./MenuTools/MenuTools";
-import { Link } from "react-router-dom";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import TogglePopup from "../Admin/TogglePopup";
 import axios from "axios";
@@ -26,7 +24,7 @@ const ContainerEditProfile = styled.div`
   display: flex;
   width: 132vh;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: column;
 
   font: 700 32px Inter, sans-serif;
@@ -75,7 +73,6 @@ const Username = styled.span`
 `;
 
 const FormGroup = styled.div`
-  /* border: 1px solid red; */
   width: 60vh;
   height: 100px;
   flex-grow: 1;
@@ -166,7 +163,7 @@ export const EditProfile = ({ handlepageChange }) => {
     }
   };
 
-  console.log(newPassword)
+  console.log(newPassword);
 
   return (
     <>

@@ -8,7 +8,6 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerAddFactory = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
   flex-direction: column;
   overflow-y: auto;
   align-items: center;
@@ -18,7 +17,6 @@ const ContainerAddFactory = styled.div`
 const SelectSection = styled.div`
   white-space: nowrap;
   font: 700 24px Inter, sans-serif;
-  /* border: 1px solid red; */
   margin-bottom: 5vh;
 `;
 
@@ -57,7 +55,7 @@ const ContentFactoryName = styled.div`
   font: 700 24px Inter, sans-serif;
   align-content: start;
   font-size: 24px;
-  /* border: 1px solid red; */
+
   margin-left: 15vh;
   margin-bottom: 2vh;
 `;
@@ -96,7 +94,7 @@ export const AddFactory = () => {
   const [filteredAmphures, setFilteredAmphures] = useState([]);
   const [filteredTambons, setFilteredTambons] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province.json"
@@ -220,7 +218,6 @@ export const AddFactory = () => {
   // ----------------------------------------------------------------
   const handleSubmit = async () => {
     if (factoryLocation !== null) {
-      // console.log("You craet", newFactoryName, "at ", factoryLocation);
       try {
         const response = await axios.post(
           `${url}/post_factory`,
@@ -261,7 +258,6 @@ export const AddFactory = () => {
         <ContentFactoryName>
           Factory Name :
           <PasswordInput
-            // maxLength={20}
             value={newFactoryName}
             onChange={(e) => setNewFactoryName(e.target.value)}
           />

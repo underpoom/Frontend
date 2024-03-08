@@ -26,7 +26,7 @@ const ContentAddAdmin = styled.div`
   width: 60vh;
   font: 700 24px Inter, sans-serif;
   font-size: 24px;
-  /* border: 1px solid red; */
+
   margin-top: 2vh;
   display: flex;
   align-items: center;

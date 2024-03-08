@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,7 +9,7 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerVerifyUsers = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: column;
   padding: 0px 0px 39px 0px;
   overflow-y: auto;
@@ -79,14 +77,14 @@ const [RowUserData, RowUserDataEmail] = [
   styled.div`
     text-align: center;
     font-family: Inter, sans-serif;
-    /* border: 1px solid red; */
+
     width: 9%;
     word-wrap: break-word;
   `,
   styled.div`
     text-align: center;
     font-family: Inter, sans-serif;
-    /* border: 1px solid red; */
+
     width: 30%;
   `,
 ];
@@ -249,19 +247,16 @@ export const VerifyUsers = (props) => {
 
   const handleDeclineClickYes = async () => {
     try {
-      const response = await axios.delete(
-        `${url}/user/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          data: {
-            username: userSelected,
-          },
-        }
-      );
+      const response = await axios.delete(`${url}/user/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        data: {
+          username: userSelected,
+        },
+      });
       console.log("successful:", response.data);
       fetchData();
       closePopupDecline();
@@ -278,9 +273,9 @@ export const VerifyUsers = (props) => {
     setFilteredData(filteredData);
   };
 
-   const handleDownloadClick = (userData) => {
-     handleDownload(userData, user.token);
-   };
+  const handleDownloadClick = (userData) => {
+    handleDownload(userData, user.token);
+  };
   return (
     <>
       <NavbarTopAdmin

@@ -9,7 +9,6 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerFactoryPermission = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
   flex-direction: column;
 `;
 

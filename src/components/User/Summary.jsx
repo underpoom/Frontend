@@ -2,19 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import axios from "axios";
 import { UserContext, url } from "../../bounding/UserContext";
+import Spinner from "../../bounding/Spinner";
 
 const ContainerSummary = styled.div`
   display: flex;
   width: 132vh;
   height: 68vh;
-  /* border: 1px solid red; */
+
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
   justify-content: space-between;
   font: 700 32px Inter, sans-serif;
   gap: 1vh;
-  /* border: 1px solid red; */
+
   margin-top: 2vh;
 `;
 
@@ -105,7 +106,7 @@ const ItemCount = styled.div`
 const ItemLabel = styled.div`
   font-family: Inter, sans-serif;
   width: 110px;
-  /* border: 1px solid red; */
+
   display: flex;
   justify-content: end;
 `;
@@ -115,15 +116,19 @@ const ContentItem = styled.div`
   margin-top: 15px;
   justify-content: space-between;
   gap: 10px;
-  /* border: 1px solid red; */
+
   margin-left: 50px;
 `;
 
 export const Summary = ({ dataHistorySelected }) => {
   const { user } = useContext(UserContext);
   const [summaryData, setSummaryData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const fetchData = async () => {
     try {
+      setLoading(true);
+
       const response = await axios.get(
         `${url}/get_summary_user_verified?histo_id=${dataHistorySelected._id}`,
         {
@@ -138,6 +143,7 @@ export const Summary = ({ dataHistorySelected }) => {
       setSummaryData(response.data[0]);
 
       console.log(response.data[0]);
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -147,66 +153,71 @@ export const Summary = ({ dataHistorySelected }) => {
     fetchData();
   }, []);
 
-  if (summaryData !== null) {
-    console.log("summm", summaryData.summary_user[0]);
-  }
   return (
     <>
-      {summaryData !== null && (
-        <ContainerSummary>
-          <ContainerDFS>
-            <ContentDFS>
-              <LabelDFS>Number of picture</LabelDFS>
-              <ValueDFS>{summaryData.photo_count}</ValueDFS>
-              <Defects>pictures</Defects>
-            </ContentDFS>
-          </ContainerDFS>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {summaryData !== null && (
+            <ContainerSummary>
+              <ContainerDFS>
+                <ContentDFS>
+                  <LabelDFS>Number of picture</LabelDFS>
+                  <ValueDFS>{summaryData.photo_count}</ValueDFS>
+                  <Defects>pictures</Defects>
+                </ContentDFS>
+              </ContainerDFS>
 
-          <ContainerDFS>
-            <ContentDFS>
-              <LabelDFS>Detect from system</LabelDFS>
-              <ValueDFS>
-                {summaryData.summary_systems[0].summary_defect}
-              </ValueDFS>
-              <Defects>defects</Defects>
-            </ContentDFS>
-            <ContainerDetails>
-              <LLine />
-              <Detail>Detail</Detail>
+              <ContainerDFS>
+                <ContentDFS>
+                  <LabelDFS>Detect from system</LabelDFS>
+                  <ValueDFS>
+                    {summaryData.summary_systems[0].summary_defect}
+                  </ValueDFS>
+                  <Defects>defects</Defects>
+                </ContentDFS>
+                <ContainerDetails>
+                  <LLine />
+                  <Detail>Detail</Detail>
 
-              {Object.entries(summaryData.summary_systems[0]).map(
-                ([key, value], index) =>
-                  key !== "summary_defect" && (
-                    <ContentItem key={index}>
-                      <ItemLabel>{key} :</ItemLabel>
-                      <ItemCount>{value}</ItemCount>
-                    </ContentItem>
-                  )
-              )}
-            </ContainerDetails>
-          </ContainerDFS>
-          <ContainerUv>
-            <ContentDFS>
-              <LabelDFS>User verified</LabelDFS>
-              <ValueUV>{summaryData.summary_user[0].summary_defect}</ValueUV>
-              <Defects>defects</Defects>
-            </ContentDFS>
-            <ContainerDetails>
-              <LLine />
-              <Detail>Detail</Detail>
+                  {Object.entries(summaryData.summary_systems[0]).map(
+                    ([key, value], index) =>
+                      key !== "summary_defect" && (
+                        <ContentItem key={index}>
+                          <ItemLabel>{key} :</ItemLabel>
+                          <ItemCount>{value}</ItemCount>
+                        </ContentItem>
+                      )
+                  )}
+                </ContainerDetails>
+              </ContainerDFS>
+              <ContainerUv>
+                <ContentDFS>
+                  <LabelDFS>User verified</LabelDFS>
+                  <ValueUV>
+                    {summaryData.summary_user[0].summary_defect}
+                  </ValueUV>
+                  <Defects>defects</Defects>
+                </ContentDFS>
+                <ContainerDetails>
+                  <LLine />
+                  <Detail>Detail</Detail>
 
-              {Object.entries(summaryData.summary_user[0]).map(
-                ([key, value], index) =>
-                  key !== "summary_defect" && (
-                    <ContentItem key={index}>
-                      <ItemLabel>{key} :</ItemLabel>
-                      <ItemCount>{value}</ItemCount>
-                    </ContentItem>
-                  )
-              )}
-            </ContainerDetails>
-          </ContainerUv>
-        </ContainerSummary>
+                  {Object.entries(summaryData.summary_user[0]).map(
+                    ([key, value], index) =>
+                      key !== "summary_defect" && (
+                        <ContentItem key={index}>
+                          <ItemLabel>{key} :</ItemLabel>
+                          <ItemCount>{value}</ItemCount>
+                        </ContentItem>
+                      )
+                  )}
+                </ContainerDetails>
+              </ContainerUv>
+            </ContainerSummary>
+          )}
+        </>
       )}
     </>
   );

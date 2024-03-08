@@ -14,7 +14,6 @@ const ContainerRemoveFactory = styled.div`
   overflow-y: auto;
   /* flex-wrap: wrap; */
   column-gap: 38px;
-  /* border: 1px solid red; */
 `;
 
 const FactoryDetail = styled.div`
@@ -54,7 +53,7 @@ const ContentLabel = styled.div`
 const FactoryName = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
-  /* border: 1px solid red; */
+
   width: 200px;
 `;
 
@@ -65,7 +64,7 @@ const LocData = styled.div`
   font: 400 20px Inter, sans-serif;
   margin-left: 5px;
   align-items: center;
-  /* border: 1px solid red; */
+
   width: 600px;
 `;
 

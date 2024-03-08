@@ -43,8 +43,6 @@ export const ManagementAdmin = () => {
         {selectedSection === "add-permission" && <AddPermission />}
         {selectedSection === "permission-summary" && <PermissionSummary />}
         {selectedSection === "Log" && <Log />}
-
-        {/* <ChangeRoleAndPassword/> */}
       </RightContainer>
     </>
   );

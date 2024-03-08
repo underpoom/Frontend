@@ -4,12 +4,13 @@ import NavbarTop from "./NavbarTop/NavbarTop";
 import TogglePopup from "../Admin/TogglePopup";
 import axios from "axios";
 import { UserContext, url } from "../../bounding/UserContext";
+import Spinner from "../../bounding/Spinner";
 
 const ContainerFactoryDetails = styled.div`
   display: flex;
   width: 132vh;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: column;
   font: 700 32px Inter, sans-serif;
   padding: 2.5vh 1.5vh 0 1.5vh;
@@ -120,6 +121,7 @@ export const BuildingDetails = ({ buildingData, handlepageChange }) => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const handleTogglePopupSave = (user) => {
     setShowPopup(true);
@@ -128,6 +130,7 @@ export const BuildingDetails = ({ buildingData, handlepageChange }) => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `${url}/get_building_info?build_id=${buildingData.building_id}`,
         {
@@ -143,6 +146,7 @@ export const BuildingDetails = ({ buildingData, handlepageChange }) => {
       setValueWidth(response.data.building_width);
       setValueLatitude(response.data.building_latitude);
       setValueLongitude(response.data.building_longitude);
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -202,85 +206,89 @@ export const BuildingDetails = ({ buildingData, handlepageChange }) => {
       )}
 
       <NavbarTop pageTitle="Building Details" changeStatePage={handlepage} />
-      <ContainerFactoryDetails>
-        This building detail :
-        <Box>
-          <ContentData>
-            <LabelBuildingName>Building Name : </LabelBuildingName>
-            <BuildingName>{buildingData.building_name}</BuildingName>
-          </ContentData>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <ContainerFactoryDetails>
+          This building detail :
+          <Box>
+            <ContentData>
+              <LabelBuildingName>Building Name : </LabelBuildingName>
+              <BuildingName>{buildingData.building_name}</BuildingName>
+            </ContentData>
 
-          <BuildingWL>
-            <ContainerMeter>
-              <LabelBuildingWL>Building Lenght </LabelBuildingWL>
-              <ContentMeter>
-                <MeterVar
-                  contentEditable={isEditing}
-                  suppressContentEditableWarning={isEditing}
-                  onBlur={(e) => setValueLenght(e.target.innerText)}
-                >
-                  {valueLenght}
-                </MeterVar>
-                <Meter>Meter</Meter>
-              </ContentMeter>
-            </ContainerMeter>
+            <BuildingWL>
+              <ContainerMeter>
+                <LabelBuildingWL>Building Lenght </LabelBuildingWL>
+                <ContentMeter>
+                  <MeterVar
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning={isEditing}
+                    onBlur={(e) => setValueLenght(e.target.innerText)}
+                  >
+                    {valueLenght}
+                  </MeterVar>
+                  <Meter>Meter</Meter>
+                </ContentMeter>
+              </ContainerMeter>
 
-            <ContainerMeter>
-              <LabelBuildingWL>Building Width </LabelBuildingWL>
-              <ContentMeter>
-                <MeterVar
-                  contentEditable={isEditing}
-                  suppressContentEditableWarning={isEditing}
-                  onBlur={(e) => setValueWidth(e.target.innerText)}
-                >
-                  {valueWidth}
-                </MeterVar>
-                <Meter>Meter</Meter>
-              </ContentMeter>
-            </ContainerMeter>
-          </BuildingWL>
+              <ContainerMeter>
+                <LabelBuildingWL>Building Width </LabelBuildingWL>
+                <ContentMeter>
+                  <MeterVar
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning={isEditing}
+                    onBlur={(e) => setValueWidth(e.target.innerText)}
+                  >
+                    {valueWidth}
+                  </MeterVar>
+                  <Meter>Meter</Meter>
+                </ContentMeter>
+              </ContainerMeter>
+            </BuildingWL>
 
-          <LabelBuildingName>Building center location</LabelBuildingName>
+            <LabelBuildingName>Building center location</LabelBuildingName>
 
-          <BuildingWL>
-            <ContainerMeter>
-              <LabelBuildingWL>Building latitude </LabelBuildingWL>
-              <ContentMeter>
-                <MeterVar
-                  contentEditable={isEditing}
-                  suppressContentEditableWarning={isEditing}
-                  onBlur={(e) => setValueLatitude(e.target.innerText)}
-                >
-                  {valueLatitude}
-                </MeterVar>
-              </ContentMeter>
-            </ContainerMeter>
+            <BuildingWL>
+              <ContainerMeter>
+                <LabelBuildingWL>Building latitude </LabelBuildingWL>
+                <ContentMeter>
+                  <MeterVar
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning={isEditing}
+                    onBlur={(e) => setValueLatitude(e.target.innerText)}
+                  >
+                    {valueLatitude}
+                  </MeterVar>
+                </ContentMeter>
+              </ContainerMeter>
 
-            <ContainerMeter>
-              <LabelBuildingWL>Building longitude </LabelBuildingWL>
-              <ContentMeter>
-                <MeterVar
-                  contentEditable={isEditing}
-                  suppressContentEditableWarning={isEditing}
-                  onBlur={(e) => setValueLongitude(e.target.innerText)}
-                >
-                  {valueLongitude}
-                </MeterVar>
-              </ContentMeter>
-            </ContainerMeter>
-          </BuildingWL>
-        </Box>
-        {!isEditing && (
-          <ButtonConfigConfirm onClick={() => setIsEditing(true)}>
-            Edit
-          </ButtonConfigConfirm>
-        )}
-        {isEditing && (
-          <ButtonConfigConfirm onClick={() => handleTogglePopupSave()}>
-            Save
-          </ButtonConfigConfirm>
-        )}
-      </ContainerFactoryDetails>
+              <ContainerMeter>
+                <LabelBuildingWL>Building longitude </LabelBuildingWL>
+                <ContentMeter>
+                  <MeterVar
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning={isEditing}
+                    onBlur={(e) => setValueLongitude(e.target.innerText)}
+                  >
+                    {valueLongitude}
+                  </MeterVar>
+                </ContentMeter>
+              </ContainerMeter>
+            </BuildingWL>
+          </Box>
+          {!isEditing && (
+            <ButtonConfigConfirm onClick={() => setIsEditing(true)}>
+              Edit
+            </ButtonConfigConfirm>
+          )}
+          {isEditing && (
+            <ButtonConfigConfirm onClick={() => handleTogglePopupSave()}>
+              Save
+            </ButtonConfigConfirm>
+          )}
+        </ContainerFactoryDetails>
+      )}
     </>
   );
 };

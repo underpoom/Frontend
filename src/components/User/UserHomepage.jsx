@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import MenuTools from "./MenuTools/MenuTools";
-import NavbarTop from "./NavbarTop/NavbarTop";
 import styled from "styled-components";
 import { EditProfile } from "./EditProfile";
 import FactoryDetails from "./FactoryDetails";
@@ -8,7 +7,6 @@ import BuildingDetails from "./BuildingDetails";
 import Information from "./Information";
 import NewBuilding from "./NewBuilding";
 import AllDataHistory from "./AllDataHistory";
-import { UserContext, url } from "../../bounding/UserContext";
 
 const RightContainer = styled.div`
   display: flex;
@@ -39,10 +37,7 @@ export const UserHomepage = () => {
   };
 
   const handleBuildingClick = (data) => {
-    // console.log("Selected section:", building);
     setSelectedBuildingData(data);
-    // console.log("fac ",selectedFactoryData)
-    // console.log("building ", building);
     setSelectedSection("AllDataHistory");
   };
 
@@ -52,8 +47,6 @@ export const UserHomepage = () => {
     setSelectedSection("AllDataHistory");
   };
 
-  const [showFactoryDetails, setShowFactoryDetails] = useState(false);
-  const [showBuildingDetails, setShowBuildingDetails] = useState(false);
   const [selectedSection, setSelectedSection] = useState("Information");
 
   const [statePage, setStatePage] = useState([]);
@@ -62,8 +55,6 @@ export const UserHomepage = () => {
     setSelectedSection(section);
     console.log("Selected section:", section);
   };
-
-  const { user } = useContext(UserContext);
 
   const handleFetch = () => {};
 

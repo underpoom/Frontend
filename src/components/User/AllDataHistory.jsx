@@ -6,12 +6,13 @@ import ViewUploadFile from "./ViewUploadFile";
 import VerifySummary from "./VerifySummary";
 import axios from "axios";
 import { UserContext, url } from "../../bounding/UserContext";
+import Spinner from "../../bounding/Spinner";
 
 const ContainerEditProfile = styled.div`
   display: flex;
   width: 132vh;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
@@ -33,8 +34,6 @@ const Label = styled.div`
   width: 100%;
   height: 60px;
   align-items: center;
-
-  /* border: 1px solid red; */
 `;
 
 const ButtonNew = styled.div`
@@ -73,7 +72,6 @@ const ContainerDate = styled.div`
 `;
 
 const ContentDate = styled.div`
-  /* border: 1px solid red; */
   display: flex;
 
   flex-direction: column;
@@ -93,11 +91,6 @@ const LabelDate = styled.div`
 
 const DateValue = styled.div`
   font-family: Inter, sans-serif;
-`;
-
-const ContainerButton = styled.div`
-  width: 30%;
-  font-size: 24px;
 `;
 
 const ButtonView = styled.div`
@@ -136,6 +129,8 @@ export const AllDataHistory = ({
     handlepageChange(data);
   };
 
+  const [loading, setLoading] = useState(true);
+
   const handleUpload = (data) => {
     setDataHistorySelected(data);
     setUploadedFile(true);
@@ -149,6 +144,7 @@ export const AllDataHistory = ({
   const handleBackClick = (data) => {
     setUploadedFile(false);
     setVerifySummary(false);
+    fetchData();
   };
 
   const [uploadedFile, setUploadedFile] = useState(false);
@@ -218,6 +214,7 @@ export const AllDataHistory = ({
   console.log(buildingData);
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `${url}/get_history?id_building=${buildingData.building_id}`,
         {
@@ -230,14 +227,19 @@ export const AllDataHistory = ({
       );
       console.log("successful:", response.data);
       setDataHistory(response.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
   useEffect(() => {
+    // const interval = setInterval(() => {
+    //   fetchData();
+    // }, 1000);
+    // return () => clearInterval(interval);
+
     fetchData();
   }, [buildingData]);
-
   return (
     <>
       {showPopup && (
@@ -254,43 +256,48 @@ export const AllDataHistory = ({
             pageTitle="All Data History"
             changeStatePage={handlepage}
           />
-          <ContainerEditProfile>
-            <Label>
-              {buildingData.building_name}
 
-              <ButtonNew onClick={handleNewButtonClick}>
-                <Img loading="lazy" src={imgButtonNew} />
-                new
-              </ButtonNew>
-            </Label>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <ContainerEditProfile>
+              <Label>
+                {buildingData.building_name}
 
-            {dataHistory.map((history, index) => (
-              <ContainerDate key={index}>
-                <ContentDate>
-                  <LabelDate>Day - Month - Year</LabelDate>
-                  <DateValue>{history.create_date}</DateValue>
-                  <LabelDate>Time</LabelDate>
-                  <DateValue>{history.create_time}</DateValue>
-                </ContentDate>
-                <div>
-                  {!history.is_process ? (
-                    <ButtonView onClick={() => handleUpload(history)}>
-                      Upload
-                    </ButtonView>
-                  ) : (
-                    <ButtonView onClick={() => handleView(history)}>
-                      View
-                    </ButtonView>
-                  )}
-                  <ButtonDelete
-                    onClick={() => handleDeleteButtonClick(history)}
-                  >
-                    Delete
-                  </ButtonDelete>
-                </div>
-              </ContainerDate>
-            ))}
-          </ContainerEditProfile>
+                <ButtonNew onClick={handleNewButtonClick}>
+                  <Img loading="lazy" src={imgButtonNew} />
+                  new
+                </ButtonNew>
+              </Label>
+
+              {dataHistory.map((history, index) => (
+                <ContainerDate key={index}>
+                  <ContentDate>
+                    <LabelDate>Day - Month - Year</LabelDate>
+                    <DateValue>{history.create_date}</DateValue>
+                    <LabelDate>Time</LabelDate>
+                    <DateValue>{history.create_time}</DateValue>
+                  </ContentDate>
+                  <div>
+                    {!history.is_process ? (
+                      <ButtonView onClick={() => handleUpload(history)}>
+                        Upload
+                      </ButtonView>
+                    ) : (
+                      <ButtonView onClick={() => handleView(history)}>
+                        View
+                      </ButtonView>
+                    )}
+                    <ButtonDelete
+                      onClick={() => handleDeleteButtonClick(history)}
+                    >
+                      Delete
+                    </ButtonDelete>
+                  </div>
+                </ContainerDate>
+              ))}
+            </ContainerEditProfile>
+          )}
         </>
       )}
 

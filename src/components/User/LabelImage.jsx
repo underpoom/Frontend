@@ -4,18 +4,19 @@ import NavbarTop from "./NavbarTop/NavbarTop";
 import TogglePopup from "../Admin/TogglePopup";
 import { UserContext, url } from "../../bounding/UserContext";
 import axios from "axios";
+import AlertPopup from "../Admin/AlertPopup";
+import Spinner from "../../bounding/Spinner";
 
 const ContainerLabelImage = styled.div`
   display: flex;
   width: 132vh;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-wrap: wrap;
   justify-content: start;
   align-content: center;
   align-items: center;
   font: 700 32px Inter, sans-serif;
-  /* border: 1px solid red; */
 `;
 const ContainerTools = styled.div`
   height: 650px;
@@ -52,7 +53,7 @@ const ContainerButton = styled.div`
   display: flex;
   font-family: Inter, sans-serif;
   justify-content: space-between;
-  /* border: 1px solid red; */
+
   width: 240px;
   height: 100px;
   margin-top: 300px;
@@ -131,8 +132,10 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
   const [canvasHeight, setCanvasHeight] = useState(null);
   const [defectClasses, setDefectClasses] = useState(null);
 
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return; // Add null check
     const ctx = canvas.getContext("2d");
 
     function loadRectanglesFromJSON(jsonData) {
@@ -192,9 +195,6 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
       } catch (error) {
         console.error("Error:", error);
       }
-    }
-
-    async function fetchDefect() {
       try {
         const response = await axios.get(`${url}/get_defect`, {
           headers: {
@@ -209,13 +209,18 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
         console.error("Error:", error);
       }
     }
+
     fetchData();
-    fetchDefect();
     loadImageAndRectangles();
   }, []);
 
   const handleInsertClick = () => {
-    setDrawingAllowed(true);
+    if (selectedDefectClass === null) {
+      setShowPopupAlert(true);
+      setPopupContentAlert("Please select defect class");
+    } else {
+      setDrawingAllowed(true);
+    }
   };
 
   const drawRectangles = (rectanglesToDraw) => {
@@ -223,6 +228,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     if (!canvas) return; // Add null check
 
     const ctx = canvas.getContext("2d");
+
     if (!ctx) return; // Add null check
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
@@ -235,7 +241,6 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     );
 
     rectanglesToDraw.forEach(({ defectClass, x, y, width, height }, index) => {
-      // ctx.strokeStyle = selectedRectangle === index ? "blue" : "red";
       if (LastSelectedRectangle === index) {
         ctx.strokeStyle = "blue";
         console.log("index :", index);
@@ -254,8 +259,6 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
       // Display class
       ctx.fillStyle = "black";
       ctx.font = "20px Arial";
-      ctx.fillText(`${defectClass}`, x - width / 2, y - height / 2 - 5);
-      // console.log(`Class: ${defectClass}`);
     });
 
     if (
@@ -286,7 +289,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     const rect = canvasRef.current.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
-    if (drawingAllowed === true) {
+    if (drawingAllowed === true && selectedDefectClass !== null) {
       setDrawing(true);
       setStartX(event.clientX - rect.left);
       setStartY(event.clientY - rect.top);
@@ -324,7 +327,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
 
     let isHovering = false;
 
-    if (drawing) {
+    if (drawing && selectedDefectClass !== null) {
       const rect = canvasRef.current.getBoundingClientRect();
       setEndX(event.clientX - rect.left);
       setEndY(event.clientY - rect.top);
@@ -357,7 +360,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
   };
 
   const handleMouseUp = () => {
-    if (drawing) {
+    if (drawing && selectedDefectClass !== null) {
       setDrawing(false);
       setDrawingAllowed(false);
       setDrawingEnded(true);
@@ -402,7 +405,9 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
           value={selectedDefectClass}
           onChange={(event) => setSelectedDefectClass(event.target.value)}
         >
-          <option value="">Select a defect class</option>
+          <option value="" disabled hidden>
+            Select a defect class
+          </option>
           {defectClasses.map((defectClass) => (
             <option key={defectClass._id} value={defectClass.defect_class_name}>
               {defectClass.defect_class_name}
@@ -427,10 +432,12 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
 
   drawRectangles(rectangles);
 
-  console.log(rectangles);
-
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState("");
+
+  const [showPopupAlert, setShowPopupAlert] = useState(false);
+  const [popupContentAlert, setPopupContentAlert] = useState("");
+
   const handleClickSubmit = () => {
     setShowPopup(true);
     setPopupContent("Do you want to confirm this picture?");
@@ -477,8 +484,6 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     setShowPopup(false);
   };
 
-  // Calculate the sum of defects
-
   let totalDefected;
   let defectCounts;
   if (defectData !== null) {
@@ -508,51 +513,62 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     <>
       <NavbarTop changeStatePage={handlepage} onBackClick={onBackClick} />
 
-      <ContainerLabelImage>
-        <>
-          {showPopup && (
-            <TogglePopup
-              content={popupContent}
-              onClose={() => setShowPopup(false)}
-              onYes={handleClickYes}
-            />
-          )}
-
-          <canvas
-            ref={canvasRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-          />
-
-          <ContainerTools>
-            {defectData !== null && (
-              <ShowDefectedCount>
-                <LabelDefectedCount>
-                  Defected : {totalDefected} Location
-                </LabelDefectedCount>
-
-                {Object.entries(defectCounts).map(([defectType, count]) => (
-                  <DefectedCount key={defectType}>
-                    {defectType.charAt(0).toUpperCase() + defectType.slice(1)}:{" "}
-                    {count}
-                  </DefectedCount>
-                ))}
-              </ShowDefectedCount>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <ContainerLabelImage>
+          <>
+            {showPopupAlert && (
+              <AlertPopup
+                content={popupContentAlert}
+                onClose={() => setShowPopupAlert(false)}
+              />
             )}
-            {renderClassSelector()}
-            <ContainerButton>
-              <InsertDelete onClick={handleInsertClick}>Insert</InsertDelete>
-              {LastSelectedRectangle !== null ? (
-                <InsertDelete onClick={deleteRectangle}>Delete</InsertDelete>
-              ) : (
-                <InsertDeleteDis>Delete</InsertDeleteDis>
+
+            {showPopup && (
+              <TogglePopup
+                content={popupContent}
+                onClose={() => setShowPopup(false)}
+                onYes={handleClickYes}
+              />
+            )}
+
+            <canvas
+              ref={canvasRef}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+            />
+
+            <ContainerTools>
+              {defectData !== null && (
+                <ShowDefectedCount>
+                  <LabelDefectedCount>
+                    Defected : {totalDefected} Location
+                  </LabelDefectedCount>
+
+                  {Object.entries(defectCounts).map(([defectType, count]) => (
+                    <DefectedCount key={defectType}>
+                      {defectType.charAt(0).toUpperCase() + defectType.slice(1)}
+                      : {count}
+                    </DefectedCount>
+                  ))}
+                </ShowDefectedCount>
               )}
-            </ContainerButton>
-            <Confirm onClick={handleClickSubmit}>Confirm</Confirm>
-          </ContainerTools>
-        </>
-      </ContainerLabelImage>
+              {renderClassSelector()}
+              <ContainerButton>
+                <InsertDelete onClick={handleInsertClick}>Insert</InsertDelete>
+                {LastSelectedRectangle !== null ? (
+                  <InsertDelete onClick={deleteRectangle}>Delete</InsertDelete>
+                ) : (
+                  <InsertDeleteDis>Delete</InsertDeleteDis>
+                )}
+              </ContainerButton>
+              <Confirm onClick={handleClickSubmit}>Confirm</Confirm>
+            </ContainerTools>
+          </>
+        </ContainerLabelImage>
+      )}
     </>
   );
 };

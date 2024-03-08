@@ -7,7 +7,7 @@ import axios from "axios";
 const ContainerRemoveFactory = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
@@ -35,7 +35,7 @@ const FactoryDetail = styled.div`
 const FactoryName = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
-  /* border: 1px solid red; */
+
   width: 200px;
 `;
 
@@ -72,7 +72,7 @@ const Members = styled.div`
   flex-wrap: wrap;
   width: 700px;
   font: 400 20px Inter, sans-serif;
-  /* border: 1px solid red; */
+
   gap: 20px;
 `;
 
@@ -95,15 +95,12 @@ export const PermissionSummary = () => {
             Authorization: `Bearer ${user.token}`,
           },
         });
-       
-   
+
         setFactoryList(response.data);
         setFilteredData(response.data);
- 
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
     };
 
     fetchData();
@@ -122,14 +119,12 @@ export const PermissionSummary = () => {
         filteredData={showFilteredData}
       />
 
-      
-
       <ContainerRemoveFactory>
         <ContainerLabel>
-        <LabelHeadFactoryname>Factory Name</LabelHeadFactoryname>
-        <LabelHeadUserCount>User Count</LabelHeadUserCount>
-        <LabelHeadMemberUsername>Member’s Username</LabelHeadMemberUsername>
-      </ContainerLabel>
+          <LabelHeadFactoryname>Factory Name</LabelHeadFactoryname>
+          <LabelHeadUserCount>User Count</LabelHeadUserCount>
+          <LabelHeadMemberUsername>Member’s Username</LabelHeadMemberUsername>
+        </ContainerLabel>
         {filteredData.map((factory, index) => (
           <FactoryDetail key={index}>
             <FactoryName>{factory.factory_name}</FactoryName>

@@ -11,7 +11,7 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerChangePassword = styled.div`
   display: flex;
   max-height: 100%;
-  /* border: 1px solid red; */
+
   flex-direction: column;
   padding: 0px 0px 39px 0px;
   overflow-y: auto;
@@ -66,8 +66,6 @@ const NewPasswordContent = styled.div`
   white-space: nowrap;
   flex-grow: 1;
   font: 700 24px Inter, sans-serif;
-
- 
 `;
 
 const PasswordInputContent = styled.div`
@@ -160,14 +158,7 @@ const imgBack =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
 export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
-  const [selectedOption, setSelectedOption] = useState("");
   const { user } = useContext(UserContext);
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
-
-  const [currentPassword, setCurrentPassword] = useState("");
 
   const [newPassword, setNewPassword] = useState("");
 
@@ -178,7 +169,6 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
     setShowPopup(true);
     setPopupContent("Do you want to change this user’s password?");
 
-    console.log(currentPassword, newPassword);
   };
 
   // ----------------------------------------------------------------
@@ -230,7 +220,6 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
           <UsernameContent>
             Username :<UsernameData>{userData.username}</UsernameData>
           </UsernameContent>
-         
           <NewPasswordContent>
             New password :
             <PasswordInputContent>
@@ -247,25 +236,6 @@ export const ChangeRoleAndPassword = ({ userData, onBackClick }) => {
           <Submit onClick={handleClickSubmit}>Submit</Submit>
         </ContentChangePassword>
 
-        {/* <ContentChangeUserRole>
-          Change user’s role
-          <NewPasswordContent>
-            User’s role :
-            <PasswordInputContent>
-              <Dropdown value={selectedOption} onChange={handleChange}>
-                <option value="">Select Role</option>
-                <option value="User">User</option>
-                <option value="Admin">Admin</option>
-              </Dropdown>
-              {selectedOption && (
-                <SelectedContent>
-                  You selected : {selectedOption}
-                </SelectedContent>
-              )}
-            </PasswordInputContent>
-          </NewPasswordContent>
-          <Submit>Submit</Submit>
-        </ContentChangeUserRole> */}
       </ContainerChangePassword>
     </>
   );

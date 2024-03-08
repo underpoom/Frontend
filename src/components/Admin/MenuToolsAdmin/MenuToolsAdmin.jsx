@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./MenuToolsAdmin.css";
 import styled from "styled-components";
 import TogglePopup from "../TogglePopup";
-import axios from "axios";
 
 const ContainerMenutools = styled.div`
   display: flex;
@@ -25,7 +24,7 @@ const HomePage = styled.div`
   display: flex;
   flex-direction: column;
   font-family: Inter, sans-serif;
-  /* border: 1px solid red; */
+
   align-items: start;
 `;
 
@@ -60,7 +59,7 @@ const imgRemoveFactory =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/a2e88c1a61b33b23b5150e281d3c3707bfa6ebb978c42bddc2484fce78f7d68f?apiKey=34584a6259e046a0be0d44044e057cb8&";
 const imgLog =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/21d683f244525500a1f10ad7d51d8b6c2018ce21826a8435e64d15c8a79e500e?";
-  export const MenuToolsAdmin = ({ onSelectSection }) => {
+export const MenuToolsAdmin = ({ onSelectSection }) => {
   const [selectedSection, setSelectedSection] = useState(null);
   const [userSelectedSection, setUserSelectedSection] = useState(null);
 

@@ -1,10 +1,5 @@
 import React, { useContext, useState } from "react";
 import "./LoginSignup.css";
-import { Icon } from "@iconify/react";
-import user_icon from "../../bounding/Assets/person.png";
-import email_icon from "../../bounding/Assets/email.png";
-import password_icon from "../../bounding/Assets/password.png";
-import MultipleFileUploader from "./MultipleFileUploader";
 import { useNavigate } from "react-router-dom";
 import "./MultipleFileUploader.css";
 import axios from "axios";
@@ -18,7 +13,6 @@ const LoginSignup = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [path, setPath] = useState("");
   const { login } = useContext(UserContext);
 
   const navigate = useNavigate();
@@ -124,7 +118,6 @@ const LoginSignup = () => {
         },
       });
       console.log("Files uploaded successfully:", response.data);
-      setPath(response.data);
       handleSignUp(response.data.path);
       setUploadedFiles(response.data.files || []); // Ensure uploadedFiles is always an array
     } catch (error) {

@@ -9,13 +9,12 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerLog = styled.div`
   display: flex;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
   /* flex-wrap: wrap; */
   column-gap: 38px;
- 
 `;
 
 const FactoryDetail = styled.div`
@@ -38,13 +37,11 @@ const Actor = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
   width: 200px;
-
 `;
 const Message = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
   width: 500px;
-
 `;
 const Timestamp = styled.div`
   align-self: center;

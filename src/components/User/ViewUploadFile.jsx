@@ -1,16 +1,15 @@
-import { upload } from "@testing-library/user-event/dist/upload";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
-import TogglePopup from "../Admin/TogglePopup";
 import { UserContext, url } from "../../bounding/UserContext";
 import axios from "axios";
+import AlertPopup from "../Admin/AlertPopup";
 
 const ContainerEditProfile = styled.div`
   display: flex;
   width: 132vh;
   height: 68vh;
-  /* border: 1px solid red; */
+
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
@@ -18,7 +17,6 @@ const ContainerEditProfile = styled.div`
   padding: 1.5vh 0vh 0 1.5vh;
   padding-left: 5vh;
   gap: 1vh;
-  /* border: 1px solid red; */
 `;
 
 const Label = styled.div`
@@ -31,7 +29,6 @@ const Label = styled.div`
   font-weight: 400;
   width: 100%;
   height: 60px;
-  /* border: 1px solid red; */
 `;
 
 const ButtonNew = styled.form`
@@ -97,11 +94,6 @@ const ImgDelete = styled.img`
   align-self: start;
 `;
 
-const BlackLine = styled.div`
-  background-color: black;
-  height: 2px;
-`;
-
 const DivLine = styled.div`
   display: flex;
   flex-direction: column;
@@ -128,9 +120,6 @@ const ButtonProcess = styled.div`
   cursor: pointer;
 `;
 
-const imgBack =
-  "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
-
 export const ViewUploadFile = ({
   buildingDataW,
   onBackClick,
@@ -139,11 +128,12 @@ export const ViewUploadFile = ({
 }) => {
   const { user } = useContext(UserContext);
   const [files, setFiles] = useState([]);
-  const [input_dir, setinput_dir] = useState(null);
-  const [output_dir, setoutput_dir] = useState(null);
   const handlepage = (data) => {
     handlepageChange(data);
   };
+
+  const [showPopupAlert, setShowPopupAlert] = useState(false);
+  const [popupContentAlert, setPopupContentAlert] = useState("");
 
   const handleFileChange = (event) => {
     setFiles([...event.target.files]);
@@ -158,6 +148,8 @@ export const ViewUploadFile = ({
   console.log(dataHistorySelected);
   // ----------------------------------------------------------------
   const handleProcessClick = async (event) => {
+    setPopupContentAlert("Processing video ... ");
+    setShowPopupAlert(true);
     event.preventDefault();
     const formData = new FormData();
 
@@ -180,7 +172,6 @@ export const ViewUploadFile = ({
       console.log("Files uploaded successfully:", uploadResponse.data);
       const inputDir = uploadResponse.data.path;
       const outputDir = dataHistorySelected.history_path;
- 
 
       console.log(inputDir);
       console.log(outputDir);
@@ -201,18 +192,27 @@ export const ViewUploadFile = ({
           }
         );
 
-        console.log("process successful:", response.data);
+        console.log("Process successful:", response.data);
       } catch (error) {
         console.error("Error process:", error);
       }
     } catch (error) {
       console.error("Error uploading files:", error);
     }
-
   };
 
   return (
     <>
+      {showPopupAlert && (
+        <AlertPopup
+          content={popupContentAlert}
+          onClose={() => {
+            setShowPopupAlert(false);
+            onBackClick();
+          }}
+        />
+      )}
+
       <NavbarTop
         pageTitle={buildingDataW.building_name}
         changeStatePage={handlepage}
@@ -229,21 +229,19 @@ export const ViewUploadFile = ({
             Your .srt file must have same name as your .mp4 file.
           </LabelMd>
           <ButtonNew>
-           
-              <label>
-                <Img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&"
-                />
-                Upload
-                <input
-                  type="file"
-                  accept=".mp4,.srt"
-                  multiple
-                  onChange={handleFileChange}
-                />
-              </label>
-            
+            <label>
+              <Img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5b7e66065244b64608b7f730498d9aab94fd4597cb181dbb3df8847800e605b?apiKey=34584a6259e046a0be0d44044e057cb8&"
+              />
+              Upload
+              <input
+                type="file"
+                accept=".mp4,.srt"
+                multiple
+                onChange={handleFileChange}
+              />
+            </label>
           </ButtonNew>
         </Label>
 

@@ -3,12 +3,13 @@ import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import axios from "axios";
 import { UserContext, url } from "../../bounding/UserContext";
+import Spinner from "../../bounding/Spinner";
 
 const ContainerFactoryDetails = styled.div`
   display: flex;
   width: 132vh;
   height: 76vh;
-  /* border: 1px solid red; */
+
   flex-direction: column;
   font: 700 32px Inter, sans-serif;
   padding: 1.5vh 1.5vh 0 1.5vh;
@@ -41,7 +42,7 @@ const ContentDetails = styled.div`
 const Label = styled.div`
   font-size: 32px;
   width: 250px;
-  /* border: 1px solid red; */
+
   display: flex;
   justify-content: end;
 `;
@@ -56,7 +57,7 @@ const Content = styled.div`
   color: #000;
   font-weight: 400;
   margin: 25px 0 25px 26px;
-  /* border: 1px solid red; */
+
   align-items: center;
 `;
 
@@ -69,13 +70,13 @@ export const FactoryDetails = ({ factoryData, handlepageChange }) => {
   const handlepage = (data) => {
     handlepageChange(data);
   };
-
-  console.log(factoryData);
+  const [loading, setLoading] = useState(true);
 
   const [detailParts, setDetailParts] = useState();
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `${url}/get_factory_info?facto_id=${factoryData.factory_id}`,
         {
@@ -88,7 +89,7 @@ export const FactoryDetails = ({ factoryData, handlepageChange }) => {
       );
       console.log("successful:", response.data);
       setDetailParts(response.data.factory_details.split("_"));
-
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -100,30 +101,34 @@ export const FactoryDetails = ({ factoryData, handlepageChange }) => {
   return (
     <>
       <NavbarTop pageTitle="Factory Details" changeStatePage={handlepage} />
-      <ContainerFactoryDetails>
-        <LabelHead>This factory detail :</LabelHead>
-        <ContentDetails>
-          <Content>
-            <Label>Factory Name :</Label> {factoryData.factory_name}
-          </Content>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <ContainerFactoryDetails>
+          <LabelHead>This factory detail :</LabelHead>
+          <ContentDetails>
+            <Content>
+              <Label>Factory Name :</Label> {factoryData.factory_name}
+            </Content>
 
-          <Address>Address</Address>
+            <Address>Address</Address>
 
-          {detailParts && detailParts.length >= 3 && (
-            <>
-              <Content>
-                <Label>Province :</Label> {detailParts[0]}
-              </Content>
-              <Content>
-                <Label>District :</Label> {detailParts[1]}
-              </Content>
-              <Content>
-                <Label>Sub - District :</Label> {detailParts[2]}
-              </Content>
-            </>
-          )}
-        </ContentDetails>
-      </ContainerFactoryDetails>
+            {detailParts && detailParts.length >= 3 && (
+              <>
+                <Content>
+                  <Label>Province :</Label> {detailParts[0]}
+                </Content>
+                <Content>
+                  <Label>District :</Label> {detailParts[1]}
+                </Content>
+                <Content>
+                  <Label>Sub - District :</Label> {detailParts[2]}
+                </Content>
+              </>
+            )}
+          </ContentDetails>
+        </ContainerFactoryDetails>
+      )}
     </>
   );
 };

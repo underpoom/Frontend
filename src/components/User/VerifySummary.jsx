@@ -6,7 +6,7 @@ import Summary from "./Summary";
 import axios from "axios";
 import { BigRec } from "./BigRec";
 import { UserContext, url } from "../../bounding/UserContext";
-
+import Spinner from "../../bounding/Spinner";
 
 const ContainerEditProfile = styled.div`
   display: flex;
@@ -19,7 +19,6 @@ const ContainerEditProfile = styled.div`
   font: 700 32px Inter, sans-serif;
   gap: 1vh;
   margin-top: 2vh;
-  
 `;
 
 const ContainerSmallRec = styled.div`
@@ -32,7 +31,6 @@ const ContainerSmallRec = styled.div`
   flex-wrap: wrap;
   flex-direction: row;
   overflow-y: auto;
-
 `;
 
 const ContentSmallRec = styled.div`
@@ -41,7 +39,6 @@ const ContentSmallRec = styled.div`
   cursor: pointer;
   position: relative;
   margin-bottom: 40px;
-  
 `;
 
 const SmallRec = styled.div`
@@ -141,11 +138,14 @@ export const VerifySummary = ({
   const [selectedSection, setSelectSection] = useState("Verify");
   const [selectedImage, setSelectImage] = useState(null);
   const [imageList, setImageList] = useState([]);
-  const [imageListDetail, setImageListDetail] = useState([]);
+  const [imageListBigRec, setImageListBigRec] = useState([]);
   const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
+      setLoading(true);
+
       const response = await axios.get(
         `${url}/get_image?history_id=${dataHistorySelected._id}`,
         {
@@ -157,12 +157,9 @@ export const VerifySummary = ({
         }
       );
       console.log("successful:", response.data);
-      setImageListDetail(response.data[1]);
-      const newImageList = response.data[0].map((item) => ({
-        ...item,
-        image_path: item.image_path.replace("data/", ""),
-      }));
-      setImageList(newImageList);
+      setImageListBigRec(response.data);
+      setImageList(response.data[0]);
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -170,7 +167,7 @@ export const VerifySummary = ({
 
   useEffect(() => {
     fetchData();
-  }, [onBackClick]);
+  }, []);
 
   const handleSection = (section) => {
     setSelectSection(section);
@@ -189,16 +186,17 @@ export const VerifySummary = ({
     handlepageChange(data);
   };
 
-   const [hoveredImage, setHoveredImage] = useState(null);
+  const [hoveredImage, setHoveredImage] = useState(null);
 
-    const handleMouseEnter = (img) => {
-      setHoveredImage(img);
-      console.log("Hovered Image:", img);
-    };
+  const handleMouseEnter = (img) => {
+    setHoveredImage(img);
+    console.log("Hovered Image:", img);
+  };
 
-    const handleMouseLeave = () => {
-      setHoveredImage(null);
-    };
+  const handleMouseLeave = () => {
+    setHoveredImage(null);
+  };
+
   return (
     <>
       {selectedImage === null ? (
@@ -226,31 +224,40 @@ export const VerifySummary = ({
             </ContentSummary>
             <Line2 />
           </HeadVS>
+
           {selectedSection === "Verify" && (
-            <ContainerEditProfile>
-              <BigRec
-                hoveredImage={hoveredImage}
-                dataHistorySelected={dataHistorySelected}
-              />
+            <>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <ContainerEditProfile>
+                  <BigRec
+                    hoveredImage={hoveredImage}
+                    dataHistorySelected={dataHistorySelected}
+                    imageListBigRec={imageListBigRec}
+                  />
 
-              <ContainerSmallRec>
-                {imageList.map((img, index) => (
-                  <ContentSmallRec key={index}>
-                    {img.is_verified && <Img src={imgVerified} />}
+                  <ContainerSmallRec>
+                    {imageList.map((img, index) => (
+                      <ContentSmallRec key={index}>
+                        {img.is_verified && <Img src={imgVerified} />}
 
-                    <SmallRec
-                      onMouseEnter={() => handleMouseEnter(img)}
-                      onMouseLeave={handleMouseLeave}
-                      onClick={() => handleSelectedImage(img)}
-                      imgSrc={img.image_path}
-                    />
+                        <SmallRec
+                          onMouseEnter={() => handleMouseEnter(img)}
+                          onMouseLeave={handleMouseLeave}
+                          onClick={() => handleSelectedImage(img)}
+                          imgSrc={img.image_path}
+                        />
 
-                    <DefectCount>Defect : {img.defect_count}</DefectCount>
-                  </ContentSmallRec>
-                ))}
-              </ContainerSmallRec>
-            </ContainerEditProfile>
+                        <DefectCount>Defect : {img.defect_count}</DefectCount>
+                      </ContentSmallRec>
+                    ))}
+                  </ContainerSmallRec>
+                </ContainerEditProfile>
+              )}
+            </>
           )}
+
           {selectedSection === "Summary" && (
             <Summary dataHistorySelected={dataHistorySelected} />
           )}
