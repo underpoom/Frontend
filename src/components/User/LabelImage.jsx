@@ -203,7 +203,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
             Authorization: `Bearer ${user.token}`,
           },
         });
-        console.log("successful:", response.data);
+        console.log("successful defect class:", response.data);
         setDefectClasses(response.data);
       } catch (error) {
         console.error("Error:", error);
@@ -259,6 +259,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
       // Display class
       ctx.fillStyle = "black";
       ctx.font = "20px Arial";
+      ctx.fillText(`${defectClass}`, x - width / 2, y - height / 2 - 5);
     });
 
     if (

@@ -105,7 +105,7 @@ export const MenuToolsAdmin = ({ onSelectSection }) => {
         }`}
         onClick={() => handleUserSectionSelect("verify-user")}
       >
-        Verify User
+        Verify Users
       </div>
     );
   };
