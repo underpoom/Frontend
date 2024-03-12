@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { UserContext, url } from "../../bounding/UserContext";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
@@ -6,14 +6,12 @@ import styled from "styled-components";
 
 const ContainerAddAdmin = styled.div`
   display: flex;
-  /* height: 76vh; */
   height: fit-content;
   border: 1px solid red;
   flex-direction: column;
   overflow-y: auto;
   align-items: start;
   padding: 32px 51px;
-
   border-radius: 20px;
   border: 1px solid var(--stork, #9f9f9f);
   background-color: var(--frame-color, #f6f6f6);
@@ -26,11 +24,9 @@ const ContentAddAdmin = styled.div`
   width: 60vh;
   font: 700 24px Inter, sans-serif;
   font-size: 24px;
-
   margin-top: 2vh;
   display: flex;
   align-items: center;
-
   justify-content: end;
 `;
 
@@ -46,7 +42,6 @@ const Input = styled.input`
   font-size: 24px;
   font-weight: 400;
   margin-left: 1vh;
-
   &:focus {
     outline: none;
   }
@@ -54,7 +49,6 @@ const Input = styled.input`
 
 const Maximum20character = styled.div`
   display: flex;
-
   flex-basis: 0%;
   flex-direction: column;
   font-size: 16px;
@@ -76,13 +70,7 @@ const Submit = styled.div`
 `;
 
 export const CreateAdmin = () => {
-  const [newAddAdmin, setNewAddAdmin] = useState("");
   const { user } = useContext(UserContext);
-
-  const handleChange = (event) => {
-    setNewAddAdmin(event.target.value);
-  };
-
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");

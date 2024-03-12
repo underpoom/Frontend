@@ -131,64 +131,11 @@ const ImgDeleteButton = styled.img`
   cursor: pointer;
 `;
 
-const PopupContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-`;
-
-const PopupContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  border: 1px solid var(--stork, #9f9f9f);
-  background-color: var(--frame-color, #f6f6f6);
-  max-width: 494px;
-  font-size: 32px;
-  font-weight: 400;
-  text-align: center;
-  padding: 27px 14px;
-  justify-content: space-between;
-`;
-
-const ButtonYesNoContainer = styled.button`
-  display: flex;
-  justify-content: space-between;
-  border: 1px solid transparent;
-  width: 42vh;
-  margin-top: 2vh;
-`;
-
-const ButtonYesNo = styled.button`
-  font-family: Inter, sans-serif;
-  border-radius: 10px;
-  border: 1px solid var(--Important-Button, #0a89ff);
-  justify-content: center;
-  align-items: center;
-  color: var(--Important-Button, #0a89ff);
-  padding: 9px 60px;
-
-  cursor: pointer;
-
-  &:hover {
-    color: #e0e0e0; /* Add your desired background color */
-    background-color: var(--Important-Button, #0a89ff);
-  }
-`;
-
 const imgDelete =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/18eef55ac0ff935d3d1cc639329aaf0d3ea795f9696368faf6799ced72cdfa6b?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
 export const ManageUser = (props) => {
   const [userData, setUserData] = useState([]);
-  const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -210,16 +157,6 @@ export const ManageUser = (props) => {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
-  const [editedIndex, setEditedIndex] = useState(null);
-
-  const togglePopup = (index) => {
-    setEditedIndex(index);
-  };
-
-  const closePopup = () => {
-    setEditedIndex(null);
   };
 
   const [selectedUser, setSelectedUser] = useState(null);
@@ -312,8 +249,6 @@ export const ManageUser = (props) => {
 
             {filteredData.map((user, index) => (
               <ContentUser key={index}>
-                {/* <RowUsername>{user.username}</RowUsername>
-                <RolRole>{user.role}</RolRole> */}
                 <RowUserData>{user.username}</RowUserData>
 
                 <RowUserData>{user.firstname}</RowUserData>

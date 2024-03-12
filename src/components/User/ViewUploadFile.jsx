@@ -236,7 +236,6 @@ export const ViewUploadFile = ({
           content={popupContentAlert}
           onClose={() => {
             setShowPopupAlert(false);
-            // onBackClick();
           }}
         />
       )}
@@ -246,9 +245,6 @@ export const ViewUploadFile = ({
         changeStatePage={handlepage}
         onBackClick={onBackClick}
       />
-
-      {/* <BlackLine /> */}
-
       <ContainerEditProfile>
         <Label>
           Upload File

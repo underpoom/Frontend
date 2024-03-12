@@ -9,11 +9,9 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerPermission = styled.div`
   display: flex;
   height: 76vh;
-
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
-  /* flex-wrap: wrap; */
   column-gap: 38px;
 `;
 
@@ -27,7 +25,6 @@ const FactoryDetail = styled.div`
   color: #000;
   font-weight: 700;
   width: 100%;
-  /* height: 35vh; */
   padding: 10px 30px;
   margin-top: 5px;
   border-radius: 8px;
@@ -89,33 +86,11 @@ const LabelMd = styled.div`
   font: 400 20px Inter, sans-serif;
 `;
 
-const SearchUserContainer = styled.div`
-  margin: 0 12vh 0 auto;
-  input[type="text"] {
-    height: 6.5vh;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 24px;
-  }
-`;
-
-const imgRemove =
-  "https://cdn.builder.io/api/v1/image/assets/TEMP/3f4c9b5db1e7a6ff8ec6827ec31de5c2c1e83625984ea6446bcdc670a3524c4b?apiKey=34584a6259e046a0be0d44044e057cb8&";
-const imgAdd =
-  "https://cdn.builder.io/api/v1/image/assets/TEMP/d1573c1f4387e34454945052c6340580dd716ebf34149be2676f645bc373c6de?apiKey=34584a6259e046a0be0d44044e057cb8&";
-const imgBack =
-  "https://cdn.builder.io/api/v1/image/assets/TEMP/de6a5fb1856d3b714a3c91e51d65fea4bc8b861e6dda41a96cdbd213fbbf6ef4?apiKey=34584a6259e046a0be0d44044e057cb8&";
 export const AddPermission = () => {
   const [FactorySelected, setFactorySelected] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [factoryList, setFactoryList] = useState([]);
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
   const { user } = useContext(UserContext);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -179,7 +154,6 @@ export const AddPermission = () => {
               <FactoryDetail key={index}>
                 <FactoryName>{factory.factory_name}</FactoryName>
                 <LocData>
-                  {/* {factory.province} - {factory.district} -{factory.subdistrict} */}
                   {factory.factory_details.replace(/_/g, " - ")}
                 </LocData>
 

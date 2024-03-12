@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { MenuToolsAdmin } from "./MenuToolsAdmin";
-import { NavbarTopAdmin } from "../NavbarTopAdmin/NavbarTopAdmin";
 import ManageUser from "../ManageUser";
 import VerifyUsers from "../VerifyUsers";
 import styled from "styled-components";
 import AddFactory from "../AddFactory";
 import AddPermission from "../AddPermission";
-import ChangeRoleAndPassword from "../ChangeRoleAndPassword";
 import ManageFactory from "../ManageFactory";
 import CreateAdmin from "../CreateAdmin";
 import ManageAdmin from "../ManageAdmin";

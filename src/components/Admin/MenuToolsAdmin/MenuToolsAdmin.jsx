@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MenuToolsAdmin.css";
 import styled from "styled-components";
@@ -32,15 +32,6 @@ const WhiteLine = styled.div`
   background-color: #fff;
   margin-top: 17px;
   height: 2px;
-`;
-
-const User = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 3vh;
-  white-space: nowrap;
-  margin: 35px 10px 0 0;
-  font-size: 32px;
 `;
 
 const imgUser =

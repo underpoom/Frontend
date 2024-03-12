@@ -84,9 +84,8 @@ const ImgDeleteButton = styled.img`
 const imgDelete =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/18eef55ac0ff935d3d1cc639329aaf0d3ea795f9696368faf6799ced72cdfa6b?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
-export const ManageAdmin = (props) => {
+export const ManageAdmin = () => {
   const [userData, setUserData] = useState([]);
-  const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState("");
   const { user } = useContext(UserContext);

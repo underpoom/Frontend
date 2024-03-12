@@ -9,11 +9,9 @@ import { UserContext, url } from "../../bounding/UserContext";
 const ContainerLog = styled.div`
   display: flex;
   height: 76vh;
-
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
-  /* flex-wrap: wrap; */
   column-gap: 38px;
 `;
 
@@ -27,7 +25,6 @@ const FactoryDetail = styled.div`
   color: #000;
   font-weight: 700;
   width: 100%;
-  /* height: 35vh; */
   padding: 10px 30px;
   margin-top: 5px;
   border-radius: 8px;
@@ -79,11 +76,7 @@ const LabelLG3 = styled.div`
 
 export const Log = () => {
   const [FactorySelected, setFactorySelected] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [factoryList, setFactoryList] = useState([]);
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
   const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchData = async () => {
@@ -106,15 +99,7 @@ export const Log = () => {
     fetchData();
   }, []);
 
-  const [FactorySelectedData, setFactorySelectedData] = useState([]);
-
-  const handleFactorySelected = (factory) => {
-    setFactorySelected(!FactorySelected);
-    setFactorySelectedData(factory);
-  };
-
   const [filteredData, setFilteredData] = useState([]);
-
   const showFilteredData = (filteredData) => {
     console.log("Filtered Data: ", filteredData);
     setFilteredData(filteredData);

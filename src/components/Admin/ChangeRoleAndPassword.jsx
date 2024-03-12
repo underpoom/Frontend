@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { MenuToolsAdmin } from "./MenuToolsAdmin/MenuToolsAdmin";
-import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
-import { useNavigate } from "react-router-dom";
+
 import TogglePopup from "./TogglePopup";
 import axios from "axios";
 import { UserContext, url } from "../../bounding/UserContext";
@@ -17,7 +14,7 @@ const ContainerChangePassword = styled.div`
   overflow-y: auto;
 `;
 
-const [ContentChangePassword, ContentChangeUserRole] = [
+const ContentChangePassword = [
   styled.div`
     border-radius: 20px;
     border: 1px solid var(--stork, #9f9f9f);

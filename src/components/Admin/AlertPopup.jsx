@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const PopupContainer = styled.div`
@@ -7,7 +7,7 @@ const PopupContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,17 +46,13 @@ const ButtonOk = styled.button`
   }
 `;
 
-export const AlertPopup = ({ content, onYes, onClose }) => {
+export const AlertPopup = ({ content, onClose }) => {
   return (
     <>
       <PopupContainer>
         <PopupContent>
-          {content}
-
-
-          
+          {content}  
             <ButtonOk onClick={onClose}>Ok</ButtonOk>
-         
         </PopupContent>
       </PopupContainer>
     </>

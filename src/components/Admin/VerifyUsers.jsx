@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { handleDownload } from "../../utils/downloadUtils";
 import { UserContext, url } from "../../bounding/UserContext";
@@ -110,7 +109,7 @@ const PopupContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -151,7 +150,7 @@ const ButtonYesNo = styled.button`
   cursor: pointer;
 
   &:hover {
-    color: #e0e0e0; /* Add your desired background color */
+    color: #e0e0e0; 
     background-color: var(--Important-Button, #0a89ff);
   }
 `;
@@ -169,16 +168,14 @@ const ImgDeclineButton = styled.img`
   cursor: pointer;
 `;
 
-const imgDelete =
-  "https://cdn.builder.io/api/v1/image/assets/TEMP/18eef55ac0ff935d3d1cc639329aaf0d3ea795f9696368faf6799ced72cdfa6b?apiKey=34584a6259e046a0be0d44044e057cb8&";
+
 const imgAccept =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/2e70134ea7583f3f1d7b1f61bd3b7d793544a6a43126197227c7e9262e37a42f?apiKey=34584a6259e046a0be0d44044e057cb8&";
 const imgDecline =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/62677d4b6ebc244193baff60fc84f6e49eadd3dfb8518eec2f2ec25565916ec2?apiKey=34584a6259e046a0be0d44044e057cb8&";
 
-export const VerifyUsers = (props) => {
+export const VerifyUsers = () => {
   const [userData, setUserData] = useState([]);
-  const navigate = useNavigate();
   const [editedIndexAccept, setEditedIndexAccept] = useState(null);
   const [editedIndexDecline, setEditedIndexDecline] = useState(null);
   const { user } = useContext(UserContext);

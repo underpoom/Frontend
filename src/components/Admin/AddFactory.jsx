@@ -272,7 +272,7 @@ export const AddFactory = () => {
             <StyledSelect
               value={selectedProvince}
               onChange={handleProvinceChange}
-              loading={loading} // Pass loading state as a prop
+              loading={loading} 
             >
               <option value="">Select the province</option>
               {provinceList.map((province) => (

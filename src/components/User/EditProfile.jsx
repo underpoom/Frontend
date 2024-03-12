@@ -116,7 +116,6 @@ const LabelNewPassword = styled.label`
 `;
 
 export const EditProfile = ({ handlepageChange }) => {
-  const [username, setUsername] = useState("user no.11");
   const navigate = useNavigate();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -155,8 +154,6 @@ export const EditProfile = ({ handlepageChange }) => {
         }
       );
       console.log("change_password successful:", response.data);
-      // setCurrentPassword("");
-      // setNewPassword("");
       setShowPopup(false);
     } catch (error) {
       console.error("Error change_password:", error);

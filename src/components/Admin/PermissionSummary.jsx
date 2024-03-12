@@ -1,17 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import TogglePopup from "./TogglePopup";
 import NavbarTopAdmin from "./NavbarTopAdmin/NavbarTopAdmin";
 import { UserContext, url } from "../../bounding/UserContext";
 import axios from "axios";
 const ContainerRemoveFactory = styled.div`
   display: flex;
   height: 76vh;
-
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
-  /* flex-wrap: wrap; */
   column-gap: 38px;
 `;
 
@@ -25,7 +22,6 @@ const FactoryDetail = styled.div`
   color: #000;
   font-weight: 700;
   width: 100%;
-  /* height: 35vh; */
   padding: 10px 30px;
   margin-top: 5px;
   border-radius: 8px;
@@ -35,7 +31,6 @@ const FactoryDetail = styled.div`
 const FactoryName = styled.div`
   align-self: center;
   font: 400 24px Inter, sans-serif;
-
   width: 200px;
 `;
 
@@ -78,7 +73,6 @@ const Members = styled.div`
 
 const Member = styled.div`
   width: 100px;
-  /* border: 1px solid blue; */
   word-wrap: break-word;
 `;
 
@@ -118,7 +112,6 @@ export const PermissionSummary = () => {
         currentData={factoryList}
         filteredData={showFilteredData}
       />
-
       <ContainerRemoveFactory>
         <ContainerLabel>
           <LabelHeadFactoryname>Factory Name</LabelHeadFactoryname>
@@ -129,7 +122,6 @@ export const PermissionSummary = () => {
           <FactoryDetail key={index}>
             <FactoryName>{factory.factory_name}</FactoryName>
             {factory.user_count}
-
             <Members>
               {factory.user_permis.map((user, userIndex) => (
                 <Member key={userIndex}>{user.username}</Member>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import axios from "axios";
 import { UserContext, url } from "../../bounding/UserContext";
 import Spinner from "../../bounding/Spinner";

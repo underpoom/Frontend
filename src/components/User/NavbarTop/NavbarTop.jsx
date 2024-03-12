@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-import styled, { css } from "styled-components";
+import React from "react";
+import styled from "styled-components";
 
 const ContainerNavbarTop = styled.div`
   display: flex;

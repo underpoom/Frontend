@@ -1,15 +1,12 @@
 import styled from "styled-components";
-import MenuTools from "./MenuTools/MenuTools";
 import NavbarTop from "./NavbarTop/NavbarTop";
-import React, { useContext, useState, useEffect } from "react";
-import { UserContext, url } from "../../bounding/UserContext";
+import React from "react";
 import axios from "axios";
 
 const ContainerInformation = styled.div`
   display: flex;
   width: 133vh;
   height: 76vh;
-  /* border: 1px red solid; */
   font: 700 32px Inter, sans-serif;
   padding: 1.5vh 1.5vh 0 1.5vh;
   align-items: center;
@@ -137,13 +134,7 @@ const Condiv9 = styled.div`
   align-items: center;
   padding: 42px 51px;
 `;
-const Conimg2 = styled.div`
-  color: #000;
-  text-align: center;
-  font: 400 32px Inter, sans-serif;
-  margin-right: auto;
-  margin-left: 4vh;
-`;
+
 const Info = styled.div`
   color: #000;
   text-align: center;
@@ -169,29 +160,20 @@ const Img2 = styled.img`
 `;
 
 const Information = ({ handlepageChange }) => {
-  const { user } = useContext(UserContext);
   const handlepage = (data) => {
     handlepageChange(data);
   };
 
   const downloadFile = async (fileName) => {
     try {
-      // Make a GET request to the server endpoint for downloading the file
       const response = await axios.get(`/data/${fileName}`, {
         responseType: "blob", // Set the response type to blob
       });
 
-      // Create a Blob object from the file data
       const blob = new Blob([response.data]);
-
-      // Create a temporary anchor element
       const tempAnchor = document.createElement("a");
       tempAnchor.href = URL.createObjectURL(blob);
-
-      // Set the download attribute to specify the file name
       tempAnchor.download = fileName;
-
-      // Simulate a click to trigger the download
       tempAnchor.click();
 
       // Clean up

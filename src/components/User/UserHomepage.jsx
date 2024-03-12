@@ -49,7 +49,7 @@ export const UserHomepage = () => {
 
   const [selectedSection, setSelectedSection] = useState("Information");
 
-  const [statePage, setStatePage] = useState([]);
+  const [statePage] = useState([]);
 
   const handleSelectSection = (section) => {
     setSelectedSection(section);

@@ -12,7 +12,6 @@ const ContainerRemoveFactory = styled.div`
   flex-direction: column;
   aspect-ratio: 1;
   overflow-y: auto;
-  /* flex-wrap: wrap; */
   column-gap: 38px;
 `;
 
@@ -26,7 +25,6 @@ const FactoryDetail = styled.div`
   color: #000;
   font-weight: 700;
   width: 100%;
-  /* height: 35vh; */
   padding: 10px 30px;
   margin-top: 5px;
   border-radius: 8px;
@@ -107,10 +105,8 @@ const LabelMd = styled.div`
 `;
 
 export const ManageFactory = () => {
-  const [FactorySelected, setFactorySelected] = useState(false);
 
   const [factoryList, setFactoryList] = useState([]);
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -132,12 +128,7 @@ export const ManageFactory = () => {
     }
   };
 
-  const handleBackClick = () => {
-    setFactorySelected(false);
-  };
-
   const [FactorySelectedData, setFactorySelectedData] = useState([]);
-
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState("");
 

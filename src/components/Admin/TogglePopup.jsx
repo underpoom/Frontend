@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const PopupContainer = styled.div`
@@ -7,7 +7,7 @@ const PopupContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,9 +35,7 @@ const ButtonYesNoContainer = styled.button`
   width: 42vh;
   margin-top: 2vh;
 `;
-const LabelHead = styled.button`
-  width: 80%;
-`;
+
 const ConfirmEditBuildingDetails = styled.div`
   color: var(--stork, #9f9f9f);
   text-align: center;
@@ -84,7 +82,6 @@ const TogglePopup = ({ content, onYes, onClose }) => {
   );
 };
 
-// Export the togglePopup function
 export const togglePopup = TogglePopup;
 
-export default TogglePopup; // Export the TogglePopup component as default
+export default TogglePopup; 

@@ -233,11 +233,6 @@ export const AllDataHistory = ({
     }
   };
   useEffect(() => {
-    // const interval = setInterval(() => {
-    //   fetchData();
-    // }, 1000);
-    // return () => clearInterval(interval);
-
     fetchData();
   }, [buildingData]);
   return (

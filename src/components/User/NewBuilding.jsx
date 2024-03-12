@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import axios from "axios";
@@ -86,7 +86,6 @@ export const NewBuilding = ({
   const handlepage = (data) => {
     handlepageChange(data);
   };
-  // console.log(factoryData);
   const [buildingName, setBuildingName] = useState("");
   const [buildingLength, setBuildingLength] = useState("");
   const [buildingWidth, setBuildingWidth] = useState("");

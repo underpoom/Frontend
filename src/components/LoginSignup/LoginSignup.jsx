@@ -35,8 +35,6 @@ const LoginSignup = () => {
       setPassword("");
       setFiles("");
       setAction("Login");
-
-      // navigate("/userhomepage");
     } catch (error) {
       console.error("Error signing up:", error);
     }
@@ -62,7 +60,6 @@ const LoginSignup = () => {
         }
       );
       console.log("Login successful:", response.data);
-      // login(username);
       login({ username: username, token: response.data.access_token });
       navigateRole(response.data.access_token);
     } catch (error) {
@@ -143,7 +140,6 @@ const LoginSignup = () => {
           <>
             <div className="inputs-name-lastname">
               <div className="input-name-lastname">
-                {/* <img src={user_icon} alt="" /> */}
                 <input
                   type="text"
                   placeholder="Name"
@@ -153,7 +149,6 @@ const LoginSignup = () => {
               </div>
 
               <div className="input-name-lastname">
-                {/* <img src={user_icon} alt="" /> */}
                 <input
                   type="text"
                   placeholder="Last name"
@@ -165,7 +160,6 @@ const LoginSignup = () => {
 
             <div className="inputs">
               <div className="input">
-                {/* <img src={user_icon} alt="" /> */}
                 <input
                   type="email"
                   placeholder="Email address"
@@ -179,7 +173,6 @@ const LoginSignup = () => {
 
         <div className="inputs">
           <div className="input">
-            {/* <img src={user_icon} alt="" /> */}
             <input
               type="text"
               placeholder="Username"
@@ -191,7 +184,6 @@ const LoginSignup = () => {
 
         <div className="inputs">
           <div className="input">
-            {/* <img src={password_icon} alt="" /> */}
             <input
               type="password"
               placeholder="Password"
