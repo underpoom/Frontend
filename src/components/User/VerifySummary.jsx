@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import styled, { css } from "styled-components";
 import NavbarTop from "./NavbarTop/NavbarTop";
 import LabelImage from "./LabelImage";
@@ -142,7 +142,7 @@ export const VerifySummary = ({
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -163,11 +163,11 @@ export const VerifySummary = ({
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+  }, [dataHistorySelected._id, user.token]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleSection = (section) => {
     setSelectSection(section);

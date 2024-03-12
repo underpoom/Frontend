@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { UserContext, url } from "../../../bounding/UserContext";
 import styled from "styled-components";
 import TogglePopup from "../../Admin/TogglePopup";
@@ -107,7 +107,7 @@ export const MenuTools = ({
     "https://cdn.builder.io/api/v1/image/assets/TEMP/53f2669f8bd0a558a048ea57cdba8b791b9ea7be12aabe822bedb6ec70fe786b?apiKey=34584a6259e046a0be0d44044e057cb8&";
   const imgLgInfornation =
     "https://cdn.builder.io/api/v1/image/assets/TEMP/8ecf12dfcc299c4d77bebc194b8fb77f9bd76b7ced54ffd7c2676c690e6d9678?apiKey=34584a6259e046a0be0d44044e057cb8&";
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(
         `${url}/get_user_factory?username=${user.username}`,
@@ -124,10 +124,10 @@ export const MenuTools = ({
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+  }, [user.token, user.username]);
   useEffect(() => {
     fetchData();
-  }, [ishandleFetch]);
+  }, [fetchData, ishandleFetch]);
 
   const handleFactoryClick = (factory) => {
     setSelectedFactory(factory);
@@ -212,7 +212,7 @@ export const MenuTools = ({
             key={index_f}
             onClick={() => handleFactoryClick(factory)}
           >
-            <img loading="lazy" src={imgFactory} />
+            <img loading="lazy" src={imgFactory} alt="Factory" />
             {factory.factory_name}
             <ImgLgInformation
               loading="lazy"
@@ -237,6 +237,7 @@ export const MenuTools = ({
                       <img
                         loading="lazy"
                         src={imgBuilding}
+                        alt="Building" // Add alt prop
                         onClick={() => {
                           handleFactorySelect(factory);
                           handleBuildingSelect(building);
@@ -250,10 +251,12 @@ export const MenuTools = ({
                       <ImgMdInformation
                         src={imgLgInfornation}
                         onClick={() => handleBuildingInformation(building)}
+                        alt="Medium Information" // Add alt prop
                       />
                       <ImgRemoveBuilding
                         src={imgRemove}
                         onClick={() => handleClickSubmit(building)}
+                        alt="Remove Building" // Add alt prop
                       />
                     </BuildingSpace>
                   ))}

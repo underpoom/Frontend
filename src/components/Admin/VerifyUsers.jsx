@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import styled from "styled-components";
 import { NavbarTopAdmin } from "./NavbarTopAdmin/NavbarTopAdmin";
 import axios from "axios";
@@ -109,7 +109,7 @@ const PopupContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -150,7 +150,7 @@ const ButtonYesNo = styled.button`
   cursor: pointer;
 
   &:hover {
-    color: #e0e0e0; 
+    color: #e0e0e0;
     background-color: var(--Important-Button, #0a89ff);
   }
 `;
@@ -168,7 +168,6 @@ const ImgDeclineButton = styled.img`
   cursor: pointer;
 `;
 
-
 const imgAccept =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/2e70134ea7583f3f1d7b1f61bd3b7d793544a6a43126197227c7e9262e37a42f?apiKey=34584a6259e046a0be0d44044e057cb8&";
 const imgDecline =
@@ -179,11 +178,8 @@ export const VerifyUsers = () => {
   const [editedIndexAccept, setEditedIndexAccept] = useState(null);
   const [editedIndexDecline, setEditedIndexDecline] = useState(null);
   const { user } = useContext(UserContext);
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(`${url}/get_user_unverified`, {
         headers: {
@@ -198,7 +194,10 @@ export const VerifyUsers = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+  }, [user.token]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const closePopupAccept = () => {
     setEditedIndexAccept(null);
