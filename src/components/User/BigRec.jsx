@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { url } from "../../bounding/UserContext";
 
 const ContainerEditProfile = styled.div`
   position: relative;
@@ -16,7 +17,6 @@ const ImageWrapper = styled.div`
 `;
 
 export const BigRec = ({ hoveredImage, imageListBigRec }) => {
-
   return (
     <>
       <ContainerEditProfile>
@@ -42,7 +42,9 @@ export const BigRec = ({ hoveredImage, imageListBigRec }) => {
               }}
             >
               <img
-                src={img.image_path}
+                src={`${url}/get_img/${img.image_id}`}
+                // src={img.image_path} // for localhost
+
                 alt={`frame_${index}`}
                 style={{
                   width: "100%",

@@ -123,8 +123,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
   const canvasRef = useRef(null);
   const [rectangles, setRectangles] = useState([]);
   const [selectedRectangle, setSelectedRectangle] = useState(null);
-  const [hoveredRectangle, setHoveredRectangle] = useState(null);
-  const [image, setImage] = useState(new Image());
+  const [image] = useState(new Image());
   const [LastSelectedRectangle, setLastSelectedRectangle] = useState(null);
   const [defectData, setDefectData] = useState(null);
   const { user } = useContext(UserContext);
@@ -132,7 +131,9 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
   const [canvasHeight, setCanvasHeight] = useState(null);
   const [defectClasses, setDefectClasses] = useState(null);
 
-  const [loading, setLoading] = useState(false);
+  let isHovering;
+
+  const [loading] = useState(false);
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return; // Add null check
@@ -160,7 +161,8 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     }
 
     async function loadImageAndRectangles() {
-      image.src = imgData.image_path;
+      // image.src = imgData.image_path;
+      image.src = `${url}/get_img/${imgData.image_id}`;
 
       await new Promise((resolve) => {
         image.onload = resolve;
@@ -296,7 +298,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
       setStartY(event.clientY - rect.top);
     }
 
-    let isHovering = false;
+    isHovering = false;
 
     rectangles.forEach(({ x, y, width, height }, index) => {
       if (
@@ -326,7 +328,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
 
-    let isHovering = false;
+    isHovering = false;
 
     if (drawing && selectedDefectClass !== null) {
       const rect = canvasRef.current.getBoundingClientRect();
@@ -342,7 +344,6 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
         mouseY <= y + height / 2
       ) {
         isHovering = true;
-        setHoveredRectangle(index);
       }
     });
 
@@ -364,7 +365,6 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
     if (drawing && selectedDefectClass !== null) {
       setDrawing(false);
       setDrawingAllowed(false);
-      setDrawingEnded(true);
       const selectedDefect = defectClasses.find(
         (defectClass) => defectClass.defect_class_name === selectedDefectClass
       );
@@ -397,7 +397,6 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
   };
 
   const [selectedDefectClass, setSelectedDefectClass] = useState(null);
-  const [drawingEnded, setDrawingEnded] = useState(false);
 
   const renderClassSelector = () => {
     if (defectClasses !== null) {
@@ -406,7 +405,7 @@ export const LabelImage = ({ imgData, onBackClick, handlepageChange }) => {
           value={selectedDefectClass}
           onChange={(event) => setSelectedDefectClass(event.target.value)}
         >
-          <option value="" disabled hidden>
+          <option value="" disabled selected>
             Select a defect class
           </option>
           {defectClasses.map((defectClass) => (

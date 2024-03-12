@@ -246,9 +246,9 @@ export const VerifySummary = ({
                           onMouseEnter={() => handleMouseEnter(img)}
                           onMouseLeave={handleMouseLeave}
                           onClick={() => handleSelectedImage(img)}
-                          imgSrc={img.image_path}
+                          imgSrc={`${url}/get_img/${img.image_id}`}
+                          // imgSrc={img.image_path} // for localhost
                         />
-
                         <DefectCount>Defect : {img.defect_count}</DefectCount>
                       </ContentSmallRec>
                     ))}

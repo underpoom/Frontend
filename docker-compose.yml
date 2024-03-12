@@ -1,14 +1,17 @@
-version: '3.5'
+version: '3'
+
 services:
-  sample-app:
-    container_name: react-docker
+  react-app:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - '.:/usr/src/app'
-      - '/usr/src/app/node_modules'
-    ports:
-      - '3000:3000'  # เปลี่ยน port จาก 443 เป็น 3000
     environment:
-      - NODE_ENV=${NODE_ENV}
+      - NODE_ENV=${NODE_ENV:-development}
+      - API_URL=${API_URL}
+    ports:
+      - "443:3000"
+    volumes:
+      - '/home/project/data:/app'
+      - '/home/project/data:/code/app'
+    env_file:
+      - .env
