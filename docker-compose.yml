@@ -8,9 +8,9 @@ services:
     image: frontend-app
     environment:
       - NODE_ENV=${NODE_ENV:-development}
-      - API_URL=${FROENT_PORT}
+      - API_URL=${BACKEND_URL}
     ports:
-      - "443:3000"
+      - ${FRONTEND_PORT}:3000
     volumes:
       - '/home/project/data:/app'
       - '/home/project/data:/code/app'
