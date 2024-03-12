@@ -5,6 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: frontend-app
+    volumes:
+      - '.:/usr/src/app'
+      - '/usr/src/app/node_modules'
+      - '/home/project/data:/app'
+    ports:
+      - '443:3000'  # can edit
     environment:
       - NODE_ENV=${NODE_ENV:-development}
       - API_URL=${API_URL}
