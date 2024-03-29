@@ -16,3 +16,4 @@ services:
       - '/home/project/data:/code/app'
     env_file:
       - .env
+    restart: always
